@@ -8,7 +8,7 @@ const connectDB = async () => {
     await mongoose.connect(process.env.DB_URL || '');
     console.log('Đã kết nối MongoDB');
   } catch (err) {
-    console.error('Kết nối MongoDB thất bại:', err.message);
+    console.error('Kết nối MongoDB thất bại:', (err as Error).message);
     process.exit(1);
   }
 };

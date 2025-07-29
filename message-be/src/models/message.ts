@@ -1,47 +1,57 @@
 import { Schema, model, Document, Types } from 'mongoose';
 
-interface ITinNhan extends Document {
-  noiDung?: string;
-  nguoiGui: Types.ObjectId;
-  cuocTroChuyen: Types.ObjectId;
-  loaiTinNhan: 'text' | 'image' | 'video' | 'file' | 'system';
-  media?: Types.ObjectId;
-  trangThai: 'sent' | 'delivered' | 'read';
-  thoiGianGui: Date;
-  daXoa: boolean;
+interface IMessage extends Document {
+  sender: Types.ObjectId;
+  conversation: Types.ObjectId;
+  content: string;
+  messageType: 'text' | 'image' | 'file' | 'audio' | 'video';
+  mediaUrl?: string;
+  isRead: boolean;
+  readBy: Types.ObjectId[];
+  replyTo?: Types.ObjectId;
   createdAt: Date;
   updatedAt: Date;
 }
 
-const tinNhanSchema = new Schema<ITinNhan>(
+const messageSchema = new Schema<IMessage>(
   {
-    noiDung: { type: String },
-    nguoiGui: {
+    sender: {
       type: Schema.Types.ObjectId,
-      ref: 'nguoiDung',
+      ref: 'User',
       required: true,
     },
-    cuocTroChuyen: {
+    conversation: {
       type: Schema.Types.ObjectId,
-      ref: 'CuocTroChuyen',
+      ref: 'Conversation',
       required: true,
     },
-    loaiTinNhan: {
+    content: {
       type: String,
-      enum: ['text', 'image', 'video', 'file', 'system'],
+      required: true,
+    },
+    messageType: {
+      type: String,
+      enum: ['text', 'image', 'file', 'audio', 'video'],
       default: 'text',
     },
-    media: {
-      type: Schema.Types.ObjectId,
-      ref: 'Media',
-    },
-    trangThai: {
+    mediaUrl: {
       type: String,
-      enum: ['sent', 'delivered', 'read'],
-      default: 'sent',
+      default: null,
     },
-    thoiGianGui: { type: Date, default: Date.now },
-    daXoa: { type: Boolean, default: false },
+    isRead: {
+      type: Boolean,
+      default: false,
+    },
+    readBy: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'User',
+      },
+    ],
+    replyTo: {
+      type: Schema.Types.ObjectId,
+      ref: 'Message',
+    },
   },
   {
     timestamps: true,
@@ -49,6 +59,7 @@ const tinNhanSchema = new Schema<ITinNhan>(
   }
 );
 
-tinNhanSchema.index({ cuocTroChuyen: 1, thoiGianGui: -1 });
+messageSchema.index({ conversation: 1, createdAt: -1 });
+messageSchema.index({ sender: 1 });
 
-export default model<ITinNhan>('TinNhan', tinNhanSchema);
+export default model<IMessage>('Message', messageSchema); 
