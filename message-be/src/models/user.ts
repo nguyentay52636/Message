@@ -3,6 +3,7 @@ import { Schema, model, Document, Types } from 'mongoose';
 interface IUser extends Document {
   username: string;
   email: string;
+  phone: string;
   password: string;
   avatar?: string;
   status: 'online' | 'offline' | 'away';

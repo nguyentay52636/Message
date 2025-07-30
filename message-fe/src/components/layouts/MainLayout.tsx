@@ -1,16 +1,12 @@
-import { Footer } from '@/components/Footer';
-import { Header } from '@/components/Header';
+import { SiderNavBar } from '@/components/SiderNavBar';
 import { PropsWithChildren } from 'react';
 import { Outlet } from 'react-router-dom';
 
 export default function MainLayout({ children }: PropsWithChildren) {
   return (
     <div>
-      {/* Header */}
-      <Header />
+      <SiderNavBar />
       {children || <Outlet />}
-      {/* Footer */}
-      <Footer />
     </div>
   );
 }
