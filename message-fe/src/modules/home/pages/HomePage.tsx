@@ -1,7 +1,13 @@
 import React from 'react'
+import { MainContentArea } from '../components/MainContentArea/MainContentArea'
+import { useTheme } from '@/components/ui/ThemeProvider'
 
 export default function HomePage() {
+  const { theme } = useTheme()
+
   return (
-    <div>HomePage</div>
+    <>
+      <MainContentArea messages={[]} isDarkMode={theme === 'dark'} />
+    </>
   )
 }

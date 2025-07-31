@@ -10,7 +10,7 @@ interface NavigationStripProps {
 
 export default function SiderNavBar({ isDarkMode, toggleTheme }: NavigationStripProps) {
     return (
-        <div className="w-20 flex flex-col bg-gradient-to-b from-blue-600 to-blue-700 flex flex-col items-center py-6 space-y-6 shadow-lg">
+        <div className="w-25 flex flex-col bg-gradient-to-b from-blue-600 to-blue-700 flex flex-col items-center py-6 space-y-6 shadow-lg">
             {/* User Avatar */}
             <div className="relative group">
                 <Avatar className="w-10 h-10 border-3 border-white/20 shadow-lg transition-transform group-hover:scale-105">
@@ -30,7 +30,7 @@ export default function SiderNavBar({ isDarkMode, toggleTheme }: NavigationStrip
                         size="sm"
                         className="text-white hover:bg-white/20 p-3 rounded-xl bg-white/10 backdrop-blur-sm transition-all duration-200 group-hover:scale-105"
                     >
-                        <MessageCircle className="w-5 h-5" />
+                        <MessageCircle className="w-10 h-10" />
                     </Button>
                     <Badge className="absolute -top-2 -right-2 bg-red-500 text-white text-xs px-2 py-1 h-6 min-w-6 rounded-full flex items-center justify-center shadow-lg">
                         3
@@ -46,7 +46,7 @@ export default function SiderNavBar({ isDarkMode, toggleTheme }: NavigationStrip
                         size="sm"
                         className="text-white hover:bg-white/20 p-3 rounded-xl transition-all duration-200 group-hover:scale-105"
                     >
-                        <Phone className="w-5 h-5" />
+                        <Phone className="w-10 h-10" />
                     </Button>
                     <div className="absolute left-full ml-3 top-1/2 transform -translate-y-1/2 bg-gray-900 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
                         Cuộc gọi
@@ -59,7 +59,7 @@ export default function SiderNavBar({ isDarkMode, toggleTheme }: NavigationStrip
                         size="sm"
                         className="text-white hover:bg-white/20 p-3 rounded-xl transition-all duration-200 group-hover:scale-105"
                     >
-                        <Users className="w-5 h-5" />
+                        <Users className="w-10 h-10" />
                     </Button>
                     <div className="absolute left-full ml-3 top-1/2 transform -translate-y-1/2 bg-gray-900 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
                         Danh bạ
@@ -72,7 +72,7 @@ export default function SiderNavBar({ isDarkMode, toggleTheme }: NavigationStrip
                         size="sm"
                         className="text-white hover:bg-white/20 p-3 rounded-xl transition-all duration-200 group-hover:scale-105"
                     >
-                        <Cloud className="w-5 h-5" />
+                        <Cloud className="w-10 h-10" />
                     </Button>
                     <div className="absolute left-full ml-3 top-1/2 transform -translate-y-1/2 bg-gray-900 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
                         Cloud
@@ -85,7 +85,7 @@ export default function SiderNavBar({ isDarkMode, toggleTheme }: NavigationStrip
                         size="sm"
                         className="text-white hover:bg-white/20 p-3 rounded-xl transition-all duration-200 group-hover:scale-105"
                     >
-                        <Briefcase className="w-5 h-5" />
+                        <Briefcase className="w-10 h-10" />
                     </Button>
                     <div className="absolute left-full ml-3 top-1/2 transform -translate-y-1/2 bg-gray-900 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
                         Zalo OA
@@ -102,7 +102,7 @@ export default function SiderNavBar({ isDarkMode, toggleTheme }: NavigationStrip
                     className="text-white hover:bg-white/20 p-3 rounded-xl transition-all duration-200 group-hover:scale-105"
                     title={isDarkMode ? "Chuyển sang Light Mode" : "Chuyển sang Dark Mode"}
                 >
-                    {isDarkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+                    {isDarkMode ? <Sun className="w-10 h-10" /> : <Moon className="w-10 h-10" />}
                 </Button>
                 <div className="absolute left-full ml-3 top-1/2 transform -translate-y-1/2 bg-gray-900 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
                     {isDarkMode ? "Sáng" : "Tối"}
@@ -116,7 +116,7 @@ export default function SiderNavBar({ isDarkMode, toggleTheme }: NavigationStrip
                     size="sm"
                     className="text-white hover:bg-white/20 p-3 rounded-xl transition-all duration-200 group-hover:scale-105"
                 >
-                    <Settings className="w-5 h-5" />
+                    <Settings className="w-10 h-10" />
                 </Button>
                 <div className="absolute left-full ml-3 top-1/2 transform -translate-y-1/2 bg-gray-900 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
                     Cài đặt

@@ -11,15 +11,16 @@ function App() {
       path: '/',
       element: <MainLayout />,
       children: [
-
-
-
+        {
+          path: '/',
+          element: <HomePage />
+        }
       ],
     },
   ]);
   return (
     <>
-      <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+      <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
         <RouterProvider router={router} />
       </ThemeProvider >
     </>
