@@ -21,7 +21,7 @@ export function SiderNavBar({ onToggleMobileSidebar }: NavigationStripProps) {
                         variant="ghost"
                         size="sm"
                         onClick={onToggleMobileSidebar}
-                        className="w-full text-sidebar-foreground hover:bg-sidebar-accent p-3 rounded-xl transition-all duration-200"
+                        className="w-full hover:text-sidebar-foreground text-sidebar-foreground hover:bg-sidebar-accent p-3 rounded-xl transition-all duration-200"
                     >
                         <Menu className="w-5 h-5" />
                     </Button>
@@ -46,7 +46,7 @@ export function SiderNavBar({ onToggleMobileSidebar }: NavigationStripProps) {
                                 <Button
                                     variant="ghost"
                                     size="sm"
-                                    className="w-full text-sidebar-foreground hover:bg-sidebar-accent p-3 rounded-xl bg-sidebar-accent/50 backdrop-blur-sm transition-all duration-200 hover:scale-105"
+                                    className="w-full text-sidebar-foreground hover:bg-sidebar-accent p-3 rounded-xl bg-sidebar-accent/50 backdrop-blur-sm transition-all duration-200 hover:scale-105 hover:text--sidebar-foreground"
                                 >
                                     <MessageCircle className="w-5 h-5" />
                                 </Button>
@@ -59,13 +59,12 @@ export function SiderNavBar({ onToggleMobileSidebar }: NavigationStripProps) {
                             <p>Tin nhắn</p>
                         </TooltipContent>
                     </Tooltip>
-
                     <Tooltip>
                         <TooltipTrigger asChild>
                             <Button
                                 variant="ghost"
                                 size="sm"
-                                className="w-full text-sidebar-foreground hover:bg-sidebar-accent p-3 rounded-xl transition-all duration-200 hover:scale-105"
+                                className="w-full cursor-pointer hover:text-sidebar-foreground text-sidebar-foreground hover:bg-sidebar-accent p-3 rounded-xl transition-all duration-200 hover:scale-105"
                             >
                                 <Phone className="w-5 h-5" />
                             </Button>
@@ -80,7 +79,7 @@ export function SiderNavBar({ onToggleMobileSidebar }: NavigationStripProps) {
                             <Button
                                 variant="ghost"
                                 size="sm"
-                                className="w-full text-sidebar-foreground hover:bg-sidebar-accent p-3 rounded-xl transition-all duration-200 hover:scale-105"
+                                className="w-full cursor-pointer hover:text-sidebar-foreground text-sidebar-foreground hover:bg-sidebar-accent p-3 rounded-xl transition-all duration-200 hover:scale-105"
                             >
                                 <Users className="w-5 h-5" />
                             </Button>
@@ -95,7 +94,7 @@ export function SiderNavBar({ onToggleMobileSidebar }: NavigationStripProps) {
                             <Button
                                 variant="ghost"
                                 size="sm"
-                                className="w-full text-sidebar-foreground hover:bg-sidebar-accent p-3 rounded-xl transition-all duration-200 hover:scale-105"
+                                className="w-full cursor-pointer hover:text-sidebar-foreground text-sidebar-foreground hover:bg-sidebar-accent p-3 rounded-xl transition-all duration-200 hover:scale-105"
                             >
                                 <Cloud className="w-5 h-5" />
                             </Button>
@@ -110,7 +109,7 @@ export function SiderNavBar({ onToggleMobileSidebar }: NavigationStripProps) {
                             <Button
                                 variant="ghost"
                                 size="sm"
-                                className="w-full text-sidebar-foreground hover:bg-sidebar-accent p-3 rounded-xl transition-all duration-200 hover:scale-105"
+                                className="w-full cursor-pointer hover:text-sidebar-foreground text-sidebar-foreground hover:bg-sidebar-accent p-3 rounded-xl transition-all duration-200 hover:scale-105"
                             >
                                 <Briefcase className="w-5 h-5" />
                             </Button>
@@ -141,7 +140,7 @@ export function SiderNavBar({ onToggleMobileSidebar }: NavigationStripProps) {
                             <Button
                                 variant="ghost"
                                 size="sm"
-                                className="w-full text-sidebar-foreground hover:bg-sidebar-accent p-3 rounded-xl transition-all duration-200 hover:scale-105"
+                                className="w-full cursor-pointer hover:text-sidebar-foreground  text-sidebar-foreground hover:bg-sidebar-accent p-3 rounded-xl transition-all duration-200 hover:scale-105"
                             >
                                 <Settings className="w-5 h-5" />
                             </Button>
