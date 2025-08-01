@@ -1,4 +1,3 @@
-import React from 'react'
 import { ChatListPanel } from '../home/components/ChatListPanel/ChatListPanel'
 import { cn } from '@/lib/utils'
 import { useSliderTabBar } from '@/components/layouts/hooks/SliderTabBar'
