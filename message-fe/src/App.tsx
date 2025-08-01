@@ -3,7 +3,7 @@ import './App.css';
 import { MainLayout } from '@/components/layouts';
 import HomePage from '@/modules/home/pages/HomePage';
 import { ThemeProvider } from './components/ui/ThemeProvider';
-
+import ChatPages from '@/modules/Chat/ChatPages';
 function App() {
   const router = createBrowserRouter([
     // Main layout
@@ -14,6 +14,10 @@ function App() {
         {
           path: '/',
           element: <HomePage />
+        },
+        {
+          path: '/chat',
+          element: <ChatPages />
         }
       ],
     },
