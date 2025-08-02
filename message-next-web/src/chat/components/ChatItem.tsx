@@ -45,7 +45,7 @@ export function ChatItem({ user, index, isSelected, onClick }: ChatListItemProps
             <div className="relative flex-shrink-0">
                 <Avatar className="w-11 h-11 lg:w-12 lg:h-12 shadow-md">
                     <AvatarImage src={user.avatar} />
-                    <AvatarFallback className="bg-gradient-to-br from-primary/80 to-secondary/80 text-primary-foreground font-semibold text-sm">
+                    <AvatarFallback className="bg-blue-600 text-primary-foreground font-semibold text-sm">
                         {user.name.charAt(0)}
                     </AvatarFallback>
                 </Avatar>

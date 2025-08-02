@@ -31,7 +31,7 @@ export function HeaderArea({ user, onToggleMobileSidebar }: ChatHeaderProps) {
                     <div className="relative flex-shrink-0">
                         <Avatar className="w-8 h-8 sm:w-10 sm:h-10 shadow-lg ring-2 ring-primary/20">
                             <AvatarImage src={user.avatar || "/placeholder.svg"} />
-                            <AvatarFallback className="bg-gradient-to-br from-primary/80 to-secondary/80 text-primary-foreground font-bold text-sm">
+                            <AvatarFallback className="bg-blue-500 text-primary-foreground font-bold text-sm">
                                 {user.name.charAt(0)}
                             </AvatarFallback>
                         </Avatar>

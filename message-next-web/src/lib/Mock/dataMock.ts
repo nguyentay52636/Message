@@ -364,4 +364,26 @@ export const welcomeSlides = [
         isRead: true,
       },
     ],
+    "emmm-yeuu-2": [
+      {
+        id: "1",
+        content: "nó chơi chơi",
+        sender: "other",
+        timestamp: "23:21", 
+        type: "text",
+        senderName: "Emmm YeuuD",
+        avatar: "/placeholder.svg?height=32&width=32&text=EY",
+      },
+    ],
+    "emmm-yeuua-2": [
+      {
+        id: "1",
+        content: "nó chơi chơi",
+        sender: "other",
+        timestamp: "23:21",
+        type: "text",
+        senderName: "Emmm YeuuD",
+        avatar: "/placeholder.svg?height=32&width=32&text=EY",
+      },
+    ],
   }

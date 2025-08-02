@@ -40,14 +40,13 @@ export function ChatArea({ messages, setSelectedChat, selectedChat, message, set
             </div>
 
             {/* Fixed Input Area at Bottom */}
-            <div className="flex-shrink-0 bg-background">
+            <div className="    flex-shrink-0 bg-background absolute bottom-0 w-[80%] fixed">
                 <ChatInput
                     message={message}
                     setMessage={setMessage}
                     onSendMessage={onSendMessage}
                     recipientName={recipientName}
                 />
-            </div>
-        </div>
+            </div></div>
     )
 }

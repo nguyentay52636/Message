@@ -1,10 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { ScrollArea } from "@/components/ui/scroll-area"
-import { SiderBar } from "@/components/shared/SiderBar/SiderBar"
 import { ChatUser, mockUsers } from "@/lib/Mock/dataMock"
-import { ChatItem } from "../ChatItem"
 import { ChatListHeader } from "../ChatListHeader/ChatListHeader"
 import ChatListItem from "../ChatListItem"
 
@@ -33,9 +30,9 @@ export function ChatListSidebar({ onChatSelect, selectedChat, onToggleMobileSide
     }
 
     return (
-        <div className="w-full h-full flex bg-card">
+        <div className="w-full bg-blue-500 flex  items-center">
 
-            <div className="flex-1 flex flex-col bg-card min-w-0 overflow-hidden">
+            <div className="flex-1 flex flex-col bg-card min-w-0 h-100vh ">
                 <div>
                     <ChatListHeader activeTab={activeTab} setActiveTab={setActiveTab} user={allUsers[0]} onToggleMobileSidebar={onToggleMobileSidebar} />
                 </div>
