@@ -1,7 +1,11 @@
+"use client"
+import Chat from '@/chat/Chat'
 import React from 'react'
 
-export default function page() {
+export default function ChatPage() {
     return (
-        <div>page</div>
+        <div className="flex-1 overflow-hidden">
+            <Chat />
+        </div>
     )
 }

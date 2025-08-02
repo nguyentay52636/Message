@@ -1,13 +1,14 @@
 import Image from "next/image";
-import { SiderBar } from "@/components/shared/SiderBar/SiderBar";
+
 export default function Home() {
   return (
-    <>
-      <div className="h-screen w-screen flex overflow-hidden bg-background">
-        <div className="hidden lg:flex w-16 flex-shrink-0 z-30">
-          <SiderBar />
-        </div>
+    <div className="flex-1 flex items-center justify-center">
+      <div className="text-center">
+        <h1 className="text-4xl font-bold mb-4">Welcome to Message App</h1>
+        <p className="text-lg text-muted-foreground">
+          Start chatting with your friends!
+        </p>
       </div>
-    </>
+    </div>
   );
 }

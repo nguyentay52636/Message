@@ -14,14 +14,14 @@ interface NavigationStripProps {
 export function SiderBar({ onToggleMobileSidebar }: NavigationStripProps) {
     return (
         <TooltipProvider>
-            <div className="w-full bg-zalo-blue flex flex-col items-center py-4 space-y-4 shadow-lg">
+            <div className="w-full bg-sidebar text-sidebar-foreground flex flex-col items-center py-4 space-y-4 shadow-lg">
                 {/* Mobile Menu Button - Only visible on mobile */}
                 <div className="lg:hidden w-full px-2">
-                    <Button
+                <Button
                         variant="ghost"
                         size="sm"
                         onClick={onToggleMobileSidebar}
-                        className="w-full text-white hover:bg-white/20 p-3 rounded-xl transition-all duration-200"
+                        className="w-full text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground p-3 rounded-xl transition-all duration-200"
                     >
                         <Menu className="w-5 h-5" />
                     </Button>
@@ -29,13 +29,13 @@ export function SiderBar({ onToggleMobileSidebar }: NavigationStripProps) {
 
                 {/* User Avatar */}
                 <div className="relative group">
-                    <Avatar className="w-10 h-10 border-2 border-white/20 shadow-lg transition-transform group-hover:scale-105">
+                    <Avatar className="w-10 h-10 border-2 border-sidebar-border shadow-lg transition-transform group-hover:scale-105">
                         <AvatarImage src="/placeholder.svg?height=40&width=40&text=U" />
                         <AvatarFallback className="bg-gradient-to-br from-orange-400 to-orange-600 text-white font-bold text-sm">
                             U
                         </AvatarFallback>
                     </Avatar>
-                    <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 border-2 border-white rounded-full"></div>
+                    <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 border-2 border-sidebar shadow-lg rounded-full"></div>
                 </div>
 
                 {/* Navigation Icons */}
@@ -46,7 +46,7 @@ export function SiderBar({ onToggleMobileSidebar }: NavigationStripProps) {
                                 <Button
                                     variant="ghost"
                                     size="sm"
-                                    className="w-full text-white hover:bg-white/20 p-3 rounded-xl bg-white/10 backdrop-blur-sm transition-all duration-200 hover:scale-105"
+                                    className="w-full text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground p-3 rounded-xl bg-sidebar-accent/50 backdrop-blur-sm transition-all duration-200 hover:scale-105"
                                 >
                                     <MessageCircle className="w-5 h-5" />
                                 </Button>
@@ -65,7 +65,7 @@ export function SiderBar({ onToggleMobileSidebar }: NavigationStripProps) {
                             <Button
                                 variant="ghost"
                                 size="sm"
-                                className="w-full text-white hover:bg-white/20 p-3 rounded-xl transition-all duration-200 hover:scale-105"
+                                className="w-full text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground p-3 rounded-xl transition-all duration-200 hover:scale-105"
                             >
                                 <Phone className="w-5 h-5" />
                             </Button>
@@ -80,7 +80,7 @@ export function SiderBar({ onToggleMobileSidebar }: NavigationStripProps) {
                             <Button
                                 variant="ghost"
                                 size="sm"
-                                className="w-full text-white hover:bg-white/20 p-3 rounded-xl transition-all duration-200 hover:scale-105"
+                                className="w-full text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground p-3 rounded-xl transition-all duration-200 hover:scale-105"
                             >
                                 <Users className="w-5 h-5" />
                             </Button>
@@ -95,7 +95,7 @@ export function SiderBar({ onToggleMobileSidebar }: NavigationStripProps) {
                             <Button
                                 variant="ghost"
                                 size="sm"
-                                className="w-full text-white hover:bg-white/20 p-3 rounded-xl transition-all duration-200 hover:scale-105"
+                                className="w-full text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground p-3 rounded-xl transition-all duration-200 hover:scale-105"
                             >
                                 <Cloud className="w-5 h-5" />
                             </Button>
@@ -110,7 +110,7 @@ export function SiderBar({ onToggleMobileSidebar }: NavigationStripProps) {
                             <Button
                                 variant="ghost"
                                 size="sm"
-                                className="w-full text-white hover:bg-white/20 p-3 rounded-xl transition-all duration-200 hover:scale-105"
+                                className="w-full text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground p-3 rounded-xl transition-all duration-200 hover:scale-105"
                             >
                                 <Briefcase className="w-5 h-5" />
                             </Button>
@@ -141,7 +141,7 @@ export function SiderBar({ onToggleMobileSidebar }: NavigationStripProps) {
                             <Button
                                 variant="ghost"
                                 size="sm"
-                                className="w-full text-white hover:bg-white/20 p-3 rounded-xl transition-all duration-200 hover:scale-105"
+                                className="w-full text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground p-3 rounded-xl transition-all duration-200 hover:scale-105"
                             >
                                 <Settings className="w-5 h-5" />
                             </Button>
