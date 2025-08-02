@@ -33,10 +33,10 @@ export function ChatListSidebar({ onChatSelect, selectedChat, onToggleMobileSide
     }
 
     return (
-        <div className="w-full  h-full flex bg-card">
+        <div className="w-full h-full flex bg-card">
 
             <div className="flex-1 flex flex-col bg-card min-w-0 overflow-hidden">
-                <div className="flex-shrink-0">
+                <div>
                     <ChatListHeader activeTab={activeTab} setActiveTab={setActiveTab} user={allUsers[0]} onToggleMobileSidebar={onToggleMobileSidebar} />
                 </div>
 

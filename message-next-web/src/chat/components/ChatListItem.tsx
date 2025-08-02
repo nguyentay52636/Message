@@ -12,17 +12,15 @@ interface chatListProps {
 }
 
 export default function ChatListItem({ activeTab, onChatSelect, selectedChat, user, index }: chatListProps) {
-    const handleChatSelection = (chatId: string) => {
-        onChatSelect(chatId)
-    }
-
     return (
-        <ChatItem
-            key={user.id}
-            user={user}
-            index={index}
-            isSelected={selectedChat === user.id}
-            onClick={() => handleChatSelection(user.id)}
-        />
+        <div className="w-full">
+            <ChatItem
+                key={user.id}
+                user={user}
+                index={index}
+                isSelected={selectedChat === user.id}
+                onClick={() => onChatSelect(user.id)}
+            />
+        </div>
     )
 }

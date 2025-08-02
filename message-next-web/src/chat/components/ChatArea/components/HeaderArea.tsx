@@ -15,9 +15,9 @@ interface ChatHeaderProps {
 
 export function HeaderArea({ user, onToggleMobileSidebar }: ChatHeaderProps) {
     return (
-        <div className="w-full fixed! bg-card border-b border-border">
-            <div className="px-4 py-3 flex items-center justify-between">
-                <div className="flex items-center gap-3 flex-1 min-w-0">
+        <div className="w-full bg-card border-b border-border shadow-sm">
+            <div className="px-3 sm:px-4 py-3 flex items-center justify-between">
+                <div className="flex items-center gap-2 sm:gap-3 flex-1 min-w-0">
                     {/* Mobile Menu Button */}
                     <Button
                         variant="ghost"
@@ -29,66 +29,64 @@ export function HeaderArea({ user, onToggleMobileSidebar }: ChatHeaderProps) {
                     </Button>
 
                     <div className="relative flex-shrink-0">
-                        <Avatar className="w-10 h-10 shadow-lg ring-2 ring-primary/20">
+                        <Avatar className="w-8 h-8 sm:w-10 sm:h-10 shadow-lg ring-2 ring-primary/20">
                             <AvatarImage src={user.avatar || "/placeholder.svg"} />
-                            <AvatarFallback className="bg-gradient-to-br from-primary/80 to-secondary/80 text-primary-foreground font-bold">
+                            <AvatarFallback className="bg-gradient-to-br from-primary/80 to-secondary/80 text-primary-foreground font-bold text-sm">
                                 {user.name.charAt(0)}
                             </AvatarFallback>
                         </Avatar>
                         {user.isOnline && (
-                            <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 border-2 border-background rounded-full"></div>
+                            <div className="absolute -bottom-1 -right-1 w-2.5 h-2.5 sm:w-3 sm:h-3 bg-green-500 border-2 border-background rounded-full"></div>
                         )}
                     </div>
 
                     <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2">
-                            <span className="font-bold text-base truncate text-foreground">{user.name}</span>
+                        <div className="flex items-center gap-1 sm:gap-2 flex-wrap">
+                            <span className="font-bold text-sm sm:text-base truncate text-foreground">{user.name}</span>
                             {user.id === "1" && (
-                                <Badge className="text-xs px-2 py-1 font-semibold rounded-full flex-shrink-0 bg-green-100 text-green-700 border border-green-200 dark:bg-green-900/20 dark:text-green-300 dark:border-green-700/30">
-                                    89 thành viên
+                                <Badge className="text-xs px-1.5 sm:px-2 py-0.5 sm:py-1 font-semibold rounded-full flex-shrink-0 bg-green-100 text-green-700 border border-green-200 dark:bg-green-900/20 dark:text-green-300 dark:border-green-700/30">
+                                    <span className="hidden sm:inline">89 thành viên</span>
+                                    <span className="sm:hidden">89</span>
                                 </Badge>
                             )}
                         </div>
                         {user.isOnline && (
-                            <div className="text-sm text-green-600 dark:text-green-400 font-medium">Đang hoạt động</div>
+                            <div className="text-xs sm:text-sm text-green-600 dark:text-green-400 font-medium">Đang hoạt động</div>
                         )}
                     </div>
                 </div>
 
-                <div className="flex items-center gap-2 flex-shrink-0">
+                <div className="flex items-center gap-1 sm:gap-2 flex-shrink-0">
                     <Button
                         variant="ghost"
                         size="sm"
-                        className="p-3 rounded-xl transition-all hover:scale-105 text-muted-foreground hover:text-foreground hover:bg-accent"
+                        className="p-2 sm:p-3 rounded-xl transition-all hover:scale-105 text-muted-foreground hover:text-foreground hover:bg-accent"
                     >
-                        <Phone className="w-5 h-5" />
+                        <Phone className="w-4 h-4 sm:w-5 sm:h-5" />
                     </Button>
                     <Button
                         variant="ghost"
                         size="sm"
-                        className="p-3 rounded-xl transition-all hover:scale-105 text-muted-foreground hover:text-foreground hover:bg-accent"
+                        className="p-2 sm:p-3 rounded-xl transition-all hover:scale-105 text-muted-foreground hover:text-foreground hover:bg-accent"
                     >
-                        <Video className="w-5 h-5" />
+                        <Video className="w-4 h-4 sm:w-5 sm:h-5" />
                     </Button>
                     <Button
                         variant="ghost"
                         size="sm"
-                        className="hidden md:block p-3 rounded-xl transition-all hover:scale-105 text-muted-foreground hover:text-foreground hover:bg-accent"
+                        className="hidden md:block p-2 sm:p-3 rounded-xl transition-all hover:scale-105 text-muted-foreground hover:text-foreground hover:bg-accent"
                     >
-                        <Search className="w-5 h-5" />
+                        <Search className="w-4 h-4 sm:w-5 sm:h-5" />
                     </Button>
                     <Button
                         variant="ghost"
                         size="sm"
-                        className="p-3 rounded-xl transition-all hover:scale-105 text-muted-foreground hover:text-foreground hover:bg-accent"
+                        className="p-2 sm:p-3 rounded-xl transition-all hover:scale-105 text-muted-foreground hover:text-foreground hover:bg-accent"
                     >
-                        <MoreHorizontal className="w-5 h-5" />
+                        <MoreHorizontal className="w-4 h-4 sm:w-5 sm:h-5" />
                     </Button>
                 </div>
             </div>
-
-            {/* Group Info Section - Only for group chats */}
-
         </div>
     )
 }

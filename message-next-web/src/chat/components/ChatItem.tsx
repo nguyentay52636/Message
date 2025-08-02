@@ -31,9 +31,6 @@ export function ChatItem({ user, index, isSelected, onClick }: ChatListItemProps
     }
 
     const handleClick = (e: React.MouseEvent) => {
-        e.preventDefault()
-        e.stopPropagation()
-
         onClick()
     }
 
