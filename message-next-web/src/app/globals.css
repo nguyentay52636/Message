@@ -69,7 +69,7 @@
   --chart-4: oklch(0.828 0.189 84.429);
   --chart-5: oklch(0.769 0.188 70.08);
   --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-foreground: oklch(1 0 0);
   --sidebar-primary: oklch(0.205 0 0);
   --sidebar-primary-foreground: oklch(0.985 0 0);
   --sidebar-accent: oklch(0.97 0 0);
@@ -110,15 +110,26 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
+  --accent: oklch(0.2 0.326 0.175);
+  --accent-foreground: oklch(0.985 0 0);
 }
 
 @layer base {
-  * {
-    @apply border-border outline-ring/50;
+  html {
+    @apply h-full w-full;
+    height: 100vh;
+    height: 100dvh;
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground h-full w-full m-0 p-0;
+    height: 100vh;
+    height: 100dvh;
+    overflow: hidden;
+  }
+
+  * {
+    @apply border-border outline-ring/50;
   }
 
   .bg-zalo-blue {

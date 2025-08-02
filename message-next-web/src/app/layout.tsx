@@ -11,6 +11,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+      </head>
       <body>
         <ThemeProvider
           attribute="class"
@@ -18,7 +21,7 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <div className="h-screen w-screen flex overflow-hidden bg-background">
+          <div className="h-screen w-full flex overflow-hidden bg-background">
             <div className="hidden lg:flex w-16 flex-shrink-0 z-30">
               <SiderBar />
             </div>

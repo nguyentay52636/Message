@@ -34,14 +34,6 @@ export function ChatItem({ user, index, isSelected, onClick }: ChatListItemProps
         e.preventDefault()
         e.stopPropagation()
 
-        // Add visual feedback
-        const target = e.currentTarget as HTMLElement
-        target.style.transform = "scale(0.98)"
-        setTimeout(() => {
-            target.style.transform = "scale(1)"
-        }, 150)
-
-        console.log("Chat item clicked:", user.id, "- Opening chat for:", user.name)
         onClick()
     }
 
@@ -49,13 +41,13 @@ export function ChatItem({ user, index, isSelected, onClick }: ChatListItemProps
         <div
             onClick={handleClick}
             className={cn(
-                "flex items-center gap-3 p-3 mx-2 my-1 cursor-pointer transition-all duration-200 rounded-xl hover:scale-[1.02] active:scale-[0.98]",
-                isSelected ? "bg-accent/50 shadow-lg border-l-4 border-primary" : "hover:bg-accent/30",
+                "flex items-center gap-3 p-3 mx-2 my-1 cursor-pointer transition-all duration-200 rounded-xl hover:scale-[1.02] active:scale-[0.9]",
+                isSelected ? "bg-accent/50 shadow-lg  border-primary" : "hover:bg-accent/30",
             )}
         >
             <div className="relative flex-shrink-0">
                 <Avatar className="w-11 h-11 lg:w-12 lg:h-12 shadow-md">
-                    <AvatarImage src={user.avatar || "/placeholder.svg"} />
+                    <AvatarImage src={user.avatar} />
                     <AvatarFallback className="bg-gradient-to-br from-primary/80 to-secondary/80 text-primary-foreground font-semibold text-sm">
                         {user.name.charAt(0)}
                     </AvatarFallback>

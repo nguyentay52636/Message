@@ -1,0 +1,94 @@
+"use client"
+
+import { Video, Search, MoreHorizontal, Phone, Menu, Users } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Badge } from "@/components/ui/badge"
+import { ChatUser } from "@/lib/Mock/dataMock"
+
+
+
+interface ChatHeaderProps {
+    user: ChatUser
+    onToggleMobileSidebar?: () => void
+}
+
+export function HeaderArea({ user, onToggleMobileSidebar }: ChatHeaderProps) {
+    return (
+        <div className="w-full fixed! bg-card border-b border-border">
+            <div className="px-4 py-3 flex items-center justify-between">
+                <div className="flex items-center gap-3 flex-1 min-w-0">
+                    {/* Mobile Menu Button */}
+                    <Button
+                        variant="ghost"
+                        size="sm"
+                        className="lg:hidden p-2 hover:bg-accent rounded-xl flex-shrink-0"
+                        onClick={onToggleMobileSidebar}
+                    >
+                        <Menu className="w-5 h-5" />
+                    </Button>
+
+                    <div className="relative flex-shrink-0">
+                        <Avatar className="w-10 h-10 shadow-lg ring-2 ring-primary/20">
+                            <AvatarImage src={user.avatar || "/placeholder.svg"} />
+                            <AvatarFallback className="bg-gradient-to-br from-primary/80 to-secondary/80 text-primary-foreground font-bold">
+                                {user.name.charAt(0)}
+                            </AvatarFallback>
+                        </Avatar>
+                        {user.isOnline && (
+                            <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 border-2 border-background rounded-full"></div>
+                        )}
+                    </div>
+
+                    <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2">
+                            <span className="font-bold text-base truncate text-foreground">{user.name}</span>
+                            {user.id === "1" && (
+                                <Badge className="text-xs px-2 py-1 font-semibold rounded-full flex-shrink-0 bg-green-100 text-green-700 border border-green-200 dark:bg-green-900/20 dark:text-green-300 dark:border-green-700/30">
+                                    89 thành viên
+                                </Badge>
+                            )}
+                        </div>
+                        {user.isOnline && (
+                            <div className="text-sm text-green-600 dark:text-green-400 font-medium">Đang hoạt động</div>
+                        )}
+                    </div>
+                </div>
+
+                <div className="flex items-center gap-2 flex-shrink-0">
+                    <Button
+                        variant="ghost"
+                        size="sm"
+                        className="p-3 rounded-xl transition-all hover:scale-105 text-muted-foreground hover:text-foreground hover:bg-accent"
+                    >
+                        <Phone className="w-5 h-5" />
+                    </Button>
+                    <Button
+                        variant="ghost"
+                        size="sm"
+                        className="p-3 rounded-xl transition-all hover:scale-105 text-muted-foreground hover:text-foreground hover:bg-accent"
+                    >
+                        <Video className="w-5 h-5" />
+                    </Button>
+                    <Button
+                        variant="ghost"
+                        size="sm"
+                        className="hidden md:block p-3 rounded-xl transition-all hover:scale-105 text-muted-foreground hover:text-foreground hover:bg-accent"
+                    >
+                        <Search className="w-5 h-5" />
+                    </Button>
+                    <Button
+                        variant="ghost"
+                        size="sm"
+                        className="p-3 rounded-xl transition-all hover:scale-105 text-muted-foreground hover:text-foreground hover:bg-accent"
+                    >
+                        <MoreHorizontal className="w-5 h-5" />
+                    </Button>
+                </div>
+            </div>
+
+            {/* Group Info Section - Only for group chats */}
+
+        </div>
+    )
+}

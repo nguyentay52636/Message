@@ -2,10 +2,12 @@
 import React from 'react'
 import { Button } from "@/components/ui/button"
 import { ChevronDown } from "lucide-react"
+
 interface ChatTabsBarProps {
     activeTab: "all" | "unread"
     setActiveTab: (tab: "all" | "unread") => void
 }
+
 export default function ChatTabsBar({ activeTab, setActiveTab }: ChatTabsBarProps) {
     return (
         <div className="flex items-center justify-between">
