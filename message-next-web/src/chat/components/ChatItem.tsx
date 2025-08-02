@@ -38,50 +38,50 @@ export function ChatItem({ user, index, isSelected, onClick }: ChatListItemProps
         <div
             onClick={handleClick}
             className={cn(
-                "flex items-center gap-3 p-3 mx-2 my-1 cursor-pointer transition-all duration-200 rounded-xl hover:scale-[1.02] active:scale-[0.9]",
-                isSelected ? "bg-accent/50 shadow-lg  border-primary" : "hover:bg-accent/30",
+                "flex items-center gap-2 sm:gap-3 p-2 sm:p-3 mx-1 sm:mx-2 my-0.5 sm:my-1 cursor-pointer transition-all duration-200 rounded-xl hover:scale-[1.02] active:scale-[0.9]",
+                isSelected ? "bg-accent/50 shadow-lg border-primary" : "hover:bg-accent/30",
             )}
         >
             <div className="relative flex-shrink-0">
-                <Avatar className="w-11 h-11 lg:w-12 lg:h-12 shadow-md">
+                <Avatar className="w-10 h-10 sm:w-11 sm:h-11 lg:w-12 lg:h-12 shadow-md">
                     <AvatarImage src={user.avatar} />
                     <AvatarFallback className="bg-blue-600 text-primary-foreground font-semibold text-sm">
                         {user.name.charAt(0)}
                     </AvatarFallback>
                 </Avatar>
                 {user.isOnline && (
-                    <div className="absolute -bottom-1 -right-1 w-3.5 h-3.5 lg:w-4 lg:h-4 bg-green-500 border-2 border-background rounded-full shadow-sm"></div>
+                    <div className="absolute -bottom-1 -right-1 w-3 h-3 sm:w-3.5 sm:h-3.5 lg:w-4 lg:h-4 bg-green-500 border-2 border-background rounded-full shadow-sm"></div>
                 )}
                 {/* Special badges for specific users */}
                 {index === 0 && user.unreadCount && (
-                    <div className="absolute -top-1 -right-1 w-5 h-5 lg:w-6 lg:h-6 bg-destructive text-destructive-foreground text-xs flex items-center justify-center rounded-full shadow-lg font-bold">
+                    <div className="absolute -top-1 -right-1 w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6 bg-destructive text-destructive-foreground text-xs flex items-center justify-center rounded-full shadow-lg font-bold">
                         {user.unreadCount}
                     </div>
                 )}
                 {index === 3 && user.unreadCount && (
-                    <div className="absolute -top-1 -right-1 w-4 h-4 lg:w-5 lg:h-5 bg-orange-500 text-white text-xs flex items-center justify-center rounded-full shadow-lg font-bold">
+                    <div className="absolute -top-1 -right-1 w-3.5 h-3.5 sm:w-4 sm:h-4 lg:w-5 lg:h-5 bg-orange-500 text-white text-xs flex items-center justify-center rounded-full shadow-lg font-bold">
                         {user.unreadCount}
                     </div>
                 )}
                 {index === 6 && user.unreadCount && (
-                    <div className="absolute -top-1 -right-1 w-4 h-4 lg:w-5 lg:h-5 bg-destructive text-destructive-foreground text-xs flex items-center justify-center rounded-full shadow-lg font-bold">
+                    <div className="absolute -top-1 -right-1 w-3.5 h-3.5 sm:w-4 sm:h-4 lg:w-5 lg:h-5 bg-destructive text-destructive-foreground text-xs flex items-center justify-center rounded-full shadow-lg font-bold">
                         {user.unreadCount}
                     </div>
                 )}
             </div>
 
             <div className="flex-1 min-w-0 overflow-hidden">
-                <div className="flex items-center gap-2 mb-1">
+                <div className="flex items-center gap-1 sm:gap-2 mb-0.5 sm:mb-1">
                     <span
-                        className={cn("font-semibold text-sm truncate flex-1", isSelected ? "text-primary" : "text-foreground")}
+                        className={cn("font-semibold text-xs sm:text-sm truncate flex-1", isSelected ? "text-primary" : "text-foreground")}
                     >
                         {user.name}
                     </span>
-                    {user.isPinned && <Pin className="w-3 h-3 text-amber-500 flex-shrink-0" />}
+                    {user.isPinned && <Pin className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-amber-500 flex-shrink-0" />}
                     {index === 2 && (
                         <div className="flex items-center gap-1 flex-shrink-0">
-                            <span className="text-yellow-500">⚡</span>
-                            <span className="text-xs text-primary font-medium">{user.timestamp}</span>
+                            <span className="text-yellow-500 text-xs">⚡</span>
+                            <span className="text-xs text-primary font-medium hidden sm:inline">{user.timestamp}</span>
                         </div>
                     )}
                 </div>
@@ -105,12 +105,12 @@ export function ChatItem({ user, index, isSelected, onClick }: ChatListItemProps
 
             <div className="flex flex-col items-end gap-1 flex-shrink-0">
                 {user.timestamp && index !== 2 && (
-                    <span className="text-xs whitespace-nowrap text-muted-foreground">{user.timestamp}</span>
+                    <span className="text-xs whitespace-nowrap text-muted-foreground hidden sm:block">{user.timestamp}</span>
                 )}
                 {user.unreadCount && user.unreadCount > 0 && (
                     <Badge
                         className={cn(
-                            "text-white text-xs px-2 py-1 h-5 min-w-[20px] font-bold shadow-lg",
+                            "text-white text-xs px-1.5 sm:px-2 py-0.5 sm:py-1 h-4 sm:h-5 min-w-[16px] sm:min-w-[20px] font-bold shadow-lg",
                             user.unreadCount >= 5 ? "bg-destructive" : "bg-primary",
                         )}
                     >

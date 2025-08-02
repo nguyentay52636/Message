@@ -15,7 +15,7 @@ export default function ChatTabsBar({ activeTab, setActiveTab }: ChatTabsBarProp
                 <Button
                     variant="ghost"
                     onClick={() => setActiveTab("all")}
-                    className={`py-2 px-0 mr-8 text-sm font-semibold border-b-2 transition-all ${activeTab === "all"
+                    className={`py-1.5 sm:py-2 px-0 mr-6 sm:mr-8 text-xs sm:text-sm font-semibold border-b-2 transition-all ${activeTab === "all"
                         ? "border-primary text-primary"
                         : "border-transparent text-muted-foreground hover:text-foreground"
                         }`}
@@ -25,7 +25,7 @@ export default function ChatTabsBar({ activeTab, setActiveTab }: ChatTabsBarProp
                 <Button
                     variant="ghost"
                     onClick={() => setActiveTab("unread")}
-                    className={`py-2 px-0 text-sm font-semibold border-b-2 transition-all ${activeTab === "unread"
+                    className={`py-1.5 sm:py-2 px-0 text-xs sm:text-sm font-semibold border-b-2 transition-all ${activeTab === "unread"
                         ? "border-primary text-primary"
                         : "border-transparent text-muted-foreground hover:text-foreground"
                         }`}
@@ -36,10 +36,11 @@ export default function ChatTabsBar({ activeTab, setActiveTab }: ChatTabsBarProp
             <Button
                 variant="ghost"
                 size="sm"
-                className="text-sm font-medium px-3 py-1.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-accent"
+                className="text-xs sm:text-sm font-medium px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-accent"
             >
-                Phân loại
-                <ChevronDown className="w-4 h-4 ml-1" />
+                <span className="hidden sm:inline">Phân loại</span>
+                <span className="sm:hidden">...</span>
+                <ChevronDown className="w-3 h-3 sm:w-4 sm:h-4 ml-1" />
             </Button>
         </div>
     )

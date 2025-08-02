@@ -14,12 +14,10 @@ interface ChatHeaderProps {
 
 export function ChatListHeader({ activeTab, setActiveTab, user, onToggleMobileSidebar }: ChatHeaderProps) {
   return (
-    <div className="p-4 border-b bg-card border-border">
-
+    <div className="p-3 sm:p-4 border-b bg-card border-border">
       <HeaderTitle />
       <ChatFilterSearch />
       <ChatTabsBar activeTab={activeTab} setActiveTab={setActiveTab} />
-
     </div>
   )
 }

@@ -3,6 +3,7 @@ import { ChatListSidebar } from './components/ChatListSider/ChatListSider'
 import { ChatArea } from './components/ChatArea/ChatArea'
 import { mockUsers, chatData } from '@/lib/Mock/dataMock'
 import { Button } from '@/components/ui/button'
+import { Menu } from 'lucide-react'
 
 interface ChatProps {
     setSelectedChat: (chatId: string | null) => void
@@ -48,6 +49,10 @@ export default function Chat({ setSelectedChat, selectedChat, onToggleMobileSide
         setIsMobileSidebarOpen(false)
     }
 
+    const handleToggleMobileSidebar = () => {
+        setIsMobileSidebarOpen(!isMobileSidebarOpen)
+    }
+
     return (
         <div className="flex h-full w-full relative">
             {/* Mobile Sidebar Overlay */}
@@ -58,89 +63,53 @@ export default function Chat({ setSelectedChat, selectedChat, onToggleMobileSide
                 />
             )}
 
-            {/* Main Container with Sidebar and Chat Area */}
-            <div className="flex h-full w-full">
-                {/* Sidebar */}
-                <div className={`
-                    ${isMobileSidebarOpen ? 'translate-x-0' : '-translate-x-full'}
-                    lg:translate-x-0 lg:relative
-                    fixed left-0 top-0 h-full w-80 bg-card border-r border-border z-50
-                    transition-transform duration-300 ease-in-out
-                `}>
-                    <ChatListSidebar
-                        onChatSelect={handleChatSelect}
+            {/* Sidebar - Responsive */}
+            <div className={`
+                fixed lg:relative inset-y-0 left-0 z-50 w-80 bg-card border-r border-border flex-shrink-0
+                transform transition-transform duration-300 ease-in-out
+                ${isMobileSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
+            `}>
+                <ChatListSidebar
+                    onChatSelect={handleChatSelect}
+                    selectedChat={selectedChat}
+                    onToggleMobileSidebar={() => setIsMobileSidebarOpen(false)}
+                />
+            </div>
+
+            {/* Chat Area */}
+            <div className="flex-1 flex flex-col lg:ml-0">
+                {selectedChat && selectedUser ? (
+                    <ChatArea
+                        messages={currentMessages}
+                        setSelectedChat={setSelectedChat}
                         selectedChat={selectedChat}
-                        onToggleMobileSidebar={() => setIsMobileSidebarOpen(false)}
+                        message={message}
+                        setMessage={setMessage}
+                        onSendMessage={handleSendMessage}
+                        recipientName={selectedUser.name}
+                        user={selectedUser}
+                        onToggleMobileSidebar={handleToggleMobileSidebar}
                     />
-                </div>
-
-                {/* Chat Area */}
-                <div className="flex-1 flex flex-col lg:ml-0">
-                    {selectedChat && selectedUser && (
-                        <div className="lg:hidden flex items-center gap-3 p-4 border-b border-border bg-card">
-                            <Button
-                                onClick={() => setIsMobileSidebarOpen(true)}
-                                className="p-2 rounded-lg hover:bg-accent"
-                            >
-                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                ) : (
+                    <div className="flex-1 flex items-center justify-center bg-gradient-to-br from-muted/10 via-background to-muted/20">
+                        <div className="text-center p-4 sm:p-8 max-w-md">
+                            <div className="w-16 h-16 sm:w-24 sm:h-24 bg-gradient-to-br from-primary/10 to-primary/5 rounded-3xl flex items-center justify-center mx-auto mb-4 sm:mb-6 shadow-lg border border-primary/10">
+                                <svg className="w-8 h-8 sm:w-12 sm:h-12 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth={1.5}
+                                        d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
+                                    />
                                 </svg>
-                            </Button>
-                            <div className="flex items-center gap-3 flex-1">
-                                <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-                                    <span className="text-sm font-semibold text-primary">
-                                        {selectedUser.name.charAt(0)}
-                                    </span>
-                                </div>
-                                <div>
-                                    <h3 className="font-semibold text-sm">{selectedUser.name}</h3>
-                                    <p className="text-xs text-muted-foreground">
-                                        {selectedUser.isOnline ? 'Đang hoạt động' : 'Không hoạt động'}
-                                    </p>
-                                </div>
                             </div>
+                            <h3 className="text-lg sm:text-xl font-bold mb-2 sm:mb-3 text-foreground">Chọn một cuộc trò chuyện</h3>
+                            <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
+                                Chọn một người từ danh sách để bắt đầu cuộc trò chuyện
+                            </p>
                         </div>
-                    )}
-
-                    {selectedChat && selectedUser ? (
-                        <ChatArea
-                            messages={currentMessages}
-                            setSelectedChat={setSelectedChat}
-                            selectedChat={selectedChat}
-                            message={message}
-                            setMessage={setMessage}
-                            onSendMessage={handleSendMessage}
-                            recipientName={selectedUser.name}
-                            user={selectedUser}
-                            onToggleMobileSidebar={() => setIsMobileSidebarOpen(true)}
-                        />
-                    ) : (
-                        <div className="flex-1 flex items-center justify-center bg-gradient-to-br from-muted/10 via-background to-muted/20">
-                            <div className="text-center p-8 max-w-md">
-                                <div className="w-24 h-24 bg-gradient-to-br from-primary/10 to-primary/5 rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-lg border border-primary/10">
-                                    <svg className="w-12 h-12 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            strokeWidth={1.5}
-                                            d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
-                                        />
-                                    </svg>
-                                </div>
-                                <h3 className="text-xl font-bold mb-3 text-foreground">Chọn một cuộc trò chuyện</h3>
-                                <p className="text-sm text-muted-foreground leading-relaxed">
-                                    Chọn một người từ danh sách để bắt đầu cuộc trò chuyện
-                                </p>
-                                <button
-                                    onClick={() => setIsMobileSidebarOpen(true)}
-                                    className="lg:hidden mt-4 px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90"
-                                >
-                                    Mở danh sách chat
-                                </button>
-                            </div>
-                        </div>
-                    )}
-                </div>
+                    </div>
+                )}
             </div>
         </div>
     )

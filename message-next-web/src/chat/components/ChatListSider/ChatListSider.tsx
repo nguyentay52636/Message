@@ -30,27 +30,29 @@ export function ChatListSidebar({ onChatSelect, selectedChat, onToggleMobileSide
     }
 
     return (
-        <div className="w-full bg-blue-500 flex  items-center">
+        <div className="w-full h-full flex flex-col bg-card">
+            {/* Header */}
+            <div className="flex-shrink-0">
+                <ChatListHeader
+                    activeTab={activeTab}
+                    setActiveTab={setActiveTab}
+                    user={allUsers[0]}
+                    onToggleMobileSidebar={onToggleMobileSidebar}
+                />
+            </div>
 
-            <div className="flex-1 flex flex-col bg-card min-w-0 h-100vh ">
-                <div>
-                    <ChatListHeader activeTab={activeTab} setActiveTab={setActiveTab} user={allUsers[0]} onToggleMobileSidebar={onToggleMobileSidebar} />
-                </div>
-
-                <div className="">
-                    {filteredUsers.map((user: ChatUser, index: number) => (
-                        <ChatListItem
-                            key={user.id}
-                            user={user}
-                            activeTab={activeTab}
-                            onChatSelect={onChatSelect}
-                            selectedChat={selectedChat}
-                            index={index}
-
-                        />
-                    ))}
-                </div>
-
+            {/* Chat List */}
+            <div className="flex-1 overflow-y-auto">
+                {filteredUsers.map((user: ChatUser, index: number) => (
+                    <ChatListItem
+                        key={user.id}
+                        user={user}
+                        activeTab={activeTab}
+                        onChatSelect={onChatSelect}
+                        selectedChat={selectedChat}
+                        index={index}
+                    />
+                ))}
             </div>
         </div>
     )
