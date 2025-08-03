@@ -23,9 +23,7 @@ export default function RootLayout({
         >
           <div className="h-screen w-full flex overflow-hidden bg-background">
             {/* Main Sidebar - Always visible */}
-            <div className="flex w-16 flex-shrink-0 z-30">
-              <SiderBar />
-            </div>
+           
             {/* Chat Area - Takes remaining space */}
             <div className="flex-1 overflow-hidden">
               {children}
