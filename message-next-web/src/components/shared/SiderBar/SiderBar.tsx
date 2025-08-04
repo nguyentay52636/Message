@@ -14,7 +14,7 @@ interface NavigationStripProps {
 export function SiderBar({ onToggleMobileSidebar }: NavigationStripProps) {
     return (
         <TooltipProvider>
-            <div className="w-full bg-blue-500 flex flex-col items-center py-2 sm:py-4 space-y-2 sm:space-y-4 shadow-lg min-h-screen">
+            <div className="w-16 h-full bg-blue-500 flex flex-col items-center py-2 sm:py-4 space-y-2 sm:space-y-4 shadow-lg">
                 {/* User Avatar */}
                 <div className="relative group">
                     <Avatar className="w-8 h-8 sm:w-10 sm:h-10 border-2 border-white/30 shadow-lg transition-transform group-hover:scale-105">

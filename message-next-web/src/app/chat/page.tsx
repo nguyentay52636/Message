@@ -10,22 +10,21 @@ export default function ChatPage() {
         setIsMobileSidebarOpen(!isMobileSidebarOpen)
     }
 
-
-
     return (
-        <>
-            <div className="flex w-16 flex-shrink-0 z-30">
+        <div className="flex h-screen w-full">
+            {/* Main Sidebar */}
+            <div className="w-16 flex-shrink-0 z-30">
                 <SiderBar />
             </div>
-            <div className="flex-1 overflow-hidden">
 
+            {/* Chat Area */}
+            <div className="flex-1 overflow-hidden">
                 <Chat
                     setSelectedChat={setSelectedChat}
                     selectedChat={selectedChat}
                     onToggleMobileSidebar={handleToggleMobileSidebar}
                 />
             </div>
-        </>
-
+        </div>
     )
 }
