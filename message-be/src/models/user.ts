@@ -33,7 +33,7 @@ const userSchema = new Schema<IUser>(
     },
     avatar: {
       type: String,
-      default: null,
+      default: "",
     },
     status: {
       type: String,
