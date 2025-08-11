@@ -1,7 +1,8 @@
 import { Request, Response } from "express";
 import { ResponseApi } from "../config/response";
 import User from "../models/user";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
+
 export const getUser = async (req: Request, res: Response) => {
 try {
     const user = await User.find();
