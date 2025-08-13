@@ -5,7 +5,7 @@ import { Application } from 'express';
 export const integrateSocketWithExpress = (app: Application, httpServer: HTTPServer) => {
   const io = new SocketIOServer(httpServer, {
     cors: {
-      origin: process.env.CLIENT_URL || "http://localhost:5173",
+      origin: process.env.CLIENT_URL || "http://localhost:3000a",
       methods: ["GET", "POST"],
       credentials: true
     }
@@ -27,6 +27,19 @@ export const integrateSocketWithExpress = (app: Application, httpServer: HTTPSer
         });
         console.log("Online users:", onlineUsers);
         io.emit('getUsers', onlineUsers);
+      }
+    });
+
+    // Chat message handler
+    socket.on('sendMessage', (data) => {
+      console.log('Chat message received:', data);
+      const receiver = onlineUsers.find(user => user.userId === data.receiverId);
+      if (receiver) {
+        io.to(receiver.socketId).emit('receiveMessage', {
+          senderId: data.senderId,
+          message: data.message,
+          timestamp: new Date().toISOString()
+        });
       }
     });
 
@@ -139,4 +152,4 @@ export const integrateSocketWithExpress = (app: Application, httpServer: HTTPSer
   });
 
   return io;
-}; 
+};
