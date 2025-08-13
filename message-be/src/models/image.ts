@@ -2,7 +2,8 @@ import { Schema, model, Document } from 'mongoose';
 
 interface IImage extends Document {
   userId: string;
-  base64: string;
+  base64: string | null;
+  fileUrl?: string;
   mimeType: string;
   createdAt: Date;
 }
@@ -15,7 +16,11 @@ const imageSchema = new Schema<IImage>(
     },
     base64: {
       type: String,
-      required: true,
+      default: null,
+    },
+    fileUrl: {
+      type: String,
+      default: null,
     },
     mimeType: {
       type: String,

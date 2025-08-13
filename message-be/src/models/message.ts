@@ -6,6 +6,7 @@ interface IMessage extends Document {
   content: string;
   messageType: 'text' | 'image' | 'file' | 'audio' | 'video';
   mediaUrl?: string;
+  imageId?: Types.ObjectId;
   isRead: boolean;
   readBy: Types.ObjectId[];
   replyTo?: Types.ObjectId;
@@ -36,6 +37,11 @@ const messageSchema = new Schema<IMessage>(
     },
     mediaUrl: {
       type: String,
+      default: null,
+    },
+    imageId: {
+      type: Schema.Types.ObjectId,
+      ref: 'Image',
       default: null,
     },
     isRead: {
