@@ -80,4 +80,17 @@ export const addUser = async (req: Request, res: Response) => {
     } catch (error:any) {
         return ResponseApi(res, 500, null, "Add user failed");
     }   
+
+}
+export const searchUserByPhoneNumber = async (req: Request, res: Response) => {
+    const { phone } = req.params;
+    try {
+        const user = await User.findOne({ phone });
+        if (!user) {
+            return ResponseApi(res, 404, null, "User not found");
+        }
+        return ResponseApi(res, 200, user, "Search user by phone number success");
+    }catch(error :any) { 
+        return ResponseApi(res, 500, null, "Search user by phone number failed");
+    }
 }

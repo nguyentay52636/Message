@@ -5,38 +5,26 @@ interface IContact extends Document {
   contact: Types.ObjectId;
   nickname?: string;
   isFavorite: boolean;
-  createdAt: Date;
-  updatedAt: Date;
+  status: 'accepted' | 'pending' | 'blocked';
+  friendSince: Date;
 }
 
 const contactSchema = new Schema<IContact>(
   {
-    user: {
-      type: Schema.Types.ObjectId,
-      ref: 'User',
-      required: true,
-    },
-    contact: {
-      type: Schema.Types.ObjectId,
-      ref: 'User',
-      required: true,
-    },
-    nickname: {
+    user: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+    contact: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+    nickname: { type: String, trim: true },
+    isFavorite: { type: Boolean, default: false },
+    status: {
       type: String,
-      trim: true,
+      enum: ['accepted', 'pending', 'blocked'],
+      default: 'accepted',
     },
-    isFavorite: {
-      type: Boolean,
-      default: false,
-    },
+    friendSince: { type: Date, default: Date.now },
   },
-  {
-    timestamps: true,
-    versionKey: false,
-  }
+  { timestamps: true, versionKey: false }
 );
 
 contactSchema.index({ user: 1, contact: 1 }, { unique: true });
-contactSchema.index({ user: 1, isFavorite: -1 });
 
-export default model<IContact>('Contact', contactSchema); 
+export default model<IContact>('Contact', contactSchema);

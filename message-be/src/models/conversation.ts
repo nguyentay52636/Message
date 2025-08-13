@@ -35,6 +35,7 @@ const conversationSchema = new Schema<IConversation>(
     lastMessage: {
       type: Schema.Types.ObjectId,
       ref: 'Message',
+      default: null,
     },
     lastUpdated: { type: Date, default: Date.now },
   },
