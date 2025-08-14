@@ -4,13 +4,12 @@ import { integrateSocketWithExpress } from './socket/socketIntegration';
 
 const PORT = process.env.PORT || 8000;
 
-// Create HTTP server
 const httpServer = createServer(app);
 
 const io = integrateSocketWithExpress(app, httpServer);
 
 httpServer.listen(PORT, () => {
-
+    console.log(`🚀 Server is running on http://localhost:${PORT}`);
 });
 
 export { io }; 

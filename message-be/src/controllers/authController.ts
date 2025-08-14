@@ -4,6 +4,7 @@ import bcrypt from "bcryptjs";
 import { createToken, createTokenRef } from "../utils/jwt";
 import { ResponseApi } from "../config/response";
 import User from "../models/user";
+// import { isValidEmail, isValidPassword, isValidPhone } from "../middleware/validation"; 
 
 export const login = async (req: Request, res: Response) => {
   const { phone, password } = req.body;
@@ -11,6 +12,8 @@ export const login = async (req: Request, res: Response) => {
   if (!phone || !password) {
     return ResponseApi(res, 400, null, "Vui lòng nhập số điện thoại và mật khẩu");
   }
+
+
 
   try {
     const user = await User.findOne({ phone });
@@ -49,47 +52,68 @@ export const login = async (req: Request, res: Response) => {
       "Đăng nhập thành công"
     );
   } catch (err: any) {
-    return ResponseApi(res, 500, null, err.message);
+    console.error("Login error:", err);
+    return ResponseApi(res, 500, null, "Lỗi server, vui lòng thử lại sau");
   }
 };
+
 export const signUp = async (req: Request, res: Response) => {
-    const { username, email, password, phone } = req.body;
   
-    if (!username || !email || !password || !phone) {
-      return ResponseApi(res, 400, null, "Vui lòng nhập đầy đủ thông tin");
+  const { username, email, password, phone } = req.body;
+
+  if (!username || !email || !password || !phone) {
+    return ResponseApi(res, 400, null, "Vui lòng nhập đầy đủ thông tin");
+  }
+
+
+
+  try {
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return ResponseApi(res, 400, null, "Email đã tồn tại");
     }
-  
-    try {
-      const existingUser = await User.findOne({ email });
-      if (existingUser) {
-        return ResponseApi(res, 400, null, "Email đã tồn tại");
-      }
-      const existingUserPhone = await User.findOne({ phone });
-      if(existingUserPhone){
-        return ResponseApi(res, 400, null, "Số điện thoại đã tồn tại");
-      }
-  
-      const hashedPassword = await bcrypt.hash(password,20);
-  
-      const newUser = await User.create({
-        username,
-        email,
-        phone,
-        password: hashedPassword,
-  
-      });
-  
-      return ResponseApi(
-        res,
-        201,
-        {
+
+    const existingUserPhone = await User.findOne({ phone });
+    if (existingUserPhone) {
+      return ResponseApi(res, 400, null, "Số điện thoại đã tồn tại");
+    }
+
+    const existingUsername = await User.findOne({ username });
+    if (existingUsername) {
+      return ResponseApi(res, 400, null, "Tên người dùng đã tồn tại");
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const newUser = await User.create({
+      username: username.trim(),
+      email: email.toLowerCase().trim(),
+      phone: phone.trim(),
+      password: hashedPassword,
+      avatar: "",
+      status: "online",
+      lastSeen: new Date(),
+    });
+    
+
+    return ResponseApi(
+      res,
+      200,
+      {
           id: newUser._id,
           username: newUser.username,
           email: newUser.email,
-        },
-        "Đăng ký thành công"
-      );
-    } catch (err: any) {
-      return ResponseApi(res, 500, null, err.message);
-    }
-  };
+          phone: newUser.phone,
+          avatar: newUser.avatar,
+          status: newUser.status,
+          lastSeen: newUser.lastSeen,
+      },
+      "Đăng ký thành công"
+    );
+  } catch (err: any) {
+    
+
+    
+    return ResponseApi(res, 500, null, "Lỗi server, vui lòng thử lại sau");
+  }
+};

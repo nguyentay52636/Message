@@ -7,8 +7,9 @@ export const ResponseApi = (
   message: string
 ) => {
   return res.status(code).json({
-    message,
+    status: code,
     data,
+    message,
     date: new Date().toISOString(),
   });
 };

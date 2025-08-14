@@ -1,3 +1,6 @@
+import dotenv from 'dotenv';
+dotenv.config();
+
 import express, { Application } from "express";
 import cors from "cors";
 import rootRouter from "./routers/rootRouter";
@@ -7,12 +10,13 @@ import connectDB from "./connection/monggodb";
 
 const app: Application = express();
 
-// Connect to MongoDB
 connectDB();
 
 app.use(cors({
-  origin: "*",
+  origin: process.env.PORT || "http://localhost:8000",
   credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
 }));
 
 app.use(express.json());

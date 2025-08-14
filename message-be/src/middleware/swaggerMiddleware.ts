@@ -7,12 +7,8 @@ export const swaggerOptimization = (req: Request, res: Response, next: NextFunct
   if (req.path.startsWith('/api-docs')) {
     // Cache static assets for 1 hour
     res.set('Cache-Control', 'public, max-age=3600');
-    
-    // Add compression for better performance
-    compression()(req, res, next);
-  } else {
-    next();
   }
+  next();
 };
 
 // Middleware to handle Swagger requests efficiently

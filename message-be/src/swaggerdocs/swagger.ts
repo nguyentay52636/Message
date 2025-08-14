@@ -6,12 +6,10 @@ import { swaggerConfig } from './swagger.config';
 
 const swaggerDir = path.join(__dirname, './');
 
-// Cache for swagger specs to avoid reading files on every request
 let cachedSwaggerSpec: any = null;
 let lastCacheTime = 0;
 const CACHE_DURATION = swaggerConfig.cache.duration;
 
-// Function to load and merge swagger specs
 const loadSwaggerSpecs = () => {
   try {
     // Load all YAML files dynamically
