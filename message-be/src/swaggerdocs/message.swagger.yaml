@@ -1,0 +1,338 @@
+
+openapi: 3.0.3
+info:
+  title: Message API
+  description: API for managing messages in conversations, including sending messages, replies, and uploading images
+  version: 1.0.0
+paths:
+  /api/messages/uploadImage:
+    post:
+      summary: Upload an image
+      tags:
+        - Messages
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                userId:
+                  type: string
+                  format: objectId
+                  description: ID of the user uploading the image
+                file:
+                  type: string
+                  format: binary
+                  description: Image file (PNG, JPEG, or JPG)
+              required:
+                - userId
+                - file
+      responses:
+        '201':
+          description: Image uploaded successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 201
+                  data:
+                    type: object
+                    properties:
+                      imageId:
+                        type: string
+                        format: objectId
+                      fileUrl:
+                        type: string
+                    required:
+                      - imageId
+                      - fileUrl
+                  message:
+                    type: string
+                    example: Image uploaded successfully
+        '400':
+          description: Missing userId, image file, or unsupported image format
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /api/messages/messages:
+    get:
+      summary: Get messages for a specific conversation
+      tags:
+        - Messages
+      parameters:
+        - name: conversationId
+          in: query
+          required: true
+          schema:
+            type: string
+            format: objectId
+          description: ID of the conversation
+      responses:
+        '200':
+          description: Messages fetched successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 200
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Message'
+                  message:
+                    type: string
+                    example: Messages fetched successfully
+        '400':
+          description: Invalid conversation ID
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /api/messages/sendMessage:
+    post:
+      summary: Send a new message
+      tags:
+        - Messages
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                conversationId:
+                  type: string
+                  format: objectId
+                  description: ID of the conversation
+                content:
+                  type: string
+                  description: Message content
+                messageType:
+                  type: string
+                  enum: [text, image, file, audio, video]
+                  default: text
+                  description: Type of message
+                imageId:
+                  type: string
+                  format: objectId
+                  description: ID of the image (required if messageType is image)
+              required:
+                - conversationId
+                - content
+      responses:
+        '201':
+          description: Message created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 201
+                  data:
+                    $ref: '#/components/schemas/Message'
+                  message:
+                    type: string
+                    example: Message created successfully
+        '400':
+          description: Missing or invalid required fields
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: User is not a member of the conversation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Conversation or image not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /api/messages/replyMessage:
+    post:
+      summary: Reply to an existing message
+      tags:
+        - Messages
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                conversationId:
+                  type: string
+                  format: objectId
+                  description: ID of the conversation
+                content:
+                  type: string
+                  description: Reply message content
+                replyTo:
+                  type: string
+                  format: objectId
+                  description: ID of the message being replied to
+                messageType:
+                  type: string
+                  enum: [text, image, file, audio, video]
+                  default: text
+                  description: Type of message
+                imageId:
+                  type: string
+                  format: objectId
+                  description: ID of the image (required if messageType is image)
+              required:
+                - conversationId
+                - content
+                - replyTo
+      responses:
+        '201':
+          description: Reply message created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 201
+                  data:
+                    $ref: '#/components/schemas/Message'
+                  message:
+                    type: string
+                    example: Reply message created successfully
+        '400':
+          description: Missing or invalid required fields
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: User is not a member of the conversation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Conversation, parent message, or image not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        _id:
+          type: string
+          format: objectId
+        username:
+          type: string
+        avatar:
+          type: string
+    Image:
+      type: object
+      properties:
+        _id:
+          type: string
+          format: objectId
+        fileUrl:
+          type: string
+        mimeType:
+          type: string
+    Message:
+      type: object
+      properties:
+        _id:
+          type: string
+          format: objectId
+        sender:
+          $ref: '#/components/schemas/User'
+        conversation:
+          type: string
+          format: objectId
+        content:
+          type: string
+        messageType:
+          type: string
+          enum: [text, image, file, audio, video]
+        mediaUrl:
+          type: string
+          nullable: true
+        imageId:
+          $ref: '#/components/schemas/Image'
+        isRead:
+          type: boolean
+        readBy:
+          type: array
+          items:
+            type: string
+            format: objectId
+        replyTo:
+          type: object
+          properties:
+            _id:
+              type: string
+              format: objectId
+            content:
+              type: string
+            sender:
+              $ref: '#/components/schemas/User'
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+      required:
+        - sender
+        - conversation
+        - content
+        - messageType
+        - isRead
+    Error:
+      type: object
+      properties:
+        status:
+          type: number
+        data:
+          type: null
+        message:
+          type: string

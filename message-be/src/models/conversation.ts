@@ -8,7 +8,7 @@ interface IConversation extends Document {
   groupAdmin?: Types.ObjectId;
   lastMessage?: Types.ObjectId;
   lastUpdated: Date;
-  createdAt: Date;
+createdAt: Date;
   updatedAt: Date;
 }
 

@@ -1,0 +1,338 @@
+openapi: 3.0.3
+info:
+  title: Conversation API
+  description: API for managing conversations, including personal and group chats
+  version: 1.0.0
+paths:
+  /api/conversations:
+    post:
+      summary: Create a new conversation
+      tags:
+        - Conversations
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                members:
+                  type: array
+                  items:
+                    type: string
+                    format: objectId
+                  minItems: 2
+                  description: Array of user IDs for conversation members
+                type:
+                  type: string
+                  enum: [personal, group]
+                  description: Type of conversation
+                groupName:
+                  type: string
+                  description: Name of the group (required for group type)
+                groupAvatar:
+                  type: string
+                  description: URL or path to group avatar (optional for group type)
+                groupAdmin:
+                  type: string
+                  format: objectId
+                  description: User ID of group admin (required for group type)
+              required:
+                - members
+                - type
+      responses:
+        '201':
+          description: Conversation created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Conversation'
+        '400':
+          description: Invalid input or existing conversation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: One or more members not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    get:
+      summary: Get all conversations
+      tags:
+        - Conversations
+      responses:
+        '200':
+          description: List of all conversations
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Conversation'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /api/conversations/{userId}:
+    get:
+      summary: Get conversations for a specific user
+      tags:
+        - Conversations
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: objectId
+          description: ID of the user
+      responses:
+        '200':
+          description: List of user conversations
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Conversation'
+        '400':
+          description: User ID is required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: No conversations found for user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /api/conversations/{conversationId}:
+    put:
+      summary: Update a group conversation
+      tags:
+        - Conversations
+      parameters:
+        - name: conversationId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: objectId
+          description: ID of the conversation to update
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                groupName:
+                  type: string
+                  description: New group name
+                groupAvatar:
+                  type: string
+                  description: New group avatar URL
+                groupAdmin:
+                  type: string
+                  format: objectId
+                  description: New group admin ID
+      responses:
+        '200':
+          description: Conversation updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Conversation'
+        '400':
+          description: Invalid input or cannot update personal conversation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Conversation not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      summary: Delete a conversation
+      tags:
+        - Conversations
+      parameters:
+        - name: conversationId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: objectId
+          description: ID of the conversation to delete
+      responses:
+        '200':
+          description: Conversation deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 200
+                  data:
+                    type: null
+                  message:
+                    type: string
+                    example: Conversation deleted successfully
+        '404':
+          description: Conversation not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /api/conversations/addMember:
+    post:
+      summary: Add a member to a group conversation
+      tags:
+        - Conversations
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                conversationId:
+                  type: string
+                  format: objectId
+                  description: ID of the conversation
+                userId:
+                  type: string
+                  format: objectId
+                  description: ID of the user to add
+              required:
+                - conversationId
+                - userId
+      responses:
+        '200':
+          description: Member added successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Conversation'
+        '400':
+          description: Invalid input or cannot add to personal conversation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Conversation or user not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        _id:
+          type: string
+          format: objectId
+        username:
+          type: string
+        avatar:
+          type: string
+        status:
+          type: string
+    Message:
+      type: object
+      properties:
+        _id:
+          type: string
+          format: objectId
+        content:
+          type: string
+        sender:
+          type: string
+          format: objectId
+        conversation:
+          type: string
+          format: objectId
+        createdAt:
+          type: string
+          format: date-time
+    Conversation:
+      type: object
+      properties:
+        _id:
+          type: string
+          format: objectId
+        type:
+          type: string
+          enum: [personal, group]
+        members:
+          type: array
+          items:
+            $ref: '#/components/schemas/User'
+        groupName:
+          type: string
+        groupAvatar:
+          type: string
+        groupAdmin:
+          $ref: '#/components/schemas/User'
+        lastMessage:
+          $ref: '#/components/schemas/Message'
+        lastUpdated:
+          type: string
+          format: date-time
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    Error:
+      type: object
+      properties:
+        status:
+          type: number
+        data:
+          type: null
+        message:
+          type: string

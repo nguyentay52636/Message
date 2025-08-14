@@ -1,0 +1,439 @@
+openapi: 3.0.3
+info:
+  title: User API
+  description: API quản lý người dùng trong ứng dụng chat
+  version: 1.0.0
+tags:
+  - name: User
+    description: API quản lý người dùng
+paths:
+  /api/user:
+    get:
+      summary: Lấy danh sách tất cả người dùng
+      description: Lấy danh sách tất cả người dùng trong hệ thống.
+      tags: [User]
+      security:
+      responses:
+        '200':
+          description: Thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/NguoiDung'
+                  message:
+                    type: string
+                    example: "Lấy danh sách người dùng thành công"
+        '401':
+          description: Không được phép (thiếu hoặc token không hợp lệ)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Lỗi server
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    post:
+      summary: Tạo người dùng mới
+      description: Tạo một người dùng mới với thông tin cung cấp. Trả về thông tin người dùng và các vai trò liên quan (nếu có).
+      tags: [User]
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - ten
+                - email
+                - tenDangNhap
+                - matKhau
+                - xacNhanMatKhau
+                - vaiTro
+              properties:
+                ten:
+                  type: string
+                  description: Tên người dùng
+                  example: "Nguyễn Văn A"
+                email:
+                  type: string
+                  format: email
+                  description: Email người dùng
+                  example: "nguyenvana@example.com"
+                tenDangNhap:
+                  type: string
+                  description: Tên đăng nhập
+                  example: "nguyenvana"
+                matKhau:
+                  type: string
+                  description: Mật khẩu
+                  example: "password123"
+                xacNhanMatKhau:
+                  type: string
+                  description: Xác nhận mật khẩu
+                  example: "password123"
+                soDienThoai:
+                  type: string
+                  description: Số điện thoại
+                  example: "0123456789"
+                vaiTro:
+                  type: string
+                  enum: ["admin", "nhan_vien", "nguoi_thue", "chu_tro"]
+                  description: Vai trò của người dùng (admin, nhan_vien, nguoi_thue, chu_tro)
+                  example: "nguoi_thue"
+                anhDaiDien:
+                  type: string
+                  description: URL ảnh đại diện
+                  example: "https://example.com/avatar.jpg"
+                trangThai:
+                  type: string
+                  enum: ["hoat_dong", "khoa"]
+                  description: Trạng thái người dùng
+                  default: "hoat_dong"
+                  example: "hoat_dong"
+      responses:
+        '201':
+          description: Tạo người dùng thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      user:
+                        $ref: '#/components/schemas/NguoiDung'
+                      customer:
+                        $ref: '#/components/schemas/Customer'
+                        nullable: true
+                      chuTro:
+                        $ref: '#/components/schemas/ChuTro'
+                        nullable: true
+                      nhanVien:
+                        $ref: '#/components/schemas/NhanVien'
+                        nullable: true
+                  message:
+                    type: string
+                    example: "Đăng ký thành công"
+        '400':
+          description: Dữ liệu không hợp lệ hoặc email/tên đăng nhập đã tồn tại
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Không được phép
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Lỗi server
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /api/user/{id}:
+    get:
+      summary: Lấy thông tin người dùng theo ID
+      description: Lấy thông tin chi tiết của một người dùng dựa trên ID.
+      tags: [User]
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: ID của người dùng
+          example: "507f1f77bcf86cd799439011"
+      responses:
+        '200':
+          description: Thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    $ref: '#/components/schemas/NguoiDung'
+                  message:
+                    type: string
+                    example: "Lấy thông tin người dùng thành công"
+        '401':
+          description: Không được phép
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Không tìm thấy người dùng
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Lỗi server
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    put:
+      summary: Cập nhật thông tin người dùng
+      description: Cập nhật thông tin của một người dùng dựa trên ID.
+      tags: [User]
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: ID của người dùng cần cập nhật
+          example: "507f1f77bcf86cd799439011"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                ten:
+                  type: string
+                  description: Tên người dùng
+                  example: "Nguyễn Văn A"
+                email:
+                  type: string
+                  format: email
+                  description: Email người dùng
+                  example: "nguyenvana@example.com"
+                tenDangNhap:
+                  type: string
+                  description: Tên đăng nhập
+                  example: "nguyenvana"
+                matKhau:
+                  type: string
+                  description: Mật khẩu mới (tùy chọn)
+                  example: "newpassword123"
+                soDienThoai:
+                  type: string
+                  description: Số điện thoại
+                  example: "0123456789"
+                vaiTro:
+                  type: string
+                  enum: ["admin", "nhan_vien", "nguoi_thue", "chu_tro"]
+                  description: Vai trò của người dùng (admin, nhan_vien, nguoi_thue, chu_tro)
+                  example: "nguoi_thue"
+                anhDaiDien:
+                  type: string
+                  description: URL ảnh đại diện
+                  example: "https://example.com/avatar.jpg"
+                trangThai:
+                  type: string
+                  enum: ["hoat_dong", "khoa"]
+                  description: Trạng thái người dùng
+                  example: "hoat_dong"
+      responses:
+        '200':
+          description: Cập nhật thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    $ref: '#/components/schemas/NguoiDung'
+                  message:
+                    type: string
+                    example: "Cập nhật người dùng thành công"
+        '401':
+          description: Không được phép
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Không tìm thấy người dùng
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Lỗi server
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    delete:
+      summary: Xóa người dùng theo ID
+      description: Xóa một người dùng dựa trên ID.
+      tags: [User]
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: ID của người dùng cần xóa
+          example: "507f1f77bcf86cd799439011"
+      responses:
+        '200':
+          description: Xóa thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    $ref: '#/components/schemas/NguoiDung'
+                  message:
+                    type: string
+                    example: "Xóa người dùng thành công"
+        '401':
+          description: Không được phép
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Không tìm thấy người dùng
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Lỗi server
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  schemas:
+    NguoiDung:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: ID của người dùng
+          example: "507f1f77bcf86cd799439011"
+        username:
+          type: string
+          description: Tên đăng nhập của người dùng
+          example: "nguyenvana"
+        avatar:
+          type: string
+          description: URL ảnh đại diện
+          example: ""
+        status:
+          type: string
+          enum: ["online", "offline", "away"]
+          description: Trạng thái người dùng
+          example: "online"
+    Customer:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: ID của khách hàng
+          example: "507f1f77bcf86cd799439012"
+        userId:
+          type: string
+          description: ID của người dùng liên kết
+          example: "507f1f77bcf86cd799439011"
+        fullName:
+          type: string
+          description: Họ và tên
+          example: "Nguyễn Văn A"
+        phoneNumber:
+          type: string
+          description: Số điện thoại
+          example: "0123456789"
+      nullable: true
+    ChuTro:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: ID của chủ trọ
+          example: "507f1f77bcf86cd799439013"
+        userId:
+          type: string
+          description: ID của người dùng liên kết
+          example: "507f1f77bcf86cd799439011"
+        fullName:
+          type: string
+          description: Họ và tên
+          example: "Nguyễn Văn A"
+        phoneNumber:
+          type: string
+          description: Số điện thoại
+          example: "0123456789"
+      nullable: true
+    NhanVien:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: ID của nhân viên
+          example: "507f1f77bcf86cd799439014"
+        userId:
+          type: string
+          description: ID của người dùng liên kết
+          example: "507f1f77bcf86cd799439011"
+        fullName:
+          type: string
+          description: Họ và tên
+          example: "Nguyễn Văn A"
+        phoneNumber:
+          type: string
+          description: Số điện thoại
+          example: "0123456789"
+      nullable: true
+    ErrorResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          description: Trạng thái thành công
+          example: false
+        data:
+          type: null
+          description: Dữ liệu trả về (null cho lỗi)
+        message:
+          type: string
+          description: Thông báo lỗi
+          example: "Không tìm thấy người dùng"
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

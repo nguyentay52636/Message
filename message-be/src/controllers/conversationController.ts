@@ -52,7 +52,6 @@ export const addConversation = async (req: CustomRequest, res: Response) => {
 
     await conversation.save();
 
-    // Emit conversation creation event
     req.io?.to(members).emit('conversationCreated', {
       conversationId: conversation._id,
       type,
