@@ -32,7 +32,7 @@ export const getUserById = async (req: Request, res: Response) => {
 
 export const updateUser = async (req: Request, res: Response) => {
   const { id } = req.params;
-  const { username, email, phone, password } = req.body;
+  const { username, email, phone, password, avatar, status } = req.body;
 
   try {
     const user = await User.findById(id);
@@ -41,7 +41,7 @@ export const updateUser = async (req: Request, res: Response) => {
     }
     const updateUser = await User.findByIdAndUpdate(
       id,
-      { username, email, phone, password },
+      { username, email, phone, password, avatar, status },
       { new: true }
     );
     return ResponseApi(res, 200, updateUser, "Update user success");
@@ -57,16 +57,16 @@ export const deleteUser = async (req: Request, res: Response) => {
     if (!user) {
       return ResponseApi(res, 404, null, "User not found");
     }
-    return ResponseApi(res, 200, null, "Delete user success");
+    return ResponseApi(res, 200, user, "Delete user success");
   } catch (error: any) {
     return ResponseApi(res, 500, null, "Delete user failed");
   }
 };
 
 export const addUser = async (req: Request, res: Response) => {
-  const { username, email, phone, password, avatar, status, lastSeen } = req.body;
+  const { username, email, phone, password, avatar, status } = req.body;
 
-  if (!username || !email || !phone || !password || !avatar || !status || !lastSeen) {
+  if (!username || !email || !phone || !password || !avatar || !status) {
     return ResponseApi(res, 400, null, "Missing required fields");
   }
   try {
@@ -86,8 +86,7 @@ export const addUser = async (req: Request, res: Response) => {
       phone,
       password: hashedPassword,
       avatar,
-      status,
-      lastSeen,
+      status
     });
     await newUser.save();
     return ResponseApi(res, 200, newUser, "Add user success");

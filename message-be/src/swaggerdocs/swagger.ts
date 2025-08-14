@@ -101,10 +101,8 @@ const getSwaggerSpec = () => {
 export const swaggerSpec = getSwaggerSpec();
 export { swaggerUi };
 
-// Export swagger UI options from config
 export const swaggerUiOptions = swaggerConfig.ui;
 
-// Function to manually refresh cache (useful for development)
 export const refreshSwaggerCache = () => {
   cachedSwaggerSpec = null;
   lastCacheTime = 0;

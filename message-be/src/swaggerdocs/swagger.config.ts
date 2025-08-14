@@ -1,4 +1,3 @@
-// Swagger configuration for better performance
 export const swaggerConfig = {
   // Cache settings
   cache: {
@@ -6,7 +5,6 @@ export const swaggerConfig = {
     maxSize: 100, // Maximum number of cached items
   },
   
-  // UI Options
   ui: {
     explorer: true,
     customCss: `
@@ -15,7 +13,7 @@ export const swaggerConfig = {
       .swagger-ui .info { margin: 20px 0 }
     `,
     customSiteTitle: 'Chat Zalo API Documentation',
-    customfavIcon: '/favicon.ico',
+    customfavIcon: '/uploads/images/swa.png',
     swaggerOptions: {
       docExpansion: 'list',
       filter: true,
@@ -45,14 +43,13 @@ export const swaggerConfig = {
     }
   },
   
-  // API Documentation settings
   api: {
     title: 'Chat Zalo API',
     description: 'API quản lý người dùng, hội thoại và tin nhắn trong ứng dụng chat tương tự Zalo',
-    version: '1.0.0',
+    version: '2.0.0',
     contact: {
       name: 'API Support',
-      email: 'support@example.com'
+      email: 'phuongtay52663@gmail.com'
     },
     license: {
       name: 'MIT',
@@ -66,9 +63,6 @@ export const swaggerConfig = {
       url: 'http://localhost:8000', 
       description: 'Local Development Server' 
     },
-    { 
-      url: 'https://api.example.com', 
-      description: 'Production Server' 
-    }
+ 
   ]
 }; 
