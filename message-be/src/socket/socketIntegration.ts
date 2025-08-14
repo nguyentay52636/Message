@@ -5,9 +5,9 @@ import { Application } from 'express';
 export const integrateSocketWithExpress = (app: Application, httpServer: HTTPServer) => {
   const io = new SocketIOServer(httpServer, {
     cors: {
-      origin: process.env.CLIENT_URL || "http://localhost:3000a",
+      origin: process.env.CLIENT_URL || "https://localhost:3000",
       methods: ["GET", "POST"],
-      credentials: true
+      credentials: true 
     }
   });
 

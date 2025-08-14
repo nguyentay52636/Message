@@ -1,4 +1,4 @@
-import { Schema, model, Document, Types } from 'mongoose';
+import { Schema, model, Document, Types, models } from 'mongoose';
 
 interface IUser extends Document {
   username: string;
@@ -17,15 +17,18 @@ const userSchema = new Schema<IUser>(
     username: {
       type: String,
       required: true,
-      unique: true,
       trim: true,
     },
     email: {
       type: String,
       required: true,
-      unique: true,
       trim: true,
       lowercase: true,
+    },
+    phone: {
+      type: String,
+      required: true,
+      trim: true,
     },
     password: {
       type: String,
@@ -33,25 +36,30 @@ const userSchema = new Schema<IUser>(
     },
     avatar: {
       type: String,
-      default: "",
+      default: '',
     },
     status: {
       type: String,
       enum: ['online', 'offline', 'away'],
-      default: 'offline',
+      default: 'online',
     },
     lastSeen: {
       type: Date,
       default: Date.now,
+      
     },
   },
   {
     timestamps: true,
     versionKey: false,
+    collection: 'users',
   }
 );
 
-userSchema.index({ email: 1 });
-userSchema.index({ username: 1 });
+userSchema.index({ username: 1 }, { unique: true });
+userSchema.index({ email: 1 }, { unique: true });
+userSchema.index({ phone: 1 }, { unique: true });
 
-export default model<IUser>('User', userSchema); 
+const UserModel = models.User || model<IUser>('User', userSchema);
+
+export default UserModel;

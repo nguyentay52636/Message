@@ -1,18 +1,27 @@
 import express, { Application } from "express";
 import cors from "cors";
 import rootRouter from "./routers/rootRouter";
-import { swaggerSpec, swaggerUi } from "./swaggerdocs/swagger";
+import { swaggerSpec, swaggerUi, swaggerUiOptions } from "./swaggerdocs/swagger";
+import { swaggerOptimization, swaggerRequestHandler, swaggerCompression } from "./middleware/swaggerMiddleware";
+import connectDB from "./connection/monggodb";
 
 const app: Application = express();
 
+// Connect to MongoDB
+connectDB();
+
 app.use(cors({
-  origin: process.env.CLIENT_URL || 'http://localhost:5173',
+  origin: "*",
   credentials: true,
 }));
 
 app.use(express.json());
 
+app.use(swaggerCompression);
+app.use(swaggerRequestHandler);
+
 app.use("/api", rootRouter);
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
+app.use("/api-docs", swaggerOptimization, swaggerUi.serve, swaggerUi.setup(swaggerSpec, swaggerUiOptions));
 
 export default app;

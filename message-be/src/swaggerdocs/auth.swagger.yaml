@@ -1,0 +1,201 @@
+openapi: 3.0.3
+info:
+  title: Authentication API
+  description: API for user authentication, including login and signup
+  version: 1.0.0
+paths:
+  /api/auth/login:
+    post:
+      summary: User login
+      tags:
+        - Authentication
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                phone:
+                  type: string
+                  description: User's phone number
+                password:
+                  type: string
+                  format: password
+                  description: User's password
+              required:
+                - phone
+                - password
+      responses:
+        '200':
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 200
+                  data:
+                    type: object
+                    properties:
+                      accessToken:
+                        type: string
+                        description: JWT access token
+                      refreshToken:
+                        type: string
+                        description: JWT refresh token
+                      user:
+                        $ref: '#/components/schemas/UserResponse'
+                    required:
+                      - accessToken
+                      - refreshToken
+                      - user
+                  message:
+                    type: string
+                    example: Đăng nhập thành công
+        '400':
+          description: Missing or invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /api/auth/signup:
+    post:
+      summary: User registration
+      tags:
+        - Authentication
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  description: User's username
+                  minLength: 1
+                email:
+                  type: string
+                  format: email
+                  description: User's email address
+                password:
+                  type: string
+                  format: password
+                  description: User's password
+                  minLength: 1
+                phone:
+                  type: string
+                  description: User's phone number
+                  minLength: 1
+              required:
+                - username
+                - email
+                - password
+                - phone
+      responses:
+        '201':
+          description: Registration successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 201
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        format: objectId
+                        description: User's unique identifier
+                      username:
+                        type: string
+                        description: User's username
+                      email:
+                        type: string
+                        format: email
+                        description: User's email address
+                    required:
+                      - id
+                      - username
+                      - email
+                  message:
+                    type: string
+                    example: Đăng ký thành công
+        '400':
+          description: Missing fields, email already exists, or phone already exists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    UserResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: objectId
+          description: User's unique identifier
+        username:
+          type: string
+          description: User's username
+        email:
+          type: string
+          format: email
+          description: User's email address
+        phone:
+          type: string
+          description: User's phone number
+        avatar:
+          type: string
+          description: User's avatar URL
+          default: ""
+        status:
+          type: string
+          enum: [online, offline, away]
+          description: User's current status
+          default: "online"
+        lastSeen:
+          type: string
+          format: date-time
+          description: User's last seen timestamp
+      required:
+        - id
+        - username
+        - email
+        - phone
+        - status
+        - lastSeen
+    Error:
+      type: object
+      properties:
+        status:
+          type: number
+          description: HTTP status code
+        data:
+          type: null
+          description: Response data (null for errors)
+        message:
+          type: string
+          description: Error message
+      required:
+        - status
+        - message
