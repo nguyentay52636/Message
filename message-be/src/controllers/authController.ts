@@ -13,45 +13,36 @@ export const login = async (req: Request, res: Response) => {
     return ResponseApi(res, 400, null, "Vui lòng nhập số điện thoại và mật khẩu");
   }
 
-
-
   try {
     const user = await User.findOne({ phone });
-    if (!user) {
+    if (!user || !(await bcrypt.compare(password, user.password))) {
       return ResponseApi(res, 400, null, "Số điện thoại hoặc mật khẩu không đúng");
     }
-
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
-      return ResponseApi(res, 400, null, "Số điện thoại hoặc mật khẩu không đúng");
-    }
-
-    const accessToken = createToken({ id: user._id, phone: user.phone });
-    const refreshToken = createTokenRef({ id: user._id, phone: user.phone });
 
     user.status = "online";
     user.lastSeen = new Date();
     await user.save();
 
-    return ResponseApi(
-      res,
-      200,
-      {
-        accessToken,
-        refreshToken,
-        user: {
-          id: user._id,
-          username: user.username,
-          email: user.email,
-          phone: user.phone,
-          avatar: user.avatar,
-          status: user.status,
-          lastSeen: user.lastSeen,
-        },
-      },
-      "Đăng nhập thành công"
-    );
-  } catch (err: any) {
+    const accessToken = createToken({ id: user._id, phone: user.phone });
+    const refreshToken = createTokenRef({ id: user._id, phone: user.phone });
+
+    const userInfo = {
+      id: user._id,
+      username: user.username,
+      email: user.email,
+      phone: user.phone,
+      avatar: user.avatar,
+      status: user.status,
+      lastSeen: user.lastSeen,
+    };
+
+    return ResponseApi(res, 200, {
+      accessToken,
+      refreshToken,
+      user: userInfo,
+    }, "Đăng nhập thành công");
+
+  } catch (err) {
     console.error("Login error:", err);
     return ResponseApi(res, 500, null, "Lỗi server, vui lòng thử lại sau");
   }
