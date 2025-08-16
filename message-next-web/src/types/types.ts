@@ -15,3 +15,8 @@ export interface ILoginDataType {
     accessToken: string;
     refreshToken: string;
   }
+export interface ICall {
+    callerId: string;
+    receiverId: string;
+    isAccepted: boolean;
+  }

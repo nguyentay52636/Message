@@ -25,13 +25,11 @@ export const addConversation = async (req: CustomRequest, res: Response) => {
       return ResponseApi(res, 400, null, 'Group name and admin are required for group conversations');
     }
 
-    // Verify all members exist
     const users = await User.find({ _id: { $in: members } });
     if (users.length !== members.length) {
       return ResponseApi(res, 404, null, 'One or more members not found');
     }
 
-    // Check for existing personal conversation
     if (type === 'personal') {
       const existingConversation = await Conversation.findOne({
         type: 'personal',

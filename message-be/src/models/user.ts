@@ -10,6 +10,7 @@ interface IUser extends Document {
   lastSeen: Date;
   createdAt: Date;
   updatedAt: Date;
+  isActive: boolean;
 }
 
 const userSchema = new Schema<IUser>(

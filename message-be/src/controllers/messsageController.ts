@@ -213,3 +213,63 @@ export const createReplyMessage = async (req: CustomRequest, res: Response) => {
     return ResponseApi(res, 500, null, `Failed to send reply: ${error.message}`);
   }
 };  
+export const markMessagesAsRead = async (req: CustomRequest, res: Response) => {
+  try {
+    const { conversationId } = req.params;
+    const userId = req.user?.id;
+
+    if (!userId) {
+      return ResponseApi(res, 400, null, 'User ID is required');
+    }
+
+    await Message.updateMany(
+      { conversation: conversationId, isRead: false, sender: { $ne: userId } },
+      { $set: { isRead: true }, $addToSet: { readBy: userId } }
+    );
+
+    req.io?.to(conversationId).emit('messagesRead', { conversationId, userId });
+
+    return ResponseApi(res, 200, null, 'Messages marked as read');
+  } catch (err: any) {
+    return ResponseApi(res, 500, null, err.message);
+  }
+};
+
+export const recallMessage = async (req: CustomRequest, res: Response) => {
+  const { messageId } = req.params;
+  const userId = req.user?.id;
+
+  const message = await Message.findById(messageId);
+  if (!message) return ResponseApi(res, 404, null, "Message not found");
+  if (message.sender.toString() !== userId) return ResponseApi(res, 403, null, "Not allowed");
+
+  message.content = "Tin nhắn đã được thu hồi";
+  message.messageType = "text";
+  await message.save();
+
+  req.io?.to(message.conversation.toString()).emit("messageRecalled", { messageId });
+
+  return ResponseApi(res, 200, message, "Message recalled");
+};
+export const forwardMessage = async (req: CustomRequest, res: Response) => {
+  const { messageId, targetConversationId } = req.body;
+  const userId = req.user?.id;
+
+  const original = await Message.findById(messageId);
+  if (!original) return ResponseApi(res, 404, null, "Message not found");
+
+  const forwarded = new Message({
+    sender: userId,
+    conversation: targetConversationId,
+    content: original.content,
+    messageType: original.messageType,
+    mediaUrl: original.mediaUrl,
+    imageId: original.imageId,
+    replyTo: original._id,
+  });
+
+  await forwarded.save();
+  req.io?.to(targetConversationId).emit("messageForwarded", forwarded);
+
+  return ResponseApi(res, 201, forwarded, "Message forwarded");
+};

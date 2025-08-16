@@ -1,8 +1,7 @@
 import axios from "axios"
 import baseApi from "@/apis/baseApi" 
-import { IUser } from "@/types"
+import { IUser } from "@/types/types"
 
-const userData = { }
 export const LoginAPI  = async (userData :{phone : string, password : string}) => {
    try {
     const {data} = await baseApi.post("/auth/login", userData)

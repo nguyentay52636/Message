@@ -2,7 +2,7 @@ import { LoginAPI, registerAPI } from "@/apis/authApi";
 
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../store/store";
-import { IUser } from "@/types";
+import { IUser } from "@/types/types";
 
 interface AuthState  { 
 user :IUser | null   
@@ -42,7 +42,7 @@ export const login = createAsyncThunk(
       }
     },
   );
-  const register = createAsyncThunk('auth/register',async ({username,email, password, phone}: IUser)=> {
+  const register = createAsyncThunk('auth/signup',async ({username,email, password, phone}: IUser)=> {
     try {   
         const response = await registerAPI({username,email, password, phone})
         return response
