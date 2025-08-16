@@ -7,6 +7,7 @@ import { Eye, EyeOff, Phone, Mail, ArrowRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Checkbox } from "@/components/ui/checkbox"
+import { Label } from "@radix-ui/react-dropdown-menu"
 
 interface LoginFormProps {
     onSwitchToRegister: () => void
@@ -147,31 +148,31 @@ export function LoginForm({ onSwitchToRegister, onLoginSuccess }: LoginFormProps
                         <form onSubmit={handleSubmit} className="space-y-6">
                             {/* Login Method Toggle */}
                             <div className="flex bg-gray-100 rounded-2xl p-1">
-                                <button
-                                    type="button"
+                                <Button
+                                    variant='outline'
                                     onClick={() => setLoginMethod("phone")}
-                                    className={`flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-xl text-sm font-semibold transition-all ${loginMethod === "phone" ? "bg-white text-blue-600 shadow-md" : "text-gray-600 hover:text-gray-800"
+                                    className={`flex-1 flex items-center bg-white! justify-center gap-2 py-3 px-4 rounded-xl text-sm font-semibold transition-all ${loginMethod === "phone" ? "bg-white text-blue-600 shadow-md" : "text-gray-600 hover:text-gray-800"
                                         }`}
                                 >
                                     <Phone className="w-4 h-4" />
                                     Số điện thoại
-                                </button>
-                                <button
-                                    type="button"
+                                </Button>
+                                <Button
+                                    variant='outline'
                                     onClick={() => setLoginMethod("email")}
-                                    className={`flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-xl text-sm font-semibold transition-all ${loginMethod === "email" ? "bg-white text-blue-600 shadow-md" : "text-gray-600 hover:text-gray-800"
+                                    className={`flex-1 flex items-center justify-center bg-white! gap-2 py-3 px-4 rounded-xl text-sm font-semibold transition-all ${loginMethod === "email" ? "bg-white text-blue-600 shadow-md" : "text-gray-600 hover:text-gray-800"
                                         }`}
                                 >
                                     <Mail className="w-4 h-4" />
                                     Email
-                                </button>
+                                </Button>
                             </div>
 
                             {/* Phone/Email Input */}
                             <div className="space-y-2">
-                                <label className="text-sm font-semibold text-gray-700">
+                                <Label className="text-sm font-semibold text-gray-700">
                                     {loginMethod === "phone" ? "Số điện thoại" : "Email"}
-                                </label>
+                                </Label>
                                 <Input
                                     type={loginMethod === "phone" ? "tel" : "email"}
                                     placeholder={loginMethod === "phone" ? "Nhập số điện thoại" : "Nhập email"}
@@ -184,7 +185,7 @@ export function LoginForm({ onSwitchToRegister, onLoginSuccess }: LoginFormProps
 
                             {/* Password Input */}
                             <div className="space-y-2">
-                                <label className="text-sm font-semibold text-gray-700">Mật khẩu</label>
+                                <Label className="text-sm font-semibold text-gray-700">Mật khẩu</Label>
                                 <div className="relative">
                                     <Input
                                         type={showPassword ? "text" : "password"}
@@ -194,13 +195,13 @@ export function LoginForm({ onSwitchToRegister, onLoginSuccess }: LoginFormProps
                                         className="h-12 text-base border-gray-300 focus:border-blue-500 focus:ring-blue-500 pr-12 rounded-xl"
                                         required
                                     />
-                                    <button
+                                    <Button
                                         type="button"
                                         onClick={() => setShowPassword(!showPassword)}
                                         className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
                                     >
                                         {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-                                    </button>
+                                    </Button>
                                 </div>
                             </div>
 
@@ -216,9 +217,13 @@ export function LoginForm({ onSwitchToRegister, onLoginSuccess }: LoginFormProps
                                         Ghi nhớ đăng nhập
                                     </label>
                                 </div>
-                                <button type="button" className="text-sm text-blue-600 hover:text-blue-700 font-semibold">
+                                <Button
+                                    variant='link'
+                                    type="button"
+                                    className="text-sm text-blue-600 hover:text-blue-700 font-semibold"
+                                >
                                     Quên mật khẩu?
-                                </button>
+                                </Button>
                             </div>
 
                             {/* Login Button */}
@@ -291,9 +296,13 @@ export function LoginForm({ onSwitchToRegister, onLoginSuccess }: LoginFormProps
                         <div className="mt-8 text-center">
                             <p className="text-gray-600">
                                 Chưa có tài khoản?{" "}
-                                <button onClick={onSwitchToRegister} className="text-blue-600 hover:text-blue-700 font-semibold">
+                                <Button
+                                    variant='link'
+                                    onClick={onSwitchToRegister}
+                                    className="text-blue-600 hover:text-blue-700 font-semibold"
+                                >
                                     Đăng ký ngay
-                                </button>
+                                </Button>
                             </p>
                         </div>
                     </div>
@@ -302,9 +311,15 @@ export function LoginForm({ onSwitchToRegister, onLoginSuccess }: LoginFormProps
                     <div className="text-center mt-8 text-sm text-gray-500">
                         <p>Bằng việc đăng nhập, bạn đồng ý với</p>
                         <div className="flex justify-center gap-4 mt-1">
-                            <button className="hover:text-blue-600">Điều khoản sử dụng</button>
+                            <Button
+                                variant='link'
+                                className="hover:text-blue-600"
+                            >
+                                Điều khoản sử dụng
+                            </Button>
                             <span>•</span>
-                            <button className="hover:text-blue-600">Chính sách bảo mật</button>
+                            <Button
+                                variant='link' className="hover:text-blue-600">Chính sách bảo mật</Button>
                         </div>
                     </div>
                 </div>

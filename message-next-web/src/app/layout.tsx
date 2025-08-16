@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { SiderBar } from "@/components/shared/SiderBar/SiderBar";
+import { Toaster } from "sonner";
 
 export default function RootLayout({
   children,
@@ -28,6 +29,7 @@ export default function RootLayout({
               {children}
             </div>
           </div>
+          <Toaster position="top-right" richColors />
         </ThemeProvider>
       </body>
     </html>
