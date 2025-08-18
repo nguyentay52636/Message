@@ -11,6 +11,13 @@ interface IUser extends Document {
   createdAt: Date;
   updatedAt: Date;
   isActive: boolean;
+
+  emailVerified: boolean;
+  verificationCode?: string;
+  verificationCodeExpires?: Date;
+
+  resetPasswordCode?: string;
+  resetPasswordExpires?: Date;
 }
 
 const userSchema = new Schema<IUser>(
@@ -47,7 +54,27 @@ const userSchema = new Schema<IUser>(
     lastSeen: {
       type: Date,
       default: Date.now,
-      
+    },
+//email , forgetpassword
+    emailVerified: {
+      type: Boolean,
+      default: false,
+    },
+    verificationCode: {
+      type: String,
+      default: null,
+    },
+    verificationCodeExpires: {
+      type: Date,
+      default: null,
+    },
+    resetPasswordCode: {
+      type: String,
+      default: null,
+    },
+    resetPasswordExpires: {
+      type: Date,
+      default: null,
     },
   },
   {

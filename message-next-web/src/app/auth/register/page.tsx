@@ -75,7 +75,6 @@ export function RegisterForm({ onSwitchToLogin, onRegisterSuccess }: RegisterFor
         )
     }
 
-    // Tính toán độ mạnh mật khẩu
     React.useEffect(() => {
         if (watchedPassword) {
             calculatePasswordStrength(watchedPassword)
