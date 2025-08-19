@@ -8,13 +8,19 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Label } from "@radix-ui/react-dropdown-menu"
-
+import Link from "next/link"
+import { useRouter } from "next/navigation"
 interface LoginFormProps {
     onSwitchToRegister: () => void
     onLoginSuccess: () => void
 }
 
 export function LoginForm({ onSwitchToRegister, onLoginSuccess }: LoginFormProps) {
+    const router = useRouter()
+    const navigateToRegister = () => {
+        router.push("/auth/register");
+    };
+
     const [loginMethod, setLoginMethod] = useState<"phone" | "email">("phone")
     const [showPassword, setShowPassword] = useState(false)
     const [formData, setFormData] = useState({

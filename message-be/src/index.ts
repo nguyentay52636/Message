@@ -13,7 +13,7 @@ const app: Application = express();
 connectDB();
 
 app.use(cors({
-  origin: process.env.PORT || "http://localhost:8000",
+  origin: process.env.CLIENT_URL || "http://localhost:3000",
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],

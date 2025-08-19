@@ -9,6 +9,7 @@ export interface IUser {
     lastSeen?: Date;
     createdAt?: string
     updatedAt?: string
+    
   }
 export interface ILoginDataType {
     user: IUser;

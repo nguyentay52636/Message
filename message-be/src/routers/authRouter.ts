@@ -4,7 +4,7 @@ import { login, signUp, verifyOTP, resendOTP } from "../controllers/authControll
 const Router = express.Router();
 
 Router.post("/login", login);
-Router.post("/signup", signUp);
+Router.post("/register", signUp);
 Router.post("/verify-otp", verifyOTP);
 Router.post("/resend-otp", resendOTP);
 

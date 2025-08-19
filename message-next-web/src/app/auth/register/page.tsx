@@ -11,7 +11,7 @@ import { Label } from "@radix-ui/react-dropdown-menu"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import * as z from "zod"
-import { registerAPI } from "@/apis/authApi"
+import { registerAPI, verifyOTPAPI, resendOTPAPI } from "@/apis/authApi"
 import { toast } from "sonner"
 
 const registerSchema = z.object({
@@ -39,6 +39,9 @@ export function RegisterForm({ onSwitchToLogin, onRegisterSuccess }: RegisterFor
     const [currentStep, setCurrentStep] = useState(1)
     const [isLoading, setIsLoading] = useState(false)
     const [passwordStrength, setPasswordStrength] = useState(0)
+    const [otp, setOtp] = useState("")
+    const [countdown, setCountdown] = useState(0)
+    const [registrationData, setRegistrationData] = useState<Partial<RegisterFormData> | null>(null)
 
     const {
         register,
@@ -59,7 +62,6 @@ export function RegisterForm({ onSwitchToLogin, onRegisterSuccess }: RegisterFor
     const watchedPhone = watch("phone")
     const watchedConfirmPassword = watch("confirmPassword")
 
-    // Kiểm tra xem form có hợp lệ không
     const isFormValid = () => {
         return (
             watchedEmail &&
@@ -80,6 +82,15 @@ export function RegisterForm({ onSwitchToLogin, onRegisterSuccess }: RegisterFor
             calculatePasswordStrength(watchedPassword)
         }
     }, [watchedPassword])
+
+    // Countdown timer for resend OTP
+    React.useEffect(() => {
+        let timer: NodeJS.Timeout
+        if (countdown > 0) {
+            timer = setTimeout(() => setCountdown(countdown - 1), 1000)
+        }
+        return () => clearTimeout(timer)
+    }, [countdown])
 
     const calculatePasswordStrength = (password: string) => {
         let strength = 0
@@ -118,7 +129,16 @@ export function RegisterForm({ onSwitchToLogin, onRegisterSuccess }: RegisterFor
                 return
             }
 
+            // Gọi API đăng ký để lấy OTP
+            const response = await registerAPI({
+                email: data.email || "",
+                username: data.username || "",
+                phone: data.phone || "",
+                password: data.password || ""
+            })
+
             // Lưu dữ liệu từ step 1
+            setRegistrationData(data)
             setValue("email", data.email || "")
             setValue("username", data.username || "")
             setValue("phone", data.phone || "")
@@ -126,10 +146,17 @@ export function RegisterForm({ onSwitchToLogin, onRegisterSuccess }: RegisterFor
             setValue("confirmPassword", data.confirmPassword || "")
             setValue("agreeTerms", data.agreeTerms || false)
 
+            // Bắt đầu countdown cho resend OTP
+            setCountdown(30)
+
             // Chuyển sang step 2
             setCurrentStep(2)
-        } catch (error) {
+            toast.success("Mã OTP đã được gửi đến email của bạn!")
+
+        } catch (error: unknown) {
             console.error("Error in step 1:", error)
+            const errorMessage = error instanceof Error ? error.message : "Đăng ký thất bại. Vui lòng thử lại."
+            toast.error(errorMessage)
         } finally {
             setIsLoading(false)
         }
@@ -137,25 +164,48 @@ export function RegisterForm({ onSwitchToLogin, onRegisterSuccess }: RegisterFor
 
     const onSubmitStep2 = async () => {
         try {
+            if (!otp || otp.length !== 6) {
+                toast.error("Vui lòng nhập mã OTP 6 số")
+                return
+            }
+
             setIsLoading(true)
 
-            // Lấy dữ liệu từ form
-            const formData = watch()
-
-            // Gọi API đăng ký
-            await registerAPI({
-                email: formData.email,
-                username: formData.username,
-                phone: formData.phone,
-                password: formData.password
+            // Gọi API xác thực OTP
+            const response = await verifyOTPAPI({
+                email: registrationData?.email || "",
+                otp: otp
             })
 
-            toast.success("Đăng ký thành công!")
+            toast.success("Đăng ký thành công! Tài khoản đã được kích hoạt.")
             onRegisterSuccess()
 
         } catch (error: unknown) {
-            console.error("Registration error:", error)
-            const errorMessage = error instanceof Error ? error.message : "Đăng ký thất bại. Vui lòng thử lại."
+            console.error("OTP verification error:", error)
+            const errorMessage = error instanceof Error ? error.message : "Xác thực OTP thất bại. Vui lòng thử lại."
+            toast.error(errorMessage)
+        } finally {
+            setIsLoading(false)
+        }
+    }
+
+    const handleResendOTP = async () => {
+        try {
+            if (!registrationData?.email) {
+                toast.error("Không tìm thấy email để gửi lại OTP")
+                return
+            }
+
+            setIsLoading(true)
+            await resendOTPAPI({ email: registrationData.email })
+
+            // Reset countdown
+            setCountdown(30)
+            toast.success("Đã gửi lại mã OTP. Vui lòng kiểm tra email.")
+
+        } catch (error: unknown) {
+            console.error("Resend OTP error:", error)
+            const errorMessage = error instanceof Error ? error.message : "Gửi lại OTP thất bại. Vui lòng thử lại."
             toast.error(errorMessage)
         } finally {
             setIsLoading(false)
@@ -172,6 +222,8 @@ export function RegisterForm({ onSwitchToLogin, onRegisterSuccess }: RegisterFor
 
     const handleBackToStep1 = () => {
         setCurrentStep(1)
+        setOtp("")
+        setCountdown(0)
     }
 
     return (
@@ -498,7 +550,7 @@ export function RegisterForm({ onSwitchToLogin, onRegisterSuccess }: RegisterFor
                                             </svg>
                                         </div>
                                         <p className="text-gray-600 mb-2">Mã xác thực đã được gửi đến</p>
-                                        <p className="font-semibold text-gray-900 text-lg">{watch("email")}</p>
+                                        <p className="font-semibold text-gray-900 text-lg">{registrationData?.email}</p>
                                     </div>
 
                                     <div className="space-y-2">
@@ -508,13 +560,23 @@ export function RegisterForm({ onSwitchToLogin, onRegisterSuccess }: RegisterFor
                                             placeholder="Nhập mã 6 số"
                                             className="h-12 text-base text-center tracking-widest border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-xl"
                                             maxLength={6}
+                                            value={otp}
+                                            onChange={(e) => setOtp(e.target.value.replace(/\D/g, ''))}
                                         />
                                     </div>
 
                                     <div className="text-center">
                                         <p className="text-sm text-gray-600 mb-2">Không nhận được mã?</p>
-                                        <button type="button" className="text-sm text-blue-600 hover:text-blue-700 font-semibold">
-                                            Gửi lại mã (30s)
+                                        <button
+                                            type="button"
+                                            onClick={handleResendOTP}
+                                            disabled={countdown > 0 || isLoading}
+                                            className={`text-sm font-semibold ${countdown > 0
+                                                ? 'text-gray-400 cursor-not-allowed'
+                                                : 'text-blue-600 hover:text-blue-700'
+                                                }`}
+                                        >
+                                            {countdown > 0 ? `Gửi lại mã (${countdown}s)` : 'Gửi lại mã'}
                                         </button>
                                     </div>
                                 </>
@@ -523,7 +585,7 @@ export function RegisterForm({ onSwitchToLogin, onRegisterSuccess }: RegisterFor
                             {/* Submit Button */}
                             <Button
                                 type="submit"
-                                disabled={isLoading || (currentStep === 1 && !isFormValid())}
+                                disabled={isLoading || (currentStep === 1 && !isFormValid()) || (currentStep === 2 && !otp)}
                                 className="w-full h-12 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold rounded-xl transition-all duration-200 flex items-center justify-center gap-2 shadow-lg"
                             >
                                 {isLoading ? (

@@ -53,7 +53,7 @@ export const login = async (req: Request, res: Response) => {
     console.error("Login error:", err);
     return ResponseApi(res, 500, null, "Lỗi server, vui lòng thử lại sau");
   }
-};
+}; 
 
 export const signUp = async (req: Request, res: Response) => {
   const { username, email, password, phone } = req.body;
