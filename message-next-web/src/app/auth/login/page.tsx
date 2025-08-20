@@ -8,8 +8,11 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Label } from "@radix-ui/react-dropdown-menu"
-import Link from "next/link"
 import { useRouter } from "next/navigation"
+import { toast } from "sonner"
+import { login } from "@/redux/slices/authSlice"
+import { useDispatch } from "react-redux"
+import { AppDispatch } from "@/redux/store/store"
 interface LoginFormProps {
     onSwitchToRegister: () => void
     onLoginSuccess: () => void
@@ -23,23 +26,51 @@ export function LoginForm({ onSwitchToRegister, onLoginSuccess }: LoginFormProps
 
     const [loginMethod, setLoginMethod] = useState<"phone" | "email">("phone")
     const [showPassword, setShowPassword] = useState(false)
+    const [isRememberMe, setIsRememberMe] = useState(false)
+
+    const dispatch = useDispatch<AppDispatch>()
     const [formData, setFormData] = useState({
-        phoneOrEmail: "",
+        phone: "",
         password: "",
         rememberMe: false,
     })
     const [isLoading, setIsLoading] = useState(false)
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault()
-        setIsLoading(true)
+    const handleSubmitLogin = async (e: React.FormEvent) => {
+        e.preventDefault();
 
-        // Simulate login process
-        setTimeout(() => {
-            setIsLoading(false)
-            onLoginSuccess()
-        }, 2000)
+        if (formData.phone && formData.password) {
+            setIsLoading(true)
+            try {
+                const response = await dispatch(login({ phone: formData.phone, password: formData.password })).unwrap();
+
+                console.log('Full login response:', response);
+
+                // Kiểm tra nếu login thành công
+                if (response && response.user && response.accessToken) {
+                    const userData = response.user;
+
+                    toast.success(`Đăng nhập thành công! Chào mừng ${userData.username}`, {
+                    });
+
+                    console.log('User data:', userData);
+                    console.log('User role:', userData.vaiTro);
+                    console.log('User role name:', userData.vaiTro?.ten);
+
+
+
+                } else {
+
+
+                }
+            } catch (err: any) {
+
+            } finally {
+                setIsLoading(false)
+            }
+        }
     }
+
 
     const handleInputChange = (field: string, value: string | boolean) => {
         setFormData((prev) => ({ ...prev, [field]: value }))
@@ -151,7 +182,7 @@ export function LoginForm({ onSwitchToRegister, onLoginSuccess }: LoginFormProps
 
                     {/* Login Form */}
                     <div className="bg-white rounded-3xl shadow-xl p-8 border border-gray-100">
-                        <form onSubmit={handleSubmit} className="space-y-6">
+                        <form onSubmit={handleSubmitLogin} className="space-y-6">
                             {/* Login Method Toggle */}
                             <div className="flex bg-gray-100 rounded-2xl p-1">
                                 <Button
@@ -182,8 +213,8 @@ export function LoginForm({ onSwitchToRegister, onLoginSuccess }: LoginFormProps
                                 <Input
                                     type={loginMethod === "phone" ? "tel" : "email"}
                                     placeholder={loginMethod === "phone" ? "Nhập số điện thoại" : "Nhập email"}
-                                    value={formData.phoneOrEmail}
-                                    onChange={(e) => handleInputChange("phoneOrEmail", e.target.value)}
+                                    value={formData.phone}
+                                    onChange={(e) => handleInputChange("phone", e.target.value)}
                                     className="h-12 text-base border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-xl"
                                     required
                                 />
@@ -336,14 +367,17 @@ export function LoginForm({ onSwitchToRegister, onLoginSuccess }: LoginFormProps
 
 // Default export for Next.js page
 export default function LoginPage() {
+    const router = useRouter()
+
     const handleSwitchToRegister = () => {
-        // Handle navigation to register page
-        console.log("Switch to register")
+        router.push('/auth/register')
     }
 
     const handleLoginSuccess = () => {
         // Handle successful login
         console.log("Login successful")
+        // You can add navigation logic here
+        // router.push('/chat')
     }
 
     return <LoginForm onSwitchToRegister={handleSwitchToRegister} onLoginSuccess={handleLoginSuccess} />

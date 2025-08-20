@@ -8,4 +8,4 @@ Router.post("/register", signUp);
 Router.post("/verify-otp", verifyOTP);
 Router.post("/resend-otp", resendOTP);
 
-export default Router;
+export default Router; 

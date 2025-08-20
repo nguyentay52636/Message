@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/ThemeProvider";
+import { ReduxProvider } from "@/components/ReduxProvider";
 import { SiderBar } from "@/components/shared/SiderBar/SiderBar";
 import { Toaster } from "sonner";
 
@@ -22,14 +23,16 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <div className="h-screen w-full flex overflow-hidden bg-background">
-            {/* Main Sidebar - Always visible */}
-            {/* Chat Area - Takes remaining space */}
-            <div className="flex-1 overflow-hidden">
-              {children}
+          <ReduxProvider>
+            <div className="h-screen w-full flex overflow-hidden bg-background">
+              {/* Main Sidebar - Always visible */}
+              {/* Chat Area - Takes remaining space */}
+              <div className="flex-1 overflow-hidden">
+                {children}
+              </div>
             </div>
-          </div>
-          <Toaster position="top-right" richColors />
+            <Toaster position="top-right" richColors />
+          </ReduxProvider>
         </ThemeProvider>
       </body>
     </html>

@@ -13,6 +13,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import * as z from "zod"
 import { registerAPI, verifyOTPAPI, resendOTPAPI } from "@/apis/authApi"
 import { toast } from "sonner"
+import { useRouter } from "next/navigation"
 
 const registerSchema = z.object({
     email: z.string().email("Email không hợp lệ"),
@@ -34,6 +35,10 @@ interface RegisterFormProps {
 }
 
 export function RegisterForm({ onSwitchToLogin, onRegisterSuccess }: RegisterFormProps) {
+    const router = useRouter()
+    const navigateToLogin = () => {
+        router.push("/auth/login");
+    };
     const [showPassword, setShowPassword] = useState(false)
     const [showConfirmPassword, setShowConfirmPassword] = useState(false)
     const [currentStep, setCurrentStep] = useState(1)
@@ -615,9 +620,9 @@ export function RegisterForm({ onSwitchToLogin, onRegisterSuccess }: RegisterFor
                         <div className="mt-8 text-center">
                             <p className="text-gray-600">
                                 Đã có tài khoản?{" "}
-                                <button onClick={onSwitchToLogin} className="text-blue-600 hover:text-blue-700 font-semibold">
+                                <Button variant="link" onClick={onSwitchToLogin} className="text-blue-600 hover:text-blue-700 font-semibold">
                                     Đăng nhập ngay
-                                </button>
+                                </Button>
                             </p>
                         </div>
                     </div>
@@ -629,6 +634,8 @@ export function RegisterForm({ onSwitchToLogin, onRegisterSuccess }: RegisterFor
 
 // Default export for the register page
 export default function RegisterPage() {
+    const router = useRouter()
+
     const handleRegisterSuccess = () => {
         console.log("Register successful")
         // Add navigation logic here
@@ -637,7 +644,7 @@ export default function RegisterPage() {
 
     const handleSwitchToLogin = () => {
         // Navigate to login page
-        window.location.href = '/auth/login'
+        router.push('/auth/login')
     }
 
     return (

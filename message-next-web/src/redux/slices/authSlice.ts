@@ -12,15 +12,31 @@ isLoading : boolean
 error : string | null
 registrationSuccess : boolean
 }
-const isAuthenticated = JSON.parse(localStorage.getItem('isAuthenticated') || 'false')
-const currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null')
-const token = localStorage.getItem('token')
 
-console.log('Loading from localStorage:', {
-  isAuthenticated,
-  currentUser,
-  token
-});
+// Helper function to safely get data from localStorage
+const getLocalStorageData = () => {
+  if (typeof window !== 'undefined') {
+    try {
+      const isAuthenticated = JSON.parse(localStorage.getItem('isAuthenticated') || 'false')
+      const currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null')
+      const token = localStorage.getItem('token')
+      
+      console.log('Loading from localStorage:', {
+        isAuthenticated,
+        currentUser,
+        token
+      });
+      
+      return { isAuthenticated, currentUser, token }
+    } catch (error) {
+      console.error('Error reading from localStorage:', error)
+      return { isAuthenticated: false, currentUser: null, token: null }
+    }
+  }
+  return { isAuthenticated: false, currentUser: null, token: null }
+}
+
+const { isAuthenticated, currentUser, token } = getLocalStorageData()
 
 const initialState : AuthState =  { 
     user : currentUser,
@@ -35,7 +51,6 @@ export const login = createAsyncThunk(
     async ({ phone, password }: { phone: string; password: string }, { rejectWithValue }) => {
       try {
         const response = await LoginAPI({ phone: phone, password: password });
-        // Assuming the API returns a token in the data
         return response;
       } catch (error) {
         return rejectWithValue((error as Error).message || 'Login failed');
