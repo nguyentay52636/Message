@@ -48,24 +48,50 @@ const initialState : AuthState =  {
 }
 export const login = createAsyncThunk(
     'auth/login',
-    async ({ phone, password }: { phone: string; password: string }, { rejectWithValue }) => {
+    async ({ phone, email, password }: { phone?: string; email?: string; password: string }, { rejectWithValue }) => {
       try {
-        const response = await LoginAPI({ phone: phone, password: password });
+        // Validate input
+        if ((!phone && !email) || !password) {
+          return rejectWithValue('Vui lòng nhập đầy đủ thông tin đăng nhập');
+        }
+        
+        const loginData = phone ? { phone, password } : { email, password };
+        const response = await LoginAPI(loginData);
         return response;
-      } catch (error) {
-        return rejectWithValue((error as Error).message || 'Login failed');
+      } catch (error: unknown) {
+        // Handle different types of errors
+        if (typeof error === 'object' && error !== null && 'response' in error) {
+          const err = error as { response?: { status?: number } };
+          if (err.response?.status === 401) {
+            return rejectWithValue('Số điện thoại/email hoặc mật khẩu không đúng');
+          } else if (err.response?.status === 404) {
+            return rejectWithValue('Tài khoản không tồn tại');
+          } else if ((err.response?.status ?? 0) >= 500) {
+            return rejectWithValue('Lỗi server, vui lòng thử lại sau');
+          }
+        }
+        const message = (typeof error === 'object' && error !== null && 'message' in error)
+          ? String((error as { message?: string }).message)
+          : 'Đăng nhập thất bại';
+        return rejectWithValue(message);
       }
     },
   );
-  const register = createAsyncThunk('auth/signup',async ({username,email, password, phone}: IUser)=> {
+  export const register = createAsyncThunk('auth/register',async ({email,username, password, phone}: IUser, { rejectWithValue })=> {
     try {   
-        const response = await registerAPI({username,email, password, phone})
+        const response = await registerAPI({email,username, password, phone})
         return response
-    } catch (error:any) {
-        throw new Error(error);
+    } catch (error: unknown) {
+        if (typeof error === 'object' && error !== null && 'response' in error) {
+          const message = (error as { response?: { data?: { message?: string } } }).response?.data?.message
+          return rejectWithValue(message || 'Đăng ký thất bại')
+        }
+        const message = (typeof error === 'object' && error !== null && 'message' in error)
+          ? String((error as { message?: string }).message)
+          : 'Đăng ký thất bại'
+        return rejectWithValue(message)
     }
   })    
-  // Create the auth slice
   const authSlice = createSlice({
     name: 'auth',
     initialState,
@@ -105,14 +131,25 @@ export const login = createAsyncThunk(
           state.isLoading = false;
           state.error = null;
           
-          // Xử lý response trực tiếp từ API
           if (action.payload) {
-            // API trả về trực tiếp user data và token
-            const userData = action.payload.user;
-            const token = action.payload.accessToken;
+            // Chuẩn hóa response để tương thích nhiều cấu trúc trả về khác nhau
+            const payload: any = action.payload as any;
+            const userData = payload?.user
+              ?? payload?.data?.user
+              ?? payload?.data?.userInfo
+              ?? payload?.currentUser
+              ?? payload?.data?.currentUser
+              ?? payload?.userData
+              ?? null;
+            const token = payload?.accessToken
+              ?? payload?.token
+              ?? payload?.data?.accessToken
+              ?? payload?.data?.token
+              ?? payload?.jwt
+              ?? null;
             
-            console.log('User data:', userData);
-            console.log('Token:', token);
+            console.log('Resolved user:', userData);
+            console.log('Resolved token:', token);
             
             if (userData && token) {
               state.user = userData;
@@ -122,7 +159,7 @@ export const login = createAsyncThunk(
               // Lưu thông tin user vào localStorage với đầy đủ thông tin
               const userDataToSave = {
                 ...userData,
-                id: userData._id, // Sử dụng _id từ MongoDB
+                id: userData._id || userData.id,
               };
               console.log('Saving user data to localStorage:', userDataToSave);
       
@@ -144,7 +181,7 @@ export const login = createAsyncThunk(
         })
         .addCase(login.rejected, (state, action) => {
           state.isLoading = false;
-          state.error = action.payload as string;
+          state.error = (action.payload as string) || action.error.message || 'Đăng nhập thất bại';
           state.isAuthenticated = false;
           
           // Xóa thông tin cũ trong localStorage khi login thất bại
@@ -169,14 +206,13 @@ export const login = createAsyncThunk(
         })
         .addCase(register.rejected, (state, action) => {
           state.isLoading = false;
-          state.error = action.payload as string;
+          state.error = (action.payload as string) || action.error.message || 'Đăng ký thất bại';
           state.registrationSuccess = false;
         });
     },
   });
   
   export const { logout, setCredentials, clearError, resetRegistrationSuccess } = authSlice.actions;
-  export { register }; // Export register function
   export default authSlice.reducer;
   export const selectAuth = (state: RootState) => state.auth;
   

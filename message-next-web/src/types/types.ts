@@ -2,14 +2,14 @@ export interface IUser {
     _id?: string
     username: string
     email: string
-    password: string
     phone: string
+    password: string
     avatar?: string
     status?: string
     lastSeen?: Date;
     createdAt?: string
     updatedAt?: string
-    
+
   }
 export interface ILoginDataType {
     user: IUser;

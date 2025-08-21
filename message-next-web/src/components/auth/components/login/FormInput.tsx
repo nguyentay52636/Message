@@ -1,38 +1,34 @@
 import { Button } from '@/components/ui/button'
-import { Mail, Phone, Eye, EyeOff } from 'lucide-react'
+import { Spinner } from '@/components/ui/spinner'
+import React from 'react'
 import { Input } from '@/components/ui/input'
 import { Checkbox } from '@/components/ui/checkbox'
-import { ArrowRight } from 'lucide-react'
-
-import React from 'react'
+import { Eye, EyeOff, Phone, Mail, ArrowRight } from 'lucide-react'
 import { Label } from '@radix-ui/react-dropdown-menu'
-interface LoginFormProps {
-    handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
-    setLoginMethod: (method: 'phone' | 'email') => void;
-    loginMethod: 'phone' | 'email';
-    formData: {
-        phoneOrEmail: string;
-        password: string;
-        rememberMe: boolean;
-    };
-    isLoading: boolean;
-    showPassword: boolean;
-    setShowPassword: (show: boolean) => void;
-    handleInputChange: (field: string, value: string | boolean) => void;
-    onSwitchToRegister: () => void;
+interface LoginFormInputProps {
+    onSubmit: (data: { phone: string, password: string, rememberMe: boolean }) => void
+    isLoading: boolean
+    loginMethod: "phone" | "email"
+    setLoginMethod: (method: "phone" | "email") => void
+    formData: { phone: string, password: string, rememberMe: boolean }
+    handleInputChange: (field: string, value: string | boolean) => void
+    showPassword: boolean
+    setShowPassword: (showPassword: boolean) => void
+    handleSubmitLogin: (e: React.FormEvent<HTMLFormElement>) => void
+    onSwitchToRegister: () => void
 }
 
-export default function LoginFormInput({ handleSubmit, setLoginMethod, loginMethod, formData, isLoading, showPassword, setShowPassword, handleInputChange, onSwitchToRegister }: LoginFormProps) {
+export default function FormInput({ onSubmit, isLoading, loginMethod, setLoginMethod, formData, handleInputChange, showPassword, setShowPassword, handleSubmitLogin, onSwitchToRegister }: LoginFormInputProps) {
     return (
         <>
             <div className="bg-white rounded-3xl shadow-xl p-8 border border-gray-100">
-                <form onSubmit={handleSubmit} className="space-y-6">
+                <form onSubmit={handleSubmitLogin} className="space-y-6">
                     {/* Login Method Toggle */}
                     <div className="flex bg-gray-100 rounded-2xl p-1">
                         <Button
                             variant='outline'
-                            onClick={() => setLoginMethod('phone')}
-                            className={`flex-1 flex items-center bg-white! justify-center gap-2 py-3 px-4 rounded-xl text-sm font-semibold transition-all ${loginMethod === 'phone' ? 'bg-white text-blue-600 shadow-md' : 'text-gray-600 hover:text-gray-800'
+                            onClick={() => setLoginMethod("phone")}
+                            className={`flex-1 flex items-center bg-white! justify-center gap-2 py-3 px-4 rounded-xl text-sm font-semibold transition-all ${loginMethod === "phone" ? "bg-white text-blue-600 shadow-md" : "text-gray-600 hover:text-gray-800"
                                 }`}
                         >
                             <Phone className="w-4 h-4" />
@@ -40,8 +36,8 @@ export default function LoginFormInput({ handleSubmit, setLoginMethod, loginMeth
                         </Button>
                         <Button
                             variant='outline'
-                            onClick={() => setLoginMethod('email')}
-                            className={`flex-1 flex items-center justify-center bg-white! gap-2 py-3 px-4 rounded-xl text-sm font-semibold transition-all ${loginMethod === 'email' ? 'bg-white text-blue-600 shadow-md' : 'text-gray-600 hover:text-gray-800'
+                            onClick={() => setLoginMethod("email")}
+                            className={`flex-1 flex items-center justify-center bg-white! gap-2 py-3 px-4 rounded-xl text-sm font-semibold transition-all ${loginMethod === "email" ? "bg-white text-blue-600 shadow-md" : "text-gray-600 hover:text-gray-800"
                                 }`}
                         >
                             <Mail className="w-4 h-4" />
@@ -52,15 +48,16 @@ export default function LoginFormInput({ handleSubmit, setLoginMethod, loginMeth
                     {/* Phone/Email Input */}
                     <div className="space-y-2">
                         <Label className="text-sm font-semibold text-gray-700">
-                            {loginMethod === 'phone' ? 'Số điện thoại' : 'Email'}
+                            {loginMethod === "phone" ? "Số điện thoại" : "Email"}
                         </Label>
                         <Input
-                            type={loginMethod === 'phone' ? 'tel' : 'email'}
-                            placeholder={loginMethod === 'phone' ? 'Nhập số điện thoại' : 'Nhập email'}
-                            value={formData.phoneOrEmail}
-                            onChange={(e) => handleInputChange('phoneOrEmail', e.target.value)}
+                            type={loginMethod === "phone" ? "tel" : "email"}
+                            placeholder={loginMethod === "phone" ? "Nhập số điện thoại" : "Nhập email"}
+                            value={formData.phone}
+                            onChange={(e) => handleInputChange("phone", e.target.value)}
                             className="h-12 text-base border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-xl"
                             required
+                            disabled={isLoading}
                         />
                     </div>
 
@@ -69,17 +66,19 @@ export default function LoginFormInput({ handleSubmit, setLoginMethod, loginMeth
                         <Label className="text-sm font-semibold text-gray-700">Mật khẩu</Label>
                         <div className="relative">
                             <Input
-                                type={showPassword ? 'text' : 'password'}
+                                type={showPassword ? "text" : "password"}
                                 placeholder="Nhập mật khẩu"
                                 value={formData.password}
-                                onChange={(e) => handleInputChange('password', e.target.value)}
+                                onChange={(e) => handleInputChange("password", e.target.value)}
                                 className="h-12 text-base border-gray-300 focus:border-blue-500 focus:ring-blue-500 pr-12 rounded-xl"
                                 required
+                                disabled={isLoading}
                             />
                             <Button
                                 type="button"
                                 onClick={() => setShowPassword(!showPassword)}
                                 className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                                disabled={isLoading}
                             >
                                 {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                             </Button>
@@ -92,7 +91,8 @@ export default function LoginFormInput({ handleSubmit, setLoginMethod, loginMeth
                             <Checkbox
                                 id="remember"
                                 checked={formData.rememberMe}
-                                onCheckedChange={(checked) => handleInputChange('rememberMe', checked as boolean)}
+                                onCheckedChange={(checked) => handleInputChange("rememberMe", checked as boolean)}
+                                disabled={isLoading}
                             />
                             <label htmlFor="remember" className="text-sm text-gray-600">
                                 Ghi nhớ đăng nhập
@@ -111,10 +111,13 @@ export default function LoginFormInput({ handleSubmit, setLoginMethod, loginMeth
                     <Button
                         type="submit"
                         disabled={isLoading}
-                        className="w-full h-12 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold rounded-xl transition-all duration-200 flex items-center justify-center gap-2 shadow-lg"
+                        className="w-full h-12 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold rounded-xl transition-all duration-200 flex items-center justify-center gap-2 shadow-lg disabled:opacity-70"
                     >
                         {isLoading ? (
-                            <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                            <>
+                                <Spinner size="sm" className="text-white" />
+                                Đang đăng nhập...
+                            </>
                         ) : (
                             <>
                                 Đăng nhập

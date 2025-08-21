@@ -56,7 +56,7 @@ export const login = async (req: Request, res: Response) => {
 }; 
 
 export const signUp = async (req: Request, res: Response) => {
-  const { username, email, password, phone } = req.body;
+  const { username, email, phone, password } = req.body;
 
   if (!username || !email || !password || !phone) {
     return ResponseApi(res, 400, null, "Vui lòng nhập đầy đủ thông tin");

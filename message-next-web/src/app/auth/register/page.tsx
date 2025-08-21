@@ -7,7 +7,6 @@ import { Eye, EyeOff, ArrowRight, Check, ArrowLeft } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Checkbox } from "@/components/ui/checkbox"
-import { Label } from "@radix-ui/react-dropdown-menu"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import * as z from "zod"
@@ -34,7 +33,7 @@ interface RegisterFormProps {
     onRegisterSuccess: () => void
 }
 
-export function RegisterForm({ onSwitchToLogin, onRegisterSuccess }: RegisterFormProps) {
+function RegisterForm({ onSwitchToLogin, onRegisterSuccess }: RegisterFormProps) {
     const router = useRouter()
     const navigateToLogin = () => {
         router.push("/auth/login");
@@ -57,7 +56,15 @@ export function RegisterForm({ onSwitchToLogin, onRegisterSuccess }: RegisterFor
         trigger
     } = useForm<RegisterFormData>({
         resolver: zodResolver(registerSchema),
-        mode: "onChange"
+        mode: "onChange",
+        defaultValues: {
+            email: "",
+            username: "",
+            phone: "",
+            password: "",
+            confirmPassword: "",
+            agreeTerms: false,
+        }
     })
 
     const watchedPassword = watch("password")
@@ -270,7 +277,7 @@ export function RegisterForm({ onSwitchToLogin, onRegisterSuccess }: RegisterFor
                                         strokeLinecap="round"
                                         strokeLinejoin="round"
                                         strokeWidth={2}
-                                        d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
+                                        d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0 a5.002 5.002 0 009.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
                                     />
                                 </svg>
                             </div>
@@ -303,7 +310,7 @@ export function RegisterForm({ onSwitchToLogin, onRegisterSuccess }: RegisterFor
                             </div>
                             <div>
                                 <h3 className="font-semibold text-lg">Trải nghiệm mới</h3>
-                                <p className="text-purple-100 text-sm">Khám phá tính năng và dịch vụ độc đáo</p>
+                                <p className="text-purple-100 text sm">Khám phá tính năng và dịch vụ độc đáo</p>
                             </div>
                         </div>
                     </div>
@@ -450,10 +457,11 @@ export function RegisterForm({ onSwitchToLogin, onRegisterSuccess }: RegisterFor
 
                                     {/* Password Input */}
                                     <div className="space-y-2">
-                                        <Label className="text-sm font-semibold text-gray-700">Mật khẩu</Label>
+                                        <label htmlFor="password" className="text-sm font-semibold text-gray-700">Mật khẩu</label>
                                         <div className="relative">
                                             <Input
                                                 {...register("password")}
+                                                id="password"
                                                 type={showPassword ? "text" : "password"}
                                                 placeholder="Nhập mật khẩu (tối thiểu 8 ký tự)"
                                                 className={`h-12 text-base border-gray-300 focus:border-blue-500 focus:ring-blue-500 pr-12 rounded-xl ${errors.password ? "border-red-500 focus:border-red-500 focus:ring-red-500" : ""
@@ -520,7 +528,7 @@ export function RegisterForm({ onSwitchToLogin, onRegisterSuccess }: RegisterFor
                                     <div className="flex items-start space-x-3">
                                         <Checkbox
                                             id="terms"
-                                            checked={watchedAgreeTerms}
+                                            checked={!!watchedAgreeTerms}
                                             onCheckedChange={(checked) => setValue("agreeTerms", checked as boolean)}
                                             className="mt-1"
                                         />
