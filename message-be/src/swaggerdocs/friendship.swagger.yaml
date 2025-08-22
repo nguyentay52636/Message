@@ -1,0 +1,411 @@
+tags:
+  - name: Friend Request
+    description: API quản lý lời mời kết bạn
+
+paths:
+  /api/friendsRequest:
+    post:
+      summary: Gửi lời mời kết bạn
+      description: Gửi lời mời kết bạn từ một người dùng đến người dùng khác
+      tags: [Friend Request]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - sender
+                - receiver
+              properties:
+                sender:
+                  type: string
+                  description: ID của người gửi lời mời
+                  example: "507f1f77bcf86cd799439011"
+                receiver:
+                  type: string
+                  description: ID của người nhận lời mời
+                  example: "507f1f77bcf86cd799439012"
+      responses:
+        '201':
+          description: Gửi lời mời kết bạn thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    $ref: '#/components/schemas/FriendRequest'
+                  message:
+                    type: string
+                    example: "Gửi lời mời kết bạn thành công"
+        '400':
+          description: Lỗi validation hoặc đã gửi lời mời trước đó
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Không tìm thấy người dùng
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Lỗi server
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/friendsRequest/search:
+    get:
+      summary: Tìm kiếm người dùng
+      description: Tìm kiếm người dùng theo số điện thoại, username hoặc email
+      tags: [Friend Request]
+      parameters:
+        - name: keyword
+          in: query
+          required: true
+          description: Từ khóa tìm kiếm (số điện thoại, username hoặc email)
+          schema:
+            type: string
+          example: "nguyenvana"
+      responses:
+        '200':
+          description: Tìm kiếm thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/UserSearchResult'
+                  message:
+                    type: string
+                    example: "Search users success"
+        '400':
+          description: Thiếu từ khóa tìm kiếm
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Lỗi server
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/friendsRequest/{id}:
+    get:
+      summary: Lấy danh sách lời mời kết bạn
+      description: Lấy danh sách tất cả lời mời kết bạn đang chờ xử lý của một người dùng
+      tags: [Friend Request]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID của người dùng nhận lời mời
+          schema:
+            type: string
+          example: "507f1f77bcf86cd799439011"
+      responses:
+        '200':
+          description: Thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/FriendRequestWithSender'
+                  message:
+                    type: string
+                    example: "Danh sách lời mời kết bạn"
+        '400':
+          description: ID không hợp lệ
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Lỗi server
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+    put:
+      summary: Chấp nhận lời mời kết bạn
+      description: Chấp nhận một lời mời kết bạn cụ thể
+      tags: [Friend Request]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID của lời mời kết bạn
+          schema:
+            type: string
+          example: "507f1f77bcf86cd799439011"
+      responses:
+        '200':
+          description: Chấp nhận kết bạn thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    $ref: '#/components/schemas/FriendRequestWithUsers'
+                  message:
+                    type: string
+                    example: "Đã chấp nhận kết bạn"
+        '400':
+          description: ID không hợp lệ
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Không tìm thấy lời mời
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Lỗi server
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+    delete:
+      summary: Xóa lời mời kết bạn
+      description: Xóa một lời mời kết bạn cụ thể
+      tags: [Friend Request]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID của lời mời kết bạn
+          schema:
+            type: string
+          example: "507f1f77bcf86cd799439011"
+      responses:
+        '200':
+          description: Xóa lời mời kết bạn thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    $ref: '#/components/schemas/FriendRequest'
+                  message:
+                    type: string
+                    example: "Đã xoá lời mời kết bạn"
+        '400':
+          description: ID không hợp lệ
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Không tìm thấy lời mời
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Lỗi server
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+components:
+  schemas:
+    FriendRequest:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: ID của lời mời kết bạn
+          example: "507f1f77bcf86cd799439011"
+        sender:
+          type: string
+          description: ID của người gửi lời mời
+          example: "507f1f77bcf86cd799439011"
+        receiver:
+          type: string
+          description: ID của người nhận lời mời
+          example: "507f1f77bcf86cd799439012"
+        status:
+          type: string
+          enum: ["pending", "accepted", "rejected"]
+          description: Trạng thái của lời mời
+          example: "pending"
+        createdAt:
+          type: string
+          format: date-time
+          description: Thời gian tạo lời mời
+          example: "2024-01-01T00:00:00.000Z"
+        updatedAt:
+          type: string
+          format: date-time
+          description: Thời gian cập nhật lời mời
+          example: "2024-01-01T00:00:00.000Z"
+      required:
+        - sender
+        - receiver
+        - status
+
+    FriendRequestWithSender:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: ID của lời mời kết bạn
+          example: "507f1f77bcf86cd799439011"
+        sender:
+          $ref: '#/components/schemas/UserBasicInfo'
+        receiver:
+          type: string
+          description: ID của người nhận lời mời
+          example: "507f1f77bcf86cd799439012"
+        status:
+          type: string
+          enum: ["pending", "accepted", "rejected"]
+          description: Trạng thái của lời mời
+          example: "pending"
+        createdAt:
+          type: string
+          format: date-time
+          description: Thời gian tạo lời mời
+          example: "2024-01-01T00:00:00.000Z"
+        updatedAt:
+          type: string
+          format: date-time
+          description: Thời gian cập nhật lời mời
+          example: "2024-01-01T00:00:00.000Z"
+
+    FriendRequestWithUsers:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: ID của lời mời kết bạn
+          example: "507f1f77bcf86cd799439011"
+        sender:
+          $ref: '#/components/schemas/UserBasicInfo'
+        receiver:
+          $ref: '#/components/schemas/UserBasicInfo'
+        status:
+          type: string
+          enum: ["pending", "accepted", "rejected"]
+          description: Trạng thái của lời mời
+          example: "accepted"
+        createdAt:
+          type: string
+          format: date-time
+          description: Thời gian tạo lời mời
+          example: "2024-01-01T00:00:00.000Z"
+        updatedAt:
+          type: string
+          format: date-time
+          description: Thời gian cập nhật lời mời
+          example: "2024-01-01T00:00:00.000Z"
+
+    UserBasicInfo:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: ID của người dùng
+          example: "507f1f77bcf86cd799439011"
+        username:
+          type: string
+          description: Tên đăng nhập
+          example: "nguyenvana"
+        avatar:
+          type: string
+          description: URL ảnh đại diện
+          example: "https://example.com/avatar.jpg"
+        status:
+          type: string
+          enum: ["online", "offline", "away"]
+          description: Trạng thái người dùng
+          example: "online"
+        lastSeen:
+          type: string
+          format: date-time
+          description: Thời gian hoạt động cuối cùng
+          example: "2024-01-01T00:00:00.000Z"
+
+    UserSearchResult:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: ID của người dùng
+          example: "507f1f77bcf86cd799439011"
+        username:
+          type: string
+          description: Tên đăng nhập
+          example: "nguyenvana"
+        phone:
+          type: string
+          description: Số điện thoại
+          example: "0123456789"
+        email:
+          type: string
+          description: Email
+          example: "nguyenvana@example.com"
+        avatar:
+          type: string
+          description: URL ảnh đại diện
+          example: "https://example.com/avatar.jpg"
+        status:
+          type: string
+          enum: ["online", "offline", "away"]
+          description: Trạng thái người dùng
+          example: "online"
+        lastSeen:
+          type: string
+          format: date-time
+          description: Thời gian hoạt động cuối cùng
+          example: "2024-01-01T00:00:00.000Z"
+
+    ErrorResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        data:
+          type: null
+          example: null
+        message:
+          type: string
+          description: Thông báo lỗi
+          example: "Có lỗi xảy ra"

@@ -2,27 +2,30 @@
 "use client"
 import { MessageCircle, Users, Cloud, Settings, Briefcase, Phone } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { ModeToggle } from "@/components/Mod/ModeTogger"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
+import { useSelector } from "react-redux"
+import { selectAuth } from "@/redux/slices/authSlice"
+import { UserDropdown } from "./UserDropdown"
 
 interface NavigationStripProps {
     onToggleMobileSidebar?: () => void
 }
 
 export function SiderBar({ onToggleMobileSidebar }: NavigationStripProps) {
+    const { isAuthenticated, user } = useSelector(selectAuth)
+
     return (
         <TooltipProvider>
             <div className="w-16 h-full bg-blue-500 flex flex-col items-center py-2 sm:py-4 space-y-2 sm:space-y-4 shadow-lg">
                 {/* User Avatar */}
                 <div className="relative group">
-                    <Avatar className="w-8 h-8 sm:w-10 sm:h-10 border-2 border-white/30 shadow-lg transition-transform group-hover:scale-105">
-                        <AvatarImage src="/placeholder.svg?height=40&width=40&text=U" />
-                        <AvatarFallback className="bg-gradient-to-br from-orange-400 to-orange-600 text-white font-bold text-xs sm:text-sm">
-                            U
-                        </AvatarFallback>
-                    </Avatar>
+                    {
+                        isAuthenticated && user && (
+                            <UserDropdown user={user} />
+                        )
+                    }
                     <div className="absolute -bottom-1 -right-1 w-3 h-3 sm:w-4 sm:h-4 bg-green-500 border-2 border-blue-500 shadow-lg rounded-full cursor-pointer"></div>
                 </div>
 

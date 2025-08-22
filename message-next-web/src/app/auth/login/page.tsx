@@ -19,9 +19,7 @@ interface LoginFormProps {
 
 function LoginForm({ onSwitchToRegister, onLoginSuccess }: LoginFormProps) {
     const router = useRouter()
-    const navigateToRegister = () => {
-        router.push("/auth/register");
-    };
+
 
     const [loginMethod, setLoginMethod] = useState<"phone" | "email">("phone")
     const [showPassword, setShowPassword] = useState(false)
