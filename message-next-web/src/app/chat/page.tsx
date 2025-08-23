@@ -12,12 +12,6 @@ export default function ChatPage() {
 
     return (
         <div className="flex h-screen w-full">
-            {/* Main Sidebar */}
-            <div className="w-16 flex-shrink-0 z-30">
-                <SiderBar />
-            </div>
-
-            {/* Chat Area */}
             <div className="flex-1 overflow-hidden">
                 <Chat
                     setSelectedChat={setSelectedChat}

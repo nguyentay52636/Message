@@ -8,6 +8,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import { useSelector } from "react-redux"
 import { selectAuth } from "@/redux/slices/authSlice"
 import { UserDropdown } from "./UserDropdown"
+import { useRouter } from "next/navigation"
 
 interface NavigationStripProps {
     onToggleMobileSidebar?: () => void
@@ -15,6 +16,8 @@ interface NavigationStripProps {
 
 export function SiderBar({ onToggleMobileSidebar }: NavigationStripProps) {
     const { isAuthenticated, user } = useSelector(selectAuth)
+    const router = useRouter();
+
 
     return (
         <TooltipProvider>
@@ -31,10 +34,11 @@ export function SiderBar({ onToggleMobileSidebar }: NavigationStripProps) {
 
                 {/* Navigation Icons */}
                 <div className="flex flex-col space-y-2 sm:space-y-3 w-full cursor-pointer px-2">
-                    <Tooltip>
+                    <Tooltip  >
                         <TooltipTrigger asChild>
                             <div className="relative">
                                 <Button
+                                    onClick={() => router.push("/chat")}
                                     variant="ghost"
                                     size="sm"
                                     className="w-full cursor-pointer text-white hover:bg-white/20 p-2 sm:p-3 rounded-xl bg-white/10 backdrop-blur-sm transition-all duration-200 hover:scale-105"
@@ -69,6 +73,7 @@ export function SiderBar({ onToggleMobileSidebar }: NavigationStripProps) {
                     <Tooltip>
                         <TooltipTrigger asChild>
                             <Button
+                                onClick={() => router.push("/friends")}
                                 variant="ghost"
                                 size="sm"
                                 className="w-full cursor-pointer text-white hover:bg-white/20 p-2 sm:p-3 rounded-xl transition-all duration-200 hover:scale-105"

@@ -1,16 +1,17 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { ReduxProvider } from "@/components/ReduxProvider";
 import { SiderBar } from "@/components/shared/SiderBar/SiderBar";
 import { Toaster } from "sonner";
+import { useSelector } from "react-redux";
+import { RootState } from "@/redux/store/store";
 
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
   return (
     <html lang="en">
       <head>
@@ -25,8 +26,12 @@ export default function RootLayout({
         >
           <ReduxProvider>
             <div className="h-screen w-full flex overflow-hidden bg-background">
-              {/* Main Sidebar - Always visible */}
-              {/* Chat Area - Takes remaining space */}
+       
+
+              <div className="w-16 flex-shrink-0 z-30">
+                <SiderBar />
+              </div>
+
               <div className="flex-1 overflow-hidden">
                 {children}
               </div>
