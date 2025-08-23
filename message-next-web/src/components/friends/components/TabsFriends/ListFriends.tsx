@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { MessageCircle, MoreHorizontal, Phone, Video } from 'lucide-react'
 import React from 'react'
-import { Friend } from './mock/data'
+import { Friend } from '../mock/data'
 interface ListFriendsProps {
     groupedFriends: Record<string, Friend[]>
 }
@@ -42,16 +42,16 @@ export default function ListFriends({ groupedFriends }: ListFriendsProps) {
                                                 </div>
                                             </div>
                                             <div className="flex items-center gap-2">
-                                                <Button variant="ghost" size="sm" className="p-2 rounded-xl hover:bg-accent">
+                                                <Button variant="ghost" size="sm" className="p-2 cursor-pointer rounded-xl hover:bg-accent">
                                                     <MessageCircle className="w-4 h-4" />
                                                 </Button>
-                                                <Button variant="ghost" size="sm" className="p-2 rounded-xl hover:bg-accent">
+                                                <Button variant="ghost" size="sm" className="p-2 cursor-pointer rounded-xl hover:bg-accent">
                                                     <Phone className="w-4 h-4" />
                                                 </Button>
-                                                <Button variant="ghost" size="sm" className="p-2 rounded-xl hover:bg-accent">
+                                                <Button variant="ghost" size="sm" className="p-2 cursor-pointer rounded-xl hover:bg-accent">
                                                     <Video className="w-4 h-4" />
                                                 </Button>
-                                                <Button variant="ghost" size="sm" className="p-2 rounded-xl hover:bg-accent">
+                                                <Button variant="ghost" size="sm" className="p-2 cursor-pointer rounded-xl hover:bg-accent">
                                                     <MoreHorizontal className="w-4 h-4" />
                                                 </Button>
                                             </div>

@@ -41,11 +41,11 @@ export default function FriendsRequest() {
                                     </div>
                                 </div>
                                 <div className="flex items-center gap-2">
-                                    <Button className="px-4 py-2 rounded-xl">
+                                    <Button className="px-4 py-2 rounded-xl cursor-pointer">
                                         <Check className="w-4 h-4 mr-2" />
                                         Chấp nhận
                                     </Button>
-                                    <Button variant="outline" className="px-4 py-2 rounded-xl bg-transparent">
+                                    <Button variant="outline" className="px-4 py-2 rounded-xl bg-transparent cursor-pointer">
                                         <X className="w-4 h-4 mr-2" />
                                         Từ chối
                                     </Button>

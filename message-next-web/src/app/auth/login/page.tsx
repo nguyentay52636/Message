@@ -34,7 +34,6 @@ function LoginForm({ onSwitchToRegister, onLoginSuccess }: LoginFormProps) {
         rememberMe: false,
     })
 
-    // Prefetch chat route for faster navigation after login
     useEffect(() => {
         router.prefetch("/chat")
     }, [router])

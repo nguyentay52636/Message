@@ -18,10 +18,34 @@ export function SiderBar({ onToggleMobileSidebar }: NavigationStripProps) {
     const { isAuthenticated, user } = useSelector(selectAuth)
     const router = useRouter();
 
-
+    const menuItems = [
+        {
+            label: "Tin nhắn",
+            icon: MessageCircle,
+            onClick: () => router.push("/chat"),
+            badge: 10,
+        },
+        {
+            label: "Cuộc gọi",
+            icon: Phone,
+        },
+        {
+            label: "Danh bạ",
+            icon: Users,
+            onClick: () => router.push("/friends"),
+        },
+        {
+            label: "Cloud của tôi",
+            icon: Cloud,
+        },
+        {
+            label: "Zalo OA",
+            icon: Briefcase,
+        },
+    ];
     return (
         <TooltipProvider>
-            <div className="w-16 h-full bg-blue-500 flex flex-col items-center py-2 sm:py-4 space-y-2 sm:space-y-4 shadow-lg">
+            <div className=" h-full bg-blue-500 flex flex-col items-center py-2 sm:py-4 space-y-2 sm:space-y-4 shadow-lg">
                 {/* User Avatar */}
                 <div className="relative group">
                     {
@@ -33,88 +57,31 @@ export function SiderBar({ onToggleMobileSidebar }: NavigationStripProps) {
                 </div>
 
                 {/* Navigation Icons */}
-                <div className="flex flex-col space-y-2 sm:space-y-3 w-full cursor-pointer px-2">
-                    <Tooltip  >
-                        <TooltipTrigger asChild>
-                            <div className="relative">
-                                <Button
-                                    onClick={() => router.push("/chat")}
-                                    variant="ghost"
-                                    size="sm"
-                                    className="w-full cursor-pointer text-white hover:bg-white/20 p-2 sm:p-3 rounded-xl bg-white/10 backdrop-blur-sm transition-all duration-200 hover:scale-105"
-                                >
-                                    <MessageCircle className="w-4 h-4 sm:w-5 sm:h-5" />
-                                </Button>
-                                <Badge className="absolute -top-1 -right-1 bg-red-500 text-white text-xs px-1 py-0.5 h-4 sm:h-5 min-w-4 sm:min-w-5 rounded-full cursor-pointer flex items-center justify-center shadow-lg border-0">
-                                    3
-                                </Badge>
-                            </div>
-                        </TooltipTrigger>
-                        <TooltipContent side="right" className="hidden md:block">
-                            <p>Tin nhắn</p>
-                        </TooltipContent>
-                    </Tooltip>
+                <div className="flex flex-col sm:space-y-4 w-full cursor-pointer px-2! py-6!">
+                    {menuItems.map((item, index) => (
+                        <Tooltip key={index}>
+                            <TooltipTrigger asChild className="w-full">
+                                <div className="relative !">
+                                    <Button
+                                        variant="ghost"
+                                        onClick={item.onClick}
+                                        className="w-full p-[30px]!  cursor-pointer text-white hover:bg-white/10 hover:text-white  p-4 sm:p-3 rounded-xl bg-white/10 backdrop-blur-sm transition-all duration-200 hover:scale-105"
+                                    >
+                                        <item.icon className="w-[30px]! hover: h-[30px]! sm:w-10 sm:h-10" />
+                                    </Button>
 
-                    <Tooltip>
-                        <TooltipTrigger asChild>
-                            <Button
-                                variant="ghost"
-                                size="sm"
-                                className="w-full cursor-pointer text-white hover:bg-white/20 p-2 sm:p-3 rounded-xl transition-all duration-200 hover:scale-105"
-                            >
-                                <Phone className="w-4 h-4 sm:w-5 sm:h-5" />
-                            </Button>
-                        </TooltipTrigger>
-                        <TooltipContent side="right" className="hidden md:block">
-                            <p>Cuộc gọi</p>
-                        </TooltipContent>
-                    </Tooltip>
-
-                    <Tooltip>
-                        <TooltipTrigger asChild>
-                            <Button
-                                onClick={() => router.push("/friends")}
-                                variant="ghost"
-                                size="sm"
-                                className="w-full cursor-pointer text-white hover:bg-white/20 p-2 sm:p-3 rounded-xl transition-all duration-200 hover:scale-105"
-                            >
-                                <Users className="w-4 h-4 sm:w-5 sm:h-5" />
-                            </Button>
-                        </TooltipTrigger>
-                        <TooltipContent side="right" className="hidden md:block">
-                            <p>Danh bạ</p>
-                        </TooltipContent>
-                    </Tooltip>
-
-                    <Tooltip>
-                        <TooltipTrigger asChild>
-                            <Button
-                                variant="ghost"
-                                size="sm"
-                                className="w-full cursor-pointer text-white hover:bg-white/20 p-2 sm:p-3 rounded-xl transition-all duration-200 hover:scale-105"
-                            >
-                                <Cloud className="w-4 h-4 sm:w-5 sm:h-5" />
-                            </Button>
-                        </TooltipTrigger>
-                        <TooltipContent side="right" className="hidden md:block">
-                            <p>Cloud của tôi</p>
-                        </TooltipContent>
-                    </Tooltip>
-
-                    <Tooltip>
-                        <TooltipTrigger asChild>
-                            <Button
-                                variant="ghost"
-                                size="sm"
-                                className="w-full cursor-pointer text-white hover:bg-white/20 p-2 sm:p-3 rounded-xl transition-all duration-200 hover:scale-105"
-                            >
-                                <Briefcase className="w-4 h-4 sm:w-5 sm:h-5" />
-                            </Button>
-                        </TooltipTrigger>
-                        <TooltipContent side="right" className="hidden md:block">
-                            <p>Zalo OA</p>
-                        </TooltipContent>
-                    </Tooltip>
+                                    {item.badge && (
+                                        <Badge className="absolute -top-1 -right-1 bg-red-500 text-white text-xs px-1 py-0.5 h-4 sm:h-5 min-w-4 sm:min-w-5 rounded-full cursor-pointer flex items-center justify-center shadow-lg border-0">
+                                            {item.badge}
+                                        </Badge>
+                                    )}
+                                </div>
+                            </TooltipTrigger>
+                            <TooltipContent side="right" className="hidden md:block">
+                                <p>{item.label}</p>
+                            </TooltipContent>
+                        </Tooltip>
+                    ))}
                 </div>
 
                 {/* Bottom Actions */}
@@ -135,11 +102,12 @@ export function SiderBar({ onToggleMobileSidebar }: NavigationStripProps) {
                     <Tooltip>
                         <TooltipTrigger asChild>
                             <Button
+                                onClick={() => router.push("/settings")}
                                 variant="ghost"
                                 size="sm"
-                                className="w-full cursor-pointer text-white hover:bg-white/20 p-2 sm:p-3 rounded-xl transition-all duration-200 hover:scale-105"
+                                className="w-full px-[30px]! cursor-pointer text-white hover:bg-white/20 p-2 sm:p-3 rounded-xl transition-all duration-200 hover:scale-105"
                             >
-                                <Settings className="w-4 h-4 sm:w-5 sm:h-5" />
+                                <Settings className="w-[30px]! hover: h-[30px]! sm:w-10 sm:h-10" />
                             </Button>
                         </TooltipTrigger>
                         <TooltipContent side="right" className="hidden md:block">
@@ -148,6 +116,6 @@ export function SiderBar({ onToggleMobileSidebar }: NavigationStripProps) {
                     </Tooltip>
                 </div>
             </div>
-        </TooltipProvider>
+        </TooltipProvider >
     )
 }

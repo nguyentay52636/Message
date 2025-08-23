@@ -8,7 +8,7 @@ import { Badge } from "@/components/ui/badge"
 import { cn } from "@/lib/utils"
 import { mockFriends, mockFriendRequests, mockGroupInvitations, Friend } from "./components/mock/data"
 import SearchFilterFriends from "./components/SearchFilterFriends"
-import ListFriends from "./components/ListFriends"
+import ListFriends from "./components/TabsFriends/ListFriends"
 import FriendsRequest from "./components/TabsFriends/FriendsRequest"
 import GroupInvitations from "./components/TabsFriends/GroupInvitations"
 
@@ -26,7 +26,6 @@ export function FriendsPage({ onBack }: FriendsPageProps) {
 
 
 
-    // Filter and sort friends
     const filteredFriends = mockFriends
         .filter((friend) => {
             const matchesSearch = friend.name.toLowerCase().includes(searchQuery.toLowerCase())
@@ -137,7 +136,7 @@ export function FriendsPage({ onBack }: FriendsPageProps) {
             <div className="lg:hidden sticky top-0 z-50 bg-card/95 backdrop-blur-md border-b border-border">
                 <div className="flex items-center justify-between p-4">
                     <div className="flex items-center gap-3">
-                        <Button variant="ghost" size="sm" onClick={onBack} className="p-2 rounded-xl hover:bg-accent">
+                        <Button variant="default" size="sm" onClick={onBack} className="p-2 rounded-xl hover:bg-accent">
                             <ArrowLeft className="w-5 h-5" />
                         </Button>
                         <h1 className="text-xl font-bold">Bạn bè</h1>
@@ -171,15 +170,15 @@ export function FriendsPage({ onBack }: FriendsPageProps) {
                     </div>
 
                     {/* Sidebar Navigation */}
-                    <div className="flex-1 overflow-y-auto p-4">
-                        <div className="space-y-2">
+                    <div className="flex-1 overflow-y-auto py-6">
+                        <div className="space-y-4 p-2">
                             {sidebarItems.map((item) => (
-                                <button
+                                <Button
                                     key={item.id}
+                                    variant={activeSection === item.id ? "default" : "ghost"}
                                     onClick={() => setActiveSection(item.id)}
                                     className={cn(
-                                        "w-full flex items-center gap-3 p-3 rounded-xl text-left transition-colors hover:bg-accent",
-                                        activeSection === item.id ? "bg-primary/10 text-primary" : "text-foreground",
+                                        "w-full flex items-center gap-4 p-6 rounded-xl cursor-pointer text-left transition-colors",
                                     )}
                                 >
                                     <item.icon className="w-5 h-5" />
@@ -189,7 +188,7 @@ export function FriendsPage({ onBack }: FriendsPageProps) {
                                             {item.count}
                                         </Badge>
                                     )}
-                                </button>
+                                </Button>
                             ))}
                         </div>
                     </div>
@@ -197,7 +196,7 @@ export function FriendsPage({ onBack }: FriendsPageProps) {
 
                 {/* Main Content */}
                 <div className="flex-1 overflow-y-auto">
-                    <div className="max-w-4xl mx-auto p-6">{renderContent()}</div>
+                    <div className="mx-auto p-6">{renderContent()}</div>
                 </div>
             </div>
         </div>

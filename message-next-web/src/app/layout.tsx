@@ -26,9 +26,9 @@ export default function RootLayout({
         >
           <ReduxProvider>
             <div className="h-screen w-full flex overflow-hidden bg-background">
-       
 
-              <div className="w-16 flex-shrink-0 z-30">
+
+              <div className="w-20 flex-shrink-0 z-30">
                 <SiderBar />
               </div>
 
