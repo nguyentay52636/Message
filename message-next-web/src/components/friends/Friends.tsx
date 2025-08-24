@@ -11,6 +11,7 @@ import SearchFilterFriends from "./components/SearchFilterFriends"
 import ListFriends from "./components/TabsFriends/ListFriends"
 import FriendsRequest from "./components/TabsFriends/FriendsRequest"
 import GroupInvitations from "./components/TabsFriends/GroupInvitations"
+import SearchUser from "./components/SearchUser/SearchUser"
 
 
 
@@ -154,20 +155,10 @@ export function FriendsPage({ onBack }: FriendsPageProps) {
 
             <div className="flex h-screen">
                 {/* Sidebar */}
-                <div className="hidden lg:flex w-80 flex-col bg-card border-r border-border">
+                <div className="hidden lg:flex w-100! flex-col bg-card border-r border-border">
                     {/* Sidebar Header */}
-                    <div className="p-4 border-b border-border">
-                        <div className="flex items-center gap-3 mb-4">
-                            <Button variant="ghost" size="sm" onClick={onBack} className="p-2 rounded-xl hover:bg-accent">
-                                <ArrowLeft className="w-5 h-5" />
-                            </Button>
-                            <h1 className="text-xl font-bold">Bạn bè</h1>
-                        </div>
-                        <div className="relative">
-                            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                            <Input placeholder="Tìm kiếm" className="pl-10 h-10 rounded-xl bg-muted/50" />
-                        </div>
-                    </div>
+                    <SearchUser onBack={() => console.log("Back")} />
+
 
                     {/* Sidebar Navigation */}
                     <div className="flex-1 overflow-y-auto py-6">
@@ -175,20 +166,22 @@ export function FriendsPage({ onBack }: FriendsPageProps) {
                             {sidebarItems.map((item) => (
                                 <Button
                                     key={item.id}
-                                    variant={activeSection === item.id ? "default" : "ghost"}
+                                    variant={activeSection === item.id ? "ghost" : "ghost"}
                                     onClick={() => setActiveSection(item.id)}
                                     className={cn(
-                                        "w-full flex items-center gap-4 p-6 rounded-xl cursor-pointer text-left transition-colors",
+                                        "w-full flex  items-center gap-4 py-8! px-6 rounded-xl cursor-pointer text-left transition-colors",
+                                        activeSection === item.id ? "bg-blue-300 text-blue-900" : ""
                                     )}
                                 >
                                     <item.icon className="w-5 h-5" />
-                                    <span className="flex-1 font-medium">{item.label}</span>
+                                    <span className="flex-1 font-semibold text-sm text ">{item.label}</span>
                                     {item.count > 0 && (
                                         <Badge variant="secondary" className="ml-auto">
                                             {item.count}
                                         </Badge>
                                     )}
                                 </Button>
+
                             ))}
                         </div>
                     </div>

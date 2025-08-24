@@ -35,13 +35,13 @@ interface UserDropdownProps {
 export function UserDropdown({ user }: UserDropdownProps) {
     return (
         <DropdownMenu>
-            <DropdownMenuTrigger asChild>
+            <DropdownMenuTrigger asChild className="my-6!">
                 <Button
                     variant="ghost"
                     size="sm"
                     className="w-full cursor-pointer text-white hover:bg-white/20 p-0 rounded-xl transition-all duration-200 hover:scale-105 border-0 bg-transparent"
                 >
-                    <Avatar className="w-8 h-8 sm:w-10 sm:h-10 border-2 border-white/30 shadow-lg transition-transform hover:scale-105">
+                    <Avatar className="w-16 h-16 my-4!  border-2 border-white/30 shadow-lg transition-transform hover:scale-105">
                         <AvatarImage src={user.avatar} />
                         <AvatarFallback className="bg-gradient-to-br from-orange-400 to-orange-600 text-white font-bold text-xs sm:text-sm">
                             {user.username?.charAt(0).toUpperCase() || user.email?.charAt(0).toUpperCase() || 'U'}

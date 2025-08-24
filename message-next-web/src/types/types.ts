@@ -21,3 +21,17 @@ export interface ICall {
     receiverId: string;
     isAccepted: boolean;
   }
+
+  export interface IFriend { 
+    sender: string;
+    receiver: string;
+    status: "pending" | "accepted" | "rejected";
+    createdAt: Date;
+    updatedAt: Date;
+  }
+
+  export interface IGroup { 
+    name: string;
+    description: string;
+    members: string[];
+  }
