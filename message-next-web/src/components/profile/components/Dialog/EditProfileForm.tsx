@@ -62,7 +62,7 @@ export default function EditProfileForm({ onClose }: { onClose: () => void }) {
                     id="bio"
                     value={formData.bio}
                     onChange={(e) => setFormData({ ...formData, bio: e.target.value })}
-                    className="min-h-[100px] glass-effect border-white/20"
+                    className="min-h-[100px]  border-white/20"
                 />
             </div>
 
@@ -70,7 +70,7 @@ export default function EditProfileForm({ onClose }: { onClose: () => void }) {
                 <Button type="button" variant="outline" onClick={onClose} className="border-white/20">
                     Hủy
                 </Button>
-                <Button type="submit" className="bg-gradient-to-r from-primary to-pink-500">
+                <Button type="submit" className="bg-blue-500 hover:bg-blue-400 cursor-pointer">
                     Lưu thay đổi
                 </Button>
             </div>

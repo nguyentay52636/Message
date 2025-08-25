@@ -6,7 +6,6 @@ import { profileData, userPhotos, currentUser } from './mock/data'
 import { ImageSelectionModal } from './components/ImageSelectionModal'
 import CoverPhoto from './components/Photo/CoverPhoto';
 export default function Profile() {
-    const [showChatBubble, setShowChatBubble] = useState(false)
     const [selectedImages, setSelectedImages] = useState<string[]>([])
     const [showImageSelector, setShowImageSelector] = useState<"cover" | "avatar" | null>(null)
 

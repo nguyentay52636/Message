@@ -11,8 +11,8 @@ import SocialMediaLink from './components/SocialMediaLink'
 export default function ProfileHeader({ profileData, userPhotos, setShowImageSelector }: { profileData: any, userPhotos: any, setShowImageSelector: any }) {
 
     return (
-        <div className="container mx-auto px-6">
-            <ImageProfile profileData={profileData} setShowImageSelector={setShowImageSelector} onClose={() => setShowImageSelector(null)} />
+        <div className="container mx-auto px-6 mt-16">
+        <ImageProfile profileData={profileData} setShowImageSelector={setShowImageSelector} onClose={() => setShowImageSelector(null)} />
 
             {/* Quick Stats Cards */}
             <QuickStatsCards profileData={profileData} />

@@ -32,7 +32,7 @@ export default function CoverPhoto({ profileData, setShowImageSelector }: CoverP
                 <Button
                     variant="secondary"
                     size="sm"
-                    className="glass-effect border-white/20 hover:bg-white/20"
+                    className="glass-effect border-white/20 cursor-pointer hover:bg-white/80"
                     onClick={() => setShowImageSelector("cover")}
                 >
                     <Camera className="mr-2 h-4 w-4" />
@@ -40,16 +40,16 @@ export default function CoverPhoto({ profileData, setShowImageSelector }: CoverP
                 </Button>
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                        <Button variant="secondary" size="icon" className="glass-effect border-white/20 hover:bg-white/20">
+                        <Button variant="secondary" size="icon" className="glass-effect border-white/20 cursor-pointer hover:bg-white/80">
                             <MoreHorizontal className="h-4 w-4" />
                         </Button>
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end" className="glass-effect border-white/20">
-                        <DropdownMenuItem className="hover:bg-white/10 rounded-lg m-1">
+                    <DropdownMenuContent align="end" className="glass-effect border-white/20 cursor-pointer hover:bg-white/80">
+                        <DropdownMenuItem className="glass-effect border-white/20 cursor-pointer hover:bg-white/80">
                             <Share className="mr-2 h-4 w-4" />
                             Chia sẻ trang cá nhân
                         </DropdownMenuItem>
-                        <DropdownMenuItem className="hover:bg-white/10 rounded-lg m-1">
+                        <DropdownMenuItem className="glass-effect border-white/20 cursor-pointer hover:bg-white/80">
                             <Settings className="mr-2 h-4 w-4" />
                             Cài đặt trang cá nhân
                         </DropdownMenuItem>
@@ -57,21 +57,7 @@ export default function CoverPhoto({ profileData, setShowImageSelector }: CoverP
                 </DropdownMenu>
             </div>
 
-            {/* Profile Stats Overlay */}
-            <div className="absolute bottom-6 left-6 flex items-center space-x-6 text-white">
-                <div className="text-center">
-                    <p className="text-2xl font-bold">{profileData.stats.profileViews.toLocaleString()}</p>
-                    <p className="text-sm opacity-90">Lượt xem profile</p>
-                </div>
-                <div className="text-center">
-                    <p className="text-2xl font-bold">{profileData.stats.totalLikes.toLocaleString()}</p>
-                    <p className="text-sm opacity-90">Lượt thích</p>
-                </div>
-                <div className="text-center">
-                    <p className="text-2xl font-bold">{profileData.stats.friendsCount}</p>
-                    <p className="text-sm opacity-90">Bạn bè</p>
-                </div>
-            </div>
+
         </div>
     )
 }

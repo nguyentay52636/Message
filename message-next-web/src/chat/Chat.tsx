@@ -2,9 +2,6 @@ import React, { useState } from 'react'
 import { ChatListSidebar } from './components/ChatListSider/ChatListSider'
 import { ChatArea } from './components/ChatArea/ChatArea'
 import { mockUsers, chatData } from '@/lib/Mock/dataMock'
-import { Button } from '@/components/ui/button'
-import { Menu } from 'lucide-react'
-
 interface ChatProps {
     setSelectedChat: (chatId: string | null) => void
     selectedChat: string | null
@@ -15,10 +12,8 @@ export default function Chat({ setSelectedChat, selectedChat, onToggleMobileSide
     const [message, setMessage] = useState('')
     const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false)
 
-    // Lấy thông tin user được chọn
     const selectedUser = selectedChat ? mockUsers[selectedChat] : null
 
-    // Lấy tin nhắn của user được chọn
     const currentMessages = selectedChat ? chatData[selectedChat] || [] : []
 
     const handleSendMessage = () => {
@@ -63,9 +58,8 @@ export default function Chat({ setSelectedChat, selectedChat, onToggleMobileSide
                 />
             )}
 
-            {/* Sidebar - Responsive */}
             <div className={`
-                fixed lg:relative inset-y-0 left-0 z-50 w-80 bg-card border-r border-border flex-shrink-0
+                fixed lg:relative inset-y-0 left-0 z-50 w-90 bg-card border-r border-border flex-shrink-0
                 transform transition-transform duration-300 ease-in-out
                 ${isMobileSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
             `}>

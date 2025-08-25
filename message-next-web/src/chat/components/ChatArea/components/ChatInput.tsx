@@ -13,7 +13,7 @@ interface MessageInputProps {
 
 export function ChatInput({ message, setMessage, onSendMessage, recipientName }: MessageInputProps) {
     return (
-        <div className="px-3 sm:px-4 py-3 sm:py-4 bg-background/95 backdrop-blur-sm border-t border-border/50">
+        <div className="px-4 sm:px-4 py-4 sm:py-4 bg-background/95 backdrop-blur-sm border-t border-border/50">
             {/* Message Input Row */}
             <div className="flex items-center gap-2 sm:gap-3 w-full">
                 {/* Left Action Buttons */}
