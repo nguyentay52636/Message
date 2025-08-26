@@ -3,14 +3,22 @@ import { UserPlus } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Search } from 'lucide-react'
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { IUser } from '@/types/types'
 import { FindUserByPhone } from '@/apis/friendsRequestApi'
 import ResponeUser from '@/components/friends/components/Respone/ResponeUser'
-export default function ChatFilterSearch() {
+
+export default function ChatFilterSearch({ onSelectUser }: { onSelectUser?: (u: IUser) => void }) {
     const [searchQuery, setSearchQuery] = useState("");
     const [user, setUser] = useState<IUser | null>(null);
     const [loading, setLoading] = useState(false);
+
+    const handleSelectUser = useCallback((u: IUser) => {
+        console.log("ChatFilterSearch - onSelectUser:", u);
+        setUser(u); //
+        onSelectUser?.(u);
+    }, [onSelectUser]);
+
     useEffect(() => {
         if (!searchQuery) {
             setUser(null);
@@ -62,7 +70,7 @@ export default function ChatFilterSearch() {
 
             </div>
 
-            <ResponeUser user={user} loading={loading} searchQuery={searchQuery} />
+            <ResponeUser user={user} loading={loading} searchQuery={searchQuery} onSelectUser={handleSelectUser} />
 
 
         </div>

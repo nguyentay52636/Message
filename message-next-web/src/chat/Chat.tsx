@@ -1,7 +1,9 @@
 import React, { useState } from 'react'
 import { ChatListSidebar } from './components/ChatListSider/ChatListSider'
 import { ChatArea } from './components/ChatArea/ChatArea'
-import { mockUsers, chatData } from '@/lib/Mock/dataMock'
+import { ChatAreaWithUser } from './components/ChatArea/ChatAreaWithUser'
+import { mockUsers, chatData, Message } from '@/lib/Mock/dataMock'
+import { IUser } from '@/types/types'
 interface ChatProps {
     setSelectedChat: (chatId: string | null) => void
     selectedChat: string | null
@@ -11,13 +13,14 @@ interface ChatProps {
 export default function Chat({ setSelectedChat, selectedChat, onToggleMobileSidebar }: ChatProps) {
     const [message, setMessage] = useState('')
     const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false)
+    const [selectedUser, setSelectedUser] = useState<IUser | null>(null)
 
-    const selectedUser = selectedChat ? mockUsers[selectedChat] : null
+    const selectedMockUser = selectedChat ? mockUsers[selectedChat] : null
 
-    const currentMessages = selectedChat ? chatData[selectedChat] || [] : []
+    const currentMessages: Message[] = selectedChat ? chatData[selectedChat] || [] : []
 
     const handleSendMessage = () => {
-        if (message.trim() && selectedChat) {
+        if (message.trim() && (selectedChat || selectedUser)) {
             // Thêm tin nhắn mới vào danh sách
             const newMessage = {
                 id: Date.now().toString(),
@@ -40,7 +43,7 @@ export default function Chat({ setSelectedChat, selectedChat, onToggleMobileSide
 
     const handleChatSelect = (chatId: string) => {
         setSelectedChat(chatId)
-        // Đóng mobile sidebar khi chọn chat trên mobile
+        if (selectedUser) setSelectedUser(null)
         setIsMobileSidebarOpen(false)
     }
 
@@ -48,9 +51,14 @@ export default function Chat({ setSelectedChat, selectedChat, onToggleMobileSide
         setIsMobileSidebarOpen(!isMobileSidebarOpen)
     }
 
+    const handleSelectUserFromSearch = (u: IUser) => {
+        setSelectedUser(u)
+        setSelectedChat(null)
+        setIsMobileSidebarOpen(false)
+    }
+
     return (
         <div className="flex h-full w-full relative">
-            {/* Mobile Sidebar Overlay */}
             {isMobileSidebarOpen && (
                 <div
                     className="fixed inset-0 bg-black/50 z-40 lg:hidden"
@@ -67,12 +75,26 @@ export default function Chat({ setSelectedChat, selectedChat, onToggleMobileSide
                     onChatSelect={handleChatSelect}
                     selectedChat={selectedChat}
                     onToggleMobileSidebar={() => setIsMobileSidebarOpen(false)}
+                    onSelectUser={handleSelectUserFromSearch}
                 />
             </div>
 
             {/* Chat Area */}
             <div className="flex-1 flex flex-col lg:ml-0">
-                {selectedChat && selectedUser ? (
+                {selectedUser ? (
+                    <ChatAreaWithUser
+                        messages={[]}
+                        setSelectedChat={setSelectedChat}
+                        selectedChat={null}
+                        message={message}
+                        setMessage={setMessage}
+                        onSendMessage={handleSendMessage}
+                        recipientName={selectedUser.username}
+                        user={selectedUser}
+                        onToggleMobileSidebar={handleToggleMobileSidebar}
+                        onBack={() => setSelectedUser(null)}
+                    />
+                ) : selectedChat && selectedMockUser ? (
                     <ChatArea
                         messages={currentMessages}
                         setSelectedChat={setSelectedChat}
@@ -80,8 +102,8 @@ export default function Chat({ setSelectedChat, selectedChat, onToggleMobileSide
                         message={message}
                         setMessage={setMessage}
                         onSendMessage={handleSendMessage}
-                        recipientName={selectedUser.name}
-                        user={selectedUser}
+                        recipientName={selectedMockUser.name}
+                        user={selectedMockUser}
                         onToggleMobileSidebar={handleToggleMobileSidebar}
                     />
                 ) : (

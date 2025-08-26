@@ -35,3 +35,15 @@ export interface ICall {
     description: string;
     members: string[];
   }
+  export interface IConversation {
+    _id: string;
+    type: 'personal' | 'group';
+    members: string[];
+    groupName?: string;
+    groupAvatar?: string;
+    groupAdmin?: string;
+    lastMessage?: string;
+    lastUpdated: Date;
+    createdAt: Date;
+    updatedAt: Date;
+  }

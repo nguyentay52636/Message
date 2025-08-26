@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { ChatUser, mockUsers } from "@/lib/Mock/dataMock"
 import { ChatListHeader } from "../ChatListHeader/ChatListHeader"
+import { IUser } from "@/types/types"
 import ChatListItem from "../ChatListItem"
 
 
@@ -10,11 +11,12 @@ interface ChatListSidebarProps {
     onChatSelect: (chatId: string) => void
     selectedChat: string | null
     onToggleMobileSidebar?: () => void
+    onSelectUser?: (u: IUser) => void
 }
 
 
 
-export function ChatListSidebar({ onChatSelect, selectedChat, onToggleMobileSidebar }: ChatListSidebarProps) {
+export function ChatListSidebar({ onChatSelect, selectedChat, onToggleMobileSidebar, onSelectUser }: ChatListSidebarProps) {
     const [activeTab, setActiveTab] = useState<"all" | "unread">("all")
     const [showWebNotification, setShowWebNotification] = useState(true)
 
@@ -38,6 +40,7 @@ export function ChatListSidebar({ onChatSelect, selectedChat, onToggleMobileSide
                     setActiveTab={setActiveTab}
                     user={allUsers[0]}
                     onToggleMobileSidebar={onToggleMobileSidebar}
+                    onSelectUser={onSelectUser}
                 />
             </div>
 
