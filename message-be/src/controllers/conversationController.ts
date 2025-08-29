@@ -1,5 +1,4 @@
 import { Request, Response } from 'express';
-import mongoose from 'mongoose';
 import Conversation from '../models/conversation';
 import User from '../models/user';
 import { Socket } from 'socket.io';

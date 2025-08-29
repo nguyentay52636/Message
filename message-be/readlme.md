@@ -11,3 +11,5 @@ npm install --save-dev @types/yamljs
   "phone": "0846777903"
 }
 react-toastify
+
+docker compose -f docker-compose-backend.yml up --build
