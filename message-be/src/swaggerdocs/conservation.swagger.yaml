@@ -22,16 +22,20 @@ paths:
                     type: string
                     format: objectId
                   minItems: 2
-                  description: Array of user IDs for conversation members
+                  maxItems: 100
+                  description: Array of user IDs for conversation members (minimum 2, maximum 100)
                 type:
                   type: string
                   enum: [personal, group]
                   description: Type of conversation
                 groupName:
                   type: string
-                  description: Name of the group (required for group type)
+                  minLength: 1
+                  maxLength: 100
+                  description: Name of the group (required for group type, 1-100 characters)
                 groupAvatar:
                   type: string
+                  format: uri
                   description: URL or path to group avatar (optional for group type)
                 groupAdmin:
                   type: string
@@ -93,6 +97,9 @@ paths:
                   message:
                     type: string
                     example: All conversations fetched successfully
+                  date:
+                    type: string
+                    format: date-time
         '500':
           description: Server error
           content:
@@ -375,10 +382,17 @@ components:
           format: objectId
         username:
           type: string
+          minLength: 3
+          maxLength: 50
         avatar:
           type: string
+          format: uri
         status:
           type: string
+          enum: [online, offline, away, busy]
+        email:
+          type: string
+          format: email
     Message:
       type: object
       properties:
@@ -387,9 +401,13 @@ components:
           format: objectId
         content:
           type: string
-        sender:
+          maxLength: 1000
+        type:
           type: string
-          format: objectId
+          enum: [text, image, file, audio, video]
+          description: Type of message content
+        sender:
+          $ref: '#/components/schemas/User'
         conversation:
           type: string
           format: objectId
@@ -405,27 +423,43 @@ components:
         type:
           type: string
           enum: [personal, group]
+          description: Type of conversation
         members:
           type: array
+          minItems: 2
+          maxItems: 100
           items:
             $ref: '#/components/schemas/User'
+          description: Array of conversation members
         groupName:
           type: string
+          nullable: true
+          description: Group name (only for group conversations)
         groupAvatar:
           type: string
+          format: uri
+          nullable: true
+          description: Group avatar URL (only for group conversations)
         groupAdmin:
           $ref: '#/components/schemas/User'
+          nullable: true
+          description: Group admin (only for group conversations)
         lastMessage:
           $ref: '#/components/schemas/Message'
+          nullable: true
+          description: Last message in conversation
         lastUpdated:
           type: string
           format: date-time
+          description: Last update timestamp
         createdAt:
           type: string
           format: date-time
+          description: Creation timestamp
         updatedAt:
           type: string
           format: date-time
+          description: Last modification timestamp
     Error:
       type: object
       properties:
@@ -435,3 +469,6 @@ components:
           type: null
         message:
           type: string
+        date:
+          type: string
+          format: date-time

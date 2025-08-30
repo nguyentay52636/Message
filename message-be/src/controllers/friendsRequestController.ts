@@ -84,7 +84,7 @@ export const deleteFriendRequest = async (req: Request, res: Response) => {
     const data = await FriendRequest.findByIdAndDelete(id);
     if (!data) return ResponseApi(res, 404, null, "Request not found");
 
-    return ResponseApi(res, 200, data, "Đã xoá lời mời kết bạn");
+    return ResponseApi(res, 200, data, "Đã hủy lời mời kết bạn");
   } catch (error: any) {
     return ResponseApi(res, 500, null, error.message);
   }
@@ -108,6 +108,29 @@ export const searchUsersByPhone = async (req: Request, res: Response) => {
       .limit(20);
 
     return ResponseApi(res, 200, users, "Search users success");
+  } catch (error: any) {
+    return ResponseApi(res, 500, null, error.message);
+  }
+};
+export const getAllRequestFriend = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  if (!isValidId(id)) return ResponseApi(res, 400, null, "Id is required");
+
+  try {
+    const data = await FriendRequest.find({ receiver: id });
+    return ResponseApi(res, 200, data, "Danh sách lời mời kết bạn");
+  } catch (error: any) {
+    return ResponseApi(res, 500, null, error.message);
+  }
+};
+export const rejectFriendRequest = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  if (!isValidId(id)) return ResponseApi(res, 400, null, "Id is required");
+
+  try {
+    const data = await FriendRequest.findByIdAndDelete(id);
+    if (!data) return ResponseApi(res, 404, null, "Request not found");
+    return ResponseApi(res, 200, data, "Đã từ chối lời mời kết bạn");
   } catch (error: any) {
     return ResponseApi(res, 500, null, error.message);
   }

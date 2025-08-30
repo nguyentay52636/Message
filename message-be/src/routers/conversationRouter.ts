@@ -15,7 +15,7 @@ const Router = express.Router();
 Router.post("/", addConversation);
 
 // Lấy tất cả hội thoại (cho admin)
-Router.get("/all", getAllConversations);
+Router.get("/", getAllConversations);
 
 // Lấy hội thoại của user cụ thể
 Router.get("/user/:userId", getConversationOfUser);

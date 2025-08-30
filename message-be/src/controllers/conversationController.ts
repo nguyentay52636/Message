@@ -78,11 +78,12 @@ export const addConversation = async (req: CustomRequest, res: Response) => {
 export const getAllConversations = async (req: CustomRequest, res: Response) => {
   try {
     const conversations = await Conversation.find()
-      .populate('members', 'username avatar status')
-      .populate('groupAdmin', 'username')
-      .populate('lastMessage')
+      .populate('members', 'username avatar status email')
+      .populate('groupAdmin', 'username avatar')
+      .populate('lastMessage', 'content type createdAt sender')
+      .populate('lastMessage.sender', 'username avatar')
       .sort({ lastUpdated: -1 });
-
+    
     return ResponseApi(res, 200, conversations, 'All conversations fetched successfully');
   } catch (error: any) {
     return ResponseApi(res, 500, null, `Failed to fetch conversations: ${error.message}`);
@@ -97,10 +98,16 @@ export const getConversationOfUser = async (req: CustomRequest, res: Response) =
       return ResponseApi(res, 400, null, 'User ID is required');
     }
 
+    // Validate ObjectId format
+    if (!/^[0-9a-fA-F]{24}$/.test(userId)) {
+      return ResponseApi(res, 400, null, 'Invalid User ID format');
+    }
+
     const conversations = await Conversation.find({ members: userId })
       .populate('members', 'username avatar status')
       .populate('groupAdmin', 'username')
       .populate('lastMessage')
+      .populate('lastMessage.sender', 'username avatar')
       .sort({ lastUpdated: -1 });
 
     if (!conversations.length) {
@@ -117,6 +124,11 @@ export const updateConversation = async (req: CustomRequest, res: Response) => {
   try {
     const { conversationId } = req.params;
     const { groupName, groupAvatar, groupAdmin } = req.body;
+
+    // Validate ObjectId format
+    if (!/^[0-9a-fA-F]{24}$/.test(conversationId)) {
+      return ResponseApi(res, 400, null, 'Invalid Conversation ID format');
+    }
 
     const conversation = await Conversation.findById(conversationId);
     if (!conversation) {
@@ -149,7 +161,8 @@ export const updateConversation = async (req: CustomRequest, res: Response) => {
     const populatedConversation = await Conversation.findById(conversationId)
       .populate('members', 'username avatar status')
       .populate('groupAdmin', 'username')
-      .populate('lastMessage');
+      .populate('lastMessage')
+      .populate('lastMessage.sender', 'username avatar');
 
     return ResponseApi(res, 200, populatedConversation, 'Conversation updated successfully');
   } catch (error: any) {
@@ -164,6 +177,14 @@ export const addMemberToConversation = async (req: CustomRequest, res: Response)
 
     if (!userId) {
       return ResponseApi(res, 400, null, 'User ID is required');
+    }
+
+    // Validate ObjectId formats
+    if (!/^[0-9a-fA-F]{24}$/.test(conversationId)) {
+      return ResponseApi(res, 400, null, 'Invalid Conversation ID format');
+    }
+    if (!/^[0-9a-fA-F]{24}$/.test(userId)) {
+      return ResponseApi(res, 400, null, 'Invalid User ID format');
     }
 
     const conversation = await Conversation.findById(conversationId);
@@ -196,7 +217,8 @@ export const addMemberToConversation = async (req: CustomRequest, res: Response)
     const populatedConversation = await Conversation.findById(conversationId)
       .populate('members', 'username avatar status')
       .populate('groupAdmin', 'username')
-      .populate('lastMessage');
+      .populate('lastMessage')
+      .populate('lastMessage.sender', 'username avatar');
 
     return ResponseApi(res, 200, populatedConversation, 'Member added successfully');
   } catch (error: any) {
@@ -208,6 +230,11 @@ export const addMemberToConversation = async (req: CustomRequest, res: Response)
 export const deleteConversation = async (req: CustomRequest, res: Response) => {
   try {
     const { conversationId } = req.params;
+
+
+    if (!/^[0-9a-fA-F]{24}$/.test(conversationId)) {
+      return ResponseApi(res, 400, null, 'Invalid Conversation ID format');
+    }
 
     const conversation = await Conversation.findById(conversationId);
     if (!conversation) {
@@ -226,13 +253,17 @@ export const deleteConversation = async (req: CustomRequest, res: Response) => {
   }
 };
 
-// 🔍 Kiểm tra hội thoại giữa 2 user (để tạo hội thoại mới hoặc lấy hội thoại đã có)
 export const getConversationBetweenUsers = async (req: CustomRequest, res: Response) => {
   try {
     const { userId1, userId2 } = req.params;
 
     if (!userId1 || !userId2) {
       return ResponseApi(res, 400, null, 'Both user IDs are required');
+    }
+
+    // Validate ObjectId formats
+    if (!/^[0-9a-fA-F]{24}$/.test(userId1) || !/^[0-9a-fA-F]{24}$/.test(userId2)) {
+      return ResponseApi(res, 400, null, 'Invalid User ID format');
     }
 
     // Tìm hội thoại cá nhân giữa 2 user

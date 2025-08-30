@@ -11,7 +11,7 @@ const router = Router();
 router.use("/auth", authRouter);
 router.use("/user", userRouter);
 router.use("/friendsRequest", friendsRequestRouter);
-router.use("/conversation", conversationRouter);
+router.use("/conversations", conversationRouter);
 router.use("/message", messageRouter);
 
 export default router;
