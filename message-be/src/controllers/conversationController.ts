@@ -35,7 +35,13 @@ export const addConversation = async (req: CustomRequest, res: Response) => {
         members: { $all: members, $size: members.length },
       });
       if (existingConversation) {
-        return ResponseApi(res, 400, null, 'Personal conversation already exists');
+        // Trả về hội thoại đã tồn tại thay vì báo lỗi
+        const populatedConversation = await Conversation.findById(existingConversation._id)
+          .populate('members', 'username avatar status')
+          .populate('groupAdmin', 'username')
+          .populate('lastMessage');
+        
+        return ResponseApi(res, 200, populatedConversation, 'Conversation already exists');
       }
     }
 
@@ -217,5 +223,32 @@ export const deleteConversation = async (req: CustomRequest, res: Response) => {
     return ResponseApi(res, 200, null, 'Conversation deleted successfully');
   } catch (error: any) {
     return ResponseApi(res, 500, null, `Failed to delete conversation: ${error.message}`);
+  }
+};
+
+// 🔍 Kiểm tra hội thoại giữa 2 user (để tạo hội thoại mới hoặc lấy hội thoại đã có)
+export const getConversationBetweenUsers = async (req: CustomRequest, res: Response) => {
+  try {
+    const { userId1, userId2 } = req.params;
+
+    if (!userId1 || !userId2) {
+      return ResponseApi(res, 400, null, 'Both user IDs are required');
+    }
+
+    // Tìm hội thoại cá nhân giữa 2 user
+    const conversation = await Conversation.findOne({
+      type: 'personal',
+      members: { $all: [userId1, userId2], $size: 2 }
+    }).populate('members', 'username avatar status')
+      .populate('lastMessage')
+      .populate('lastMessage.sender', 'username avatar');
+
+    if (!conversation) {
+      return ResponseApi(res, 404, null, 'No conversation found between these users');
+    }
+
+    return ResponseApi(res, 200, conversation, 'Conversation found successfully');
+  } catch (error: any) {
+    return ResponseApi(res, 500, null, `Failed to find conversation: ${error.message}`);
   }
 };

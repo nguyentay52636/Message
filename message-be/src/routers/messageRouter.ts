@@ -1,12 +1,39 @@
 import express from "express";
-import { uploadImage, getMessages, createMessageHandler, createReplyMessage } from "../controllers/messsageController";
+import { 
+  uploadImage, 
+  getMessages, 
+  createMessageHandler, 
+  createReplyMessage,
+  markMessagesAsRead,
+  recallMessage,
+  forwardMessage,
+  deleteMessage
+} from "../controllers/messsageController";
 
-const Router = express.Router() ; 
+const Router = express.Router();
 
+// Upload ảnh
 Router.post("/uploadImage", uploadImage);
-Router.get("/messages", getMessages);
-Router.post("/sendMessage", createMessageHandler);
-Router.post("/replyMessage", createReplyMessage);
 
+// Lấy tin nhắn của một hội thoại
+Router.get("/:conversationId", getMessages);
+
+// Gửi tin nhắn mới
+Router.post("/send", createMessageHandler);
+
+// Gửi tin nhắn trả lời
+Router.post("/reply", createReplyMessage);
+
+// Đánh dấu tin nhắn đã đọc
+Router.put("/:conversationId/read", markMessagesAsRead);
+
+// Thu hồi tin nhắn
+Router.put("/recall/:messageId", recallMessage);
+
+// Chuyển tiếp tin nhắn
+Router.post("/forward", forwardMessage);
+
+// Xóa tin nhắn
+Router.delete("/:messageId", deleteMessage);
 
 export default Router;

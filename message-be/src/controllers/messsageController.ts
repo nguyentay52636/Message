@@ -71,10 +71,11 @@ export const getMessages = async (req: CustomRequest, res: Response) => {
 
 export const createMessageHandler = async (req: CustomRequest, res: Response) => {
   try {
-    const { conversationId, content, messageType = 'text', imageId } = req.body;
-    const senderId = req.user?.id;
+    const { conversationId, content, messageType = 'text', imageId, senderId } = req.body;
+    
+    const userId = req.user?.id || senderId;
 
-    if (!mongoose.Types.ObjectId.isValid(conversationId) || !senderId || !content) {
+    if (!mongoose.Types.ObjectId.isValid(conversationId) || !userId || !content) {
       return ResponseApi(res, 400, null, 'Missing or invalid required fields');
     }
 
@@ -83,7 +84,7 @@ export const createMessageHandler = async (req: CustomRequest, res: Response) =>
       return ResponseApi(res, 404, null, 'Conversation not found');
     }
 
-    if (!conversation.members.includes(new mongoose.Types.ObjectId(senderId))) {
+    if (!conversation.members.includes(new mongoose.Types.ObjectId(userId))) {
       return ResponseApi(res, 403, null, 'User is not a member of this conversation');
     }
 
@@ -98,7 +99,7 @@ export const createMessageHandler = async (req: CustomRequest, res: Response) =>
     }
 
     const message = new Message({
-      sender: senderId,
+      sender: userId,
       conversation: conversationId,
       content,
       messageType,
@@ -110,6 +111,7 @@ export const createMessageHandler = async (req: CustomRequest, res: Response) =>
 
     await message.save();
 
+    // Cập nhật conversation với tin nhắn mới nhất và thời gian
     conversation.lastMessage = message._id as mongoose.Types.ObjectId;
     conversation.lastUpdated = new Date();
     await conversation.save();
@@ -119,8 +121,9 @@ export const createMessageHandler = async (req: CustomRequest, res: Response) =>
       .populate('replyTo', 'content sender')
       .populate('imageId', 'fileUrl mimeType');
 
+    // Emit socket event để real-time
     req.io?.to(conversationId).emit('receiveMessage', {
-      senderId,
+      senderId: userId,
       conversationId,
       content,
       messageType,
@@ -130,6 +133,13 @@ export const createMessageHandler = async (req: CustomRequest, res: Response) =>
       messageId: message._id,
       sender: populatedMessage?.sender,
       image: populatedMessage?.imageId,
+    });
+
+    // Emit event cập nhật conversation
+    req.io?.to(conversationId).emit('conversationUpdated', {
+      conversationId,
+      lastMessage: populatedMessage,
+      lastUpdated: conversation.lastUpdated,
     });
 
     return ResponseApi(res, 201, populatedMessage, 'Message created successfully');
@@ -216,7 +226,8 @@ export const createReplyMessage = async (req: CustomRequest, res: Response) => {
 export const markMessagesAsRead = async (req: CustomRequest, res: Response) => {
   try {
     const { conversationId } = req.params;
-    const userId = req.user?.id;
+    const { senderId } = req.body;
+    const userId = req.user?.id || senderId;
 
     if (!userId) {
       return ResponseApi(res, 400, null, 'User ID is required');
@@ -273,3 +284,16 @@ export const forwardMessage = async (req: CustomRequest, res: Response) => {
 
   return ResponseApi(res, 201, forwarded, "Message forwarded");
 };
+ export const deleteMessage = async (req: CustomRequest, res: Response) => {
+  const { messageId } = req.params;
+try { 
+
+  const message = await Message.findById(messageId);
+  if (!message) return ResponseApi(res, 404, null, "Message not found");
+ const data = await Message.findByIdAndDelete(messageId);
+  return ResponseApi(res, 200, data, "Message deleted");
+}catch(error: any){
+  return ResponseApi(res, 500, null, error.message);
+}
+};
+

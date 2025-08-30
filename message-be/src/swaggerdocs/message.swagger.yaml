@@ -65,14 +65,14 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-  /api/messages/messages:
+  /api/messages/{conversationId}:
     get:
       summary: Get messages for a specific conversation
       tags:
         - Messages
       parameters:
         - name: conversationId
-          in: query
+          in: path
           required: true
           schema:
             type: string
@@ -108,7 +108,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-  /api/messages/sendMessage:
+  /api/messages/send:
     post:
       summary: Send a new message
       tags:
@@ -136,6 +136,10 @@ paths:
                   type: string
                   format: objectId
                   description: ID of the image (required if messageType is image)
+                senderId:
+                  type: string
+                  format: objectId
+                  description: ID of the sender (optional if user is authenticated)
               required:
                 - conversationId
                 - content
@@ -179,7 +183,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-  /api/messages/replyMessage:
+  /api/messages/reply:
     post:
       summary: Reply to an existing message
       tags:
@@ -245,6 +249,199 @@ paths:
                 $ref: '#/components/schemas/Error'
         '404':
           description: Conversation, parent message, or image not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /api/messages/{conversationId}/read:
+    put:
+      summary: Mark messages as read in a conversation
+      tags:
+        - Messages
+      parameters:
+        - name: conversationId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: objectId
+          description: ID of the conversation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                senderId:
+                  type: string
+                  format: objectId
+                  description: ID of the sender (optional if user is authenticated)
+              required:
+                - senderId
+      responses:
+        '200':
+          description: Messages marked as read successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 200
+                  data:
+                    type: null
+                  message:
+                    type: string
+                    example: Messages marked as read
+        '400':
+          description: User ID is required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /api/messages/recall/{messageId}:
+    put:
+      summary: Recall a message
+      tags:
+        - Messages
+      parameters:
+        - name: messageId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: objectId
+          description: ID of the message to recall
+      responses:
+        '200':
+          description: Message recalled successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 200
+                  data:
+                    $ref: '#/components/schemas/Message'
+                  message:
+                    type: string
+                    example: Message recalled
+        '403':
+          description: Not allowed to recall this message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Message not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /api/messages/forward:
+    post:
+      summary: Forward a message to another conversation
+      tags:
+        - Messages
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                messageId:
+                  type: string
+                  format: objectId
+                  description: ID of the message to forward
+                targetConversationId:
+                  type: string
+                  format: objectId
+                  description: ID of the target conversation
+              required:
+                - messageId
+                - targetConversationId
+      responses:
+        '201':
+          description: Message forwarded successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 201
+                  data:
+                    $ref: '#/components/schemas/Message'
+                  message:
+                    type: string
+                    example: Message forwarded
+        '404':
+          description: Message not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /api/messages/{messageId}:
+    delete:
+      summary: Delete a message
+      tags:
+        - Messages
+      parameters:
+        - name: messageId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: objectId
+          description: ID of the message to delete
+      responses:
+        '200':
+          description: Message deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 200
+                  data:
+                    $ref: '#/components/schemas/Message'
+                  message:
+                    type: string
+                    example: Message deleted
+        '404':
+          description: Message not found
           content:
             application/json:
               schema:

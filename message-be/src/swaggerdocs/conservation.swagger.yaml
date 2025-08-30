@@ -41,6 +41,12 @@ paths:
                 - members
                 - type
       responses:
+        '200':
+          description: Conversation already exists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Conversation'
         '201':
           description: Conversation created successfully
           content:
@@ -75,16 +81,25 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Conversation'
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 200
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Conversation'
+                  message:
+                    type: string
+                    example: All conversations fetched successfully
         '500':
           description: Server error
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-  /api/conversations/{userId}:
+  /api/conversations/user/{userId}:
     get:
       summary: Get conversations for a specific user
       tags:
@@ -103,9 +118,18 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Conversation'
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 200
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Conversation'
+                  message:
+                    type: string
+                    example: User conversations fetched successfully
         '400':
           description: User ID is required
           content:
@@ -114,6 +138,60 @@ paths:
                 $ref: '#/components/schemas/Error'
         '404':
           description: No conversations found for user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /api/conversations/between/{userId1}/{userId2}:
+    get:
+      summary: Get conversation between two specific users
+      tags:
+        - Conversations
+      parameters:
+        - name: userId1
+          in: path
+          required: true
+          schema:
+            type: string
+            format: objectId
+          description: ID of the first user
+        - name: userId2
+          in: path
+          required: true
+          schema:
+            type: string
+            format: objectId
+          description: ID of the second user
+      responses:
+        '200':
+          description: Conversation found successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 200
+                  data:
+                    $ref: '#/components/schemas/Conversation'
+                  message:
+                    type: string
+                    example: Conversation found successfully
+        '400':
+          description: Both user IDs are required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: No conversation found between these users
           content:
             application/json:
               schema:
@@ -159,7 +237,16 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Conversation'
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 200
+                  data:
+                    $ref: '#/components/schemas/Conversation'
+                  message:
+                    type: string
+                    example: Conversation updated successfully
         '400':
           description: Invalid input or cannot update personal conversation
           content:
@@ -218,11 +305,19 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-  /api/conversations/addMember:
+  /api/conversations/{conversationId}/addMember:
     post:
       summary: Add a member to a group conversation
       tags:
         - Conversations
+      parameters:
+        - name: conversationId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: objectId
+          description: ID of the conversation
       requestBody:
         required: true
         content:
@@ -230,16 +325,11 @@ paths:
             schema:
               type: object
               properties:
-                conversationId:
-                  type: string
-                  format: objectId
-                  description: ID of the conversation
                 userId:
                   type: string
                   format: objectId
                   description: ID of the user to add
               required:
-                - conversationId
                 - userId
       responses:
         '200':
@@ -247,7 +337,16 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Conversation'
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 200
+                  data:
+                    $ref: '#/components/schemas/Conversation'
+                  message:
+                    type: string
+                    example: Member added successfully
         '400':
           description: Invalid input or cannot add to personal conversation
           content:
