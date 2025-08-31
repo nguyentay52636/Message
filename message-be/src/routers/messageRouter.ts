@@ -13,7 +13,7 @@ import {
 const Router = express.Router();
 
 // Upload ảnh
-Router.post("/uploadImage", uploadImage);
+Router.post("/upload-image", uploadImage);
 
 // Lấy tin nhắn của một hội thoại
 Router.get("/:conversationId", getMessages);

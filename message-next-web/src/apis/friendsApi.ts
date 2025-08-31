@@ -1,12 +1,6 @@
 import baseApi from "./baseApi"
+import { IFriendRequest } from "@/types/types"
 
-export interface IFriendRequest {
-sender : string
-receiver : string
-status? : string
-createdAt? : Date
-updatedAt?: Date
- } 
  export const addRequestFriend = async (friendRequest: IFriendRequest) => { 
     const {sender,receiver} = friendRequest;
    if(!sender || !receiver) {
