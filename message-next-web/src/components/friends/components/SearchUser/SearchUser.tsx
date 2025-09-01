@@ -9,6 +9,7 @@ import ResponeUser from "../Respone/ResponeUser"
 import { IUser } from "@/types/types"
 import { ChatAreaWithUser } from "@/chat/components/ChatArea/ChatAreaWithUser"
 import { Message } from "@/lib/Mock/dataMock"
+import { MainWindownChat } from "@/chat/ChatUpdate/MainWindownChat"
 
 interface SearchUserProps {
   onBack: () => void
@@ -104,17 +105,19 @@ export default function SearchUser({ onBack }: SearchUserProps) {
           />
         </div>
       ) : (
-        <ChatAreaWithUser
-          messages={messages}
-          setSelectedChat={setSelectedChat}
-          selectedChat={selectedChat}
-          message={message}
-          setMessage={setMessage}
-          onSendMessage={onSendMessage}
-          recipientName={selectedUser.username}
-          user={selectedUser}
-          onBack={() => setSelectedUser(null)}
-        />
+        <div className="h-full w-full border-2 border-red-500 bg-blue-50">
+          <MainWindownChat
+            messages={messages}
+            setSelectedChat={setSelectedChat}
+            selectedChat={selectedChat}
+            message={message}
+            setMessage={setMessage}
+            onSendMessage={onSendMessage}
+            recipientName={selectedUser.username}
+            user={selectedUser}
+            onBack={() => setSelectedUser(null)}
+          />
+        </div>
       )}
     </div>
   )

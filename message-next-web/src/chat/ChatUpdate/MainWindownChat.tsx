@@ -3,114 +3,68 @@
 import { useState } from "react"
 import MessageAreaWindownChat from "./MessageAreaWindownChat"
 import InputWindownChat from "./InputWindownChat"
-import InfoUserWindownChat from "./InfoUserWindownChat"
+import InfoUserWindownChat from "./components/InfoUserWindownChat/InfoUserWindownChat"
 import HeaderWindownChat from "./HeaderWindownChat"
+import { IUser } from "@/types/types"
+import { Message } from "@/lib/Mock/dataMock"
+import { Button } from "@/components/ui/button"
+import { Phone, Video, Search, MoreHorizontal, MessageCircle, Users, Settings } from "lucide-react"
+import BubbleStartChat from "./BubbleStartChat"
 
-
-interface StrangerMessage {
-    id: string
-    content: string
-    sender: "user" | "other"
-    timestamp: string
-    type: "text" | "emoji" | "missed-call" | "sticker" | "link-preview"
-    isRead?: boolean
-    linkData?: {
-        url: string
-        title: string
-        description: string
-        domain: string
-        thumbnail: string
-        likes?: number
-    }
-}
-
-interface StrangerChatPageProps {
+interface MainWindownChatProps {
+    messages: Message[]
+    setSelectedChat: (chatId: string) => void
+    selectedChat: string | null
+    message: string
+    setMessage: (message: string) => void
+    onSendMessage: () => void
+    recipientName: string
+    user: IUser
+    onToggleMobileSidebar?: () => void
     onBack?: () => void
 }
 
-export function MainWindownChat({ onBack }: StrangerChatPageProps) {
+export function MainWindownChat({
+    messages,
+    setSelectedChat,
+    selectedChat,
+    message,
+    setMessage,
+    onSendMessage,
+    recipientName,
+    user,
+    onToggleMobileSidebar,
+    onBack
+}: MainWindownChatProps) {
     const [showInfoPanel, setShowInfoPanel] = useState(true)
-    const [message, setMessage] = useState("")
-    const [friendRequestStatus, setFriendRequestStatus] = useState<"pending" | "waiting" | "accepted">("waiting") // Changed to waiting to show banner
+    const [showChatBubble, setShowChatBubble] = useState(false)
+    const [friendRequestStatus, setFriendRequestStatus] = useState<"pending" | "waiting" | "accepted">("waiting")
 
-    // Mock user data
-    const strangerUser = {
-        id: "stranger-1",
-        name: "Trần Quốc Tho",
-        avatar: "/placeholder.svg?height=48&width=48&text=TQT",
-        isOnline: false,
+    console.log("MainWindownChat render - user:", user)
+    console.log("MainWindownChat render - messages:", messages)
+
+    const headerUser = {
+        id: user._id || user.username,
+        name: user.username,
+        avatar: user.avatar || "/placeholder.svg",
+        isOnline: false
     }
 
-    // Mock messages matching the image
-    const [messages, setMessages] = useState<StrangerMessage[]>([
-        {
-            id: "1",
-            content: "Hi",
-            sender: "other",
-            timestamp: "20:34",
-            type: "text",
-            isRead: true,
-        },
-        {
-            id: "2",
-            content: "🐰", // Bunny sticker
-            sender: "other",
-            timestamp: "20:34",
-            type: "sticker",
-            isRead: true,
-        },
-        {
-            id: "3",
-            content: "Okie em",
-            sender: "user",
-            timestamp: "20:35",
-            type: "text",
-            isRead: true,
-        },
-        {
-            id: "4",
-            content: "https://github.com/nguyentay52636/",
-            sender: "user",
-            timestamp: "20:36",
-            type: "link-preview",
-            isRead: true,
-            linkData: {
-                url: "https://github.com/nguyentay52636/",
-                title: "nguyentay52636 - Overview",
-                description: "nguyentay52636 has 30 repositories available. Follow their code on GitHub.",
-                domain: "github.com",
-                thumbnail: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-s3nrW57zE6OLlhG3ItCv9c1hveWXWe.png",
-                likes: 1,
-            },
-        },
-    ])
+    console.log("MainWindownChat render - headerUser:", headerUser)
+
+    const strangerMessages = messages.map(msg => ({
+        id: msg.id,
+        content: msg.content,
+        sender: msg.sender as "user" | "other",
+        timestamp: msg.timestamp,
+        type: msg.type === "image" || msg.type === "file" || msg.type === "video" ? "text" : msg.type as "text" | "sticker",
+        isRead: msg.isRead
+    }))
 
     const handleSendMessage = () => {
         if (message.trim()) {
-            const newMessage: StrangerMessage = {
-                id: Date.now().toString(),
-                content: message,
-                sender: "user",
-                timestamp: new Date().toLocaleTimeString("vi-VN", { hour: "2-digit", minute: "2-digit" }),
-                type: "text",
-                isRead: false,
-            }
-
-            setMessages((prev) => [...prev, newMessage])
-            setMessage("")
-
-            // Simulate auto reply after 2 seconds
-            setTimeout(() => {
-                const autoReply: StrangerMessage = {
-                    id: (Date.now() + 1).toString(),
-                    content: "Cảm ơn bạn đã nhắn tin! 😊",
-                    sender: "other",
-                    timestamp: new Date().toLocaleTimeString("vi-VN", { hour: "2-digit", minute: "2-digit" }),
-                    type: "text",
-                    isRead: true,
-                }
-                setMessages((prev) => [...prev, autoReply])
-            }, 2000)
+            // Call the parent's onSendMessage function
+            onSendMessage()
         }
     }
 
@@ -120,29 +74,36 @@ export function MainWindownChat({ onBack }: StrangerChatPageProps) {
         setTimeout(() => {
             setFriendRequestStatus("waiting")
         }, 1000)
-        console.log("Friend request sent to:", strangerUser.name)
+        console.log("Friend request sent to:", user.username)
     }
 
     const handleAcceptFriendRequest = () => {
         setFriendRequestStatus("accepted")
-        console.log("Friend request accepted for:", strangerUser.name)
+        console.log("Friend request accepted for:", user.username)
     }
 
     const handleToggleInfo = () => {
         setShowInfoPanel(!showInfoPanel)
     }
 
+    const handleToggleChatBubble = () => {
+        setShowChatBubble(!showChatBubble)
+        console.log("Toggle chat bubble clicked")
+    }
+
     return (
-        <div className="h-screen flex flex-col bg-white">
-            {/* Chat Header */}
+        <div className="h-full w-full flex flex-col bg-white border-2">
+
             <div className="flex-shrink-0">
                 <HeaderWindownChat
-                    user={strangerUser}
+                    user={headerUser}
                     onBack={onBack}
                     onToggleInfo={handleToggleInfo}
                     onSendFriendRequest={handleSendFriendRequest}
                     onAcceptFriendRequest={handleAcceptFriendRequest}
                     showInfoPanel={showInfoPanel}
+                    onToggleMobileSidebar={onToggleMobileSidebar}
+                    onToggleChatBubble={handleToggleChatBubble}
                 />
             </div>
 
@@ -152,7 +113,7 @@ export function MainWindownChat({ onBack }: StrangerChatPageProps) {
                 <div className="flex-1 flex flex-col min-w-0">
                     {/* Messages Area */}
                     <div className="flex-1 overflow-hidden">
-                        <MessageAreaWindownChat messages={messages} user={strangerUser} />
+                        <MessageAreaWindownChat messages={strangerMessages} user={headerUser} />
                     </div>
 
                     {/* Message Input */}
@@ -161,8 +122,8 @@ export function MainWindownChat({ onBack }: StrangerChatPageProps) {
                             message={message}
                             setMessage={setMessage}
                             onSendMessage={handleSendMessage}
-                            recipientName={strangerUser.name}
-                            disabled={false} // Always enabled for testing
+                            recipientName={recipientName}
+                            disabled={false}
                         />
                     </div>
                 </div>
@@ -170,9 +131,24 @@ export function MainWindownChat({ onBack }: StrangerChatPageProps) {
                 {/* Info Panel - Desktop Only */}
                 {showInfoPanel && (
                     <div className="hidden lg:block flex-shrink-0">
-                        <InfoUserWindownChat user={strangerUser} onClose={() => setShowInfoPanel(false)} />
+                        <InfoUserWindownChat user={headerUser} onClose={() => setShowInfoPanel(false)} />
                     </div>
                 )}
+            </div>
+            {showChatBubble && (
+                <BubbleStartChat
+                    handleToggleChatBubble={handleToggleChatBubble}
+                  
+                />
+            )}
+
+            <div className="fixed bottom-6 right-6 z-40">
+                <Button
+                    onClick={handleToggleChatBubble}
+                    className="w-12 h-12 rounded-full shadow-lg bg-blue-500 hover:bg-blue-600 text-white"
+                >
+                    <MessageCircle className="w-5 h-5" />
+                </Button>
             </div>
         </div>
     )

@@ -138,7 +138,6 @@ export default function MessageAreaWindownChat({ messages, user }: StrangerMessa
             )
         }
 
-        // Emoji Message
         if (message.type === "emoji") {
             return (
                 <div className={`flex ${isUser ? "justify-end" : "justify-start"}`}>
@@ -147,7 +146,6 @@ export default function MessageAreaWindownChat({ messages, user }: StrangerMessa
             )
         }
 
-        // Text Message
         return (
             <div
                 className={`px-3 py-2 rounded-2xl max-w-xs ${isUser
@@ -160,7 +158,6 @@ export default function MessageAreaWindownChat({ messages, user }: StrangerMessa
         )
     }
 
-    // Handle empty messages array
     if (!messages || messages.length === 0) {
         return (
             <div className="w-full h-full flex items-center justify-center bg-gray-50">
@@ -276,8 +273,6 @@ export default function MessageAreaWindownChat({ messages, user }: StrangerMessa
                             )
                         })}
                     </div>
-
-                    {/* Scroll anchor */}
                     <div ref={messagesEndRef} className="h-1" />
                 </div>
             </div>

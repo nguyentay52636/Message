@@ -1,7 +1,7 @@
 
 "use client"
 
-import { ArrowLeft, Search, Phone, Video, MoreHorizontal, UserCheck, Info } from "lucide-react"
+import { ArrowLeft, Search, Phone, Video, MoreHorizontal, UserCheck, Info, Menu, MessageCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
@@ -19,6 +19,8 @@ interface StrangerChatHeaderProps {
     onAcceptFriendRequest?: () => void
     showInfoPanel?: boolean
     friendRequestStatus?: "pending" | "waiting" | "accepted"
+    onToggleMobileSidebar?: () => void
+    onToggleChatBubble?: () => void
 }
 
 export default function HeaderWindownChat({
@@ -29,6 +31,8 @@ export default function HeaderWindownChat({
     onAcceptFriendRequest,
     showInfoPanel = false,
     friendRequestStatus = "waiting",
+    onToggleMobileSidebar,
+    onToggleChatBubble,
 }: StrangerChatHeaderProps) {
     return (
         <div className="w-full bg-white border-b border-gray-200">
@@ -68,6 +72,18 @@ export default function HeaderWindownChat({
                         <ArrowLeft className="w-5 h-5 text-gray-600" />
                     </Button>
 
+                    {/* Mobile Menu Button */}
+                    {onToggleMobileSidebar && (
+                        <Button
+                            variant="ghost"
+                            size="sm"
+                            className="lg:hidden p-2 hover:bg-gray-100 rounded-lg flex-shrink-0"
+                            onClick={onToggleMobileSidebar}
+                        >
+                            <Menu className="w-5 h-5 text-gray-600" />
+                        </Button>
+                    )}
+
                     <div className="relative flex-shrink-0">
                         <Avatar className="w-10 h-10">
                             <AvatarImage src={user.avatar || "/placeholder.svg"} />
@@ -75,6 +91,9 @@ export default function HeaderWindownChat({
                                 {user.name.charAt(0)}
                             </AvatarFallback>
                         </Avatar>
+                        {user.isOnline && (
+                            <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 border-2 border-white rounded-full"></div>
+                        )}
                     </div>
 
                     <div className="flex-1 min-w-0">
@@ -92,6 +111,18 @@ export default function HeaderWindownChat({
                 </div>
 
                 <div className="flex items-center gap-1 flex-shrink-0">
+                    {/* Chat Bubble Toggle Button */}
+                    {onToggleChatBubble && (
+                        <Button
+                            variant="ghost"
+                            size="sm"
+                            className="p-2.5 rounded-lg text-gray-500 hover:text-gray-700 hover:bg-gray-100"
+                            onClick={onToggleChatBubble}
+                        >
+                            <MessageCircle className="w-5 h-5" />
+                        </Button>
+                    )}
+
                     <Button
                         variant="ghost"
                         size="sm"

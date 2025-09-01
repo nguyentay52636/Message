@@ -122,7 +122,7 @@ function LoginForm({ onSwitchToRegister, onLoginSuccess }: LoginFormProps) {
                     }
                 }
 
-                router.replace("/chat");
+                router.replace("/strager-chat");
 
                 onLoginSuccess();
             } else {
@@ -140,7 +140,7 @@ function LoginForm({ onSwitchToRegister, onLoginSuccess }: LoginFormProps) {
     // Chuyển hướng nếu đã đăng nhập
     useEffect(() => {
         if (isAuthenticated) {
-            router.push("/chat");
+            router.push("/strager-chat");
         }
     }, [isAuthenticated, router]);
 
