@@ -5,6 +5,8 @@ import { ArrowLeft, Search, Phone, Video, MoreHorizontal, UserCheck, Info, Menu,
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
+import AcceptFriends from "./components/AcceptFriends"
+import SentRequestFriends from "./components/SentRequestFriends"
 
 interface StrangerChatHeaderProps {
     user: {
@@ -38,25 +40,7 @@ export default function HeaderWindownChat({
         <div className="w-full bg-white border-b border-gray-200">
             {/* Friend Request Status Banner */}
             {friendRequestStatus === "waiting" && (
-                <div className="px-4 py-2.5 bg-blue-50 border-b border-blue-100">
-                    <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-2">
-                            <UserCheck className="w-4 h-4 text-blue-600" />
-                            <span className="text-sm text-gray-700">Đang chờ được đồng ý kết bạn</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                            <Button
-                                onClick={onAcceptFriendRequest}
-                                className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 h-7 text-sm rounded-md font-medium"
-                            >
-                                Đồng ý
-                            </Button>
-                            <Button variant="ghost" size="sm" className="p-1 h-7 w-7 text-gray-500 hover:text-gray-700">
-                                <MoreHorizontal className="w-4 h-4" />
-                            </Button>
-                        </div>
-                    </div>
-                </div>
+                <SentRequestFriends />
             )}
 
             {/* Main Chat Header */}

@@ -1,10 +1,11 @@
 import express from "express";
-import { addFriendRequest, getAllRequestFriends, acceptFriendRequest, deleteFriendRequest, searchUsersByPhone, getAllRequestFriend, rejectFriendRequest } from "../controllers/friendsRequestController";
+import { addFriendRequest, getAllRequestFriends, acceptFriendRequest, deleteFriendRequest, searchUsersByPhone, getAllRequestFriend, rejectFriendRequest, getAllFriendByUserId } from "../controllers/friendsRequestController";
 const Router = express.Router();
 
 Router.post("/", addFriendRequest);
 Router.get("/search", searchUsersByPhone);
 Router.get("/user/:id", getAllRequestFriend);
+Router.get("/friends/:id", getAllFriendByUserId);
 Router.get("/:id", getAllRequestFriends);
 Router.put("/accept/:id", acceptFriendRequest);
 Router.put("/reject/:id", rejectFriendRequest);

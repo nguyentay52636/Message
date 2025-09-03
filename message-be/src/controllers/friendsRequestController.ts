@@ -135,3 +135,14 @@ export const rejectFriendRequest = async (req: Request, res: Response) => {
     return ResponseApi(res, 500, null, error.message);
   }
 };
+export const getAllFriendByUserId = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  if (!isValidId(id)) return ResponseApi(res, 400, null, "Id is required");
+
+  try {
+    const data = await FriendRequest.find({ receiver: id, status: "accepted" });
+    return ResponseApi(res, 200, data, "Danh sách bạn bè");
+  } catch (error: any) {
+    return ResponseApi(res, 500, null, error.message);
+  }
+};
