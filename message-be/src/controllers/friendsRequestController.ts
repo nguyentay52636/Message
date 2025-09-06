@@ -37,7 +37,11 @@ export const addFriendRequest = async (req: Request, res: Response) => {
     }
 
     const request = await FriendRequest.create({ sender, receiver });
-    return ResponseApi(res, 201, request, "Gửi lời mời kết bạn thành công");
+    const populated = await request.populate([
+      { path: "sender", select: "_id username email phone avatar status lastSeen createdAt updatedAt" },
+      { path: "receiver", select: "_id username email phone avatar status lastSeen createdAt updatedAt" },
+    ]);
+    return ResponseApi(res, 201, populated, "Gửi lời mời kết bạn thành công");
   } catch (error: any) {
     return ResponseApi(res, 500, null, error.message);
   }
@@ -49,7 +53,14 @@ export const getAllRequestFriends = async (req: Request, res: Response) => {
 
   try {
     const data = await FriendRequest.find({ receiver: id, status: "pending" })
-      .populate("sender", "username avatar status lastSeen");
+      .populate({
+        path: "sender",
+        select: "_id username email phone avatar status lastSeen createdAt updatedAt",
+      })
+      .populate({
+        path: "receiver",
+        select: "_id username email phone avatar status lastSeen createdAt updatedAt",
+      });
 
     return ResponseApi(res, 200, data, "Danh sách lời mời kết bạn");
   } catch (error: any) {
@@ -66,7 +77,15 @@ export const acceptFriendRequest = async (req: Request, res: Response) => {
       id,
       { status: "accepted" },
       { new: true }
-    ).populate("sender receiver", "username avatar");
+    )
+      .populate({
+        path: "sender",
+        select: "_id username email phone avatar status lastSeen createdAt updatedAt",
+      })
+      .populate({
+        path: "receiver",
+        select: "_id username email phone avatar status lastSeen createdAt updatedAt",
+      });
 
     if (!request) return ResponseApi(res, 404, null, "Request not found");
 
@@ -117,7 +136,15 @@ export const getAllRequestFriend = async (req: Request, res: Response) => {
   if (!isValidId(id)) return ResponseApi(res, 400, null, "Id is required");
 
   try {
-    const data = await FriendRequest.find({ receiver: id });
+    const data = await FriendRequest.find({ receiver: id })
+      .populate({
+        path: "sender",
+        select: "_id username email phone avatar status lastSeen createdAt updatedAt",
+      })
+      .populate({
+        path: "receiver",
+        select: "_id username email phone avatar status lastSeen createdAt updatedAt",
+      });
     return ResponseApi(res, 200, data, "Danh sách lời mời kết bạn");
   } catch (error: any) {
     return ResponseApi(res, 500, null, error.message);
@@ -131,17 +158,6 @@ export const rejectFriendRequest = async (req: Request, res: Response) => {
     const data = await FriendRequest.findByIdAndDelete(id);
     if (!data) return ResponseApi(res, 404, null, "Request not found");
     return ResponseApi(res, 200, data, "Đã từ chối lời mời kết bạn");
-  } catch (error: any) {
-    return ResponseApi(res, 500, null, error.message);
-  }
-};
-export const getAllFriendByUserId = async (req: Request, res: Response) => {
-  const { id } = req.params;
-  if (!isValidId(id)) return ResponseApi(res, 400, null, "Id is required");
-
-  try {
-    const data = await FriendRequest.find({ receiver: id, status: "accepted" });
-    return ResponseApi(res, 200, data, "Danh sách bạn bè");
   } catch (error: any) {
     return ResponseApi(res, 500, null, error.message);
   }

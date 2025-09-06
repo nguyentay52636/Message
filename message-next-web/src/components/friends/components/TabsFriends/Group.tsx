@@ -1,5 +1,6 @@
 import { Card } from "@/components/ui/card";
 import { Users } from "lucide-react";
+import FriendRequestItem from "./FriendRequest/FriendRequestItem";
 
 export default function Group() {
     return (
@@ -21,6 +22,8 @@ export default function Group() {
                 <h3 className="text-xl font-semibold mb-2">Sắp ra mắt</h3>
                 <p className="text-muted-foreground">Tính năng nhóm và cộng đồng đang được phát triển</p>
             </Card>
+
         </div>
+
     )
 }

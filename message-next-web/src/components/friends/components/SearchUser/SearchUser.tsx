@@ -70,7 +70,7 @@ export default function SearchUser({ onBack }: SearchUserProps) {
   console.log("Rendering - selectedUser exists:", !!selectedUser);
 
   return (
-    <div className="h-full w-full">
+    <div className="">
       {!selectedUser ? (
         <div className="p-4 border-b border-border">
           {/* Header */}

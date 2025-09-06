@@ -5,16 +5,11 @@ import { ArrowLeft, Search, Phone, Video, MoreHorizontal, UserCheck, Info, Menu,
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
-import AcceptFriends from "./components/AcceptFriends"
 import SentRequestFriends from "./components/SentRequestFriends"
+import { IUser } from "@/types/types"
 
 interface StrangerChatHeaderProps {
-    user: {
-        id: string
-        name: string
-        avatar: string
-        isOnline?: boolean
-    }
+    user: IUser
     onBack?: () => void
     onToggleInfo?: () => void
     onSendFriendRequest?: () => void
@@ -23,14 +18,14 @@ interface StrangerChatHeaderProps {
     friendRequestStatus?: "pending" | "waiting" | "accepted"
     onToggleMobileSidebar?: () => void
     onToggleChatBubble?: () => void
+    onSelectUser?: (user: IUser) => void;
+
 }
 
 export default function HeaderWindownChat({
     user,
     onBack,
     onToggleInfo,
-    onSendFriendRequest,
-    onAcceptFriendRequest,
     showInfoPanel = false,
     friendRequestStatus = "waiting",
     onToggleMobileSidebar,
@@ -38,15 +33,12 @@ export default function HeaderWindownChat({
 }: StrangerChatHeaderProps) {
     return (
         <div className="w-full bg-white border-b border-gray-200">
-            {/* Friend Request Status Banner */}
             {friendRequestStatus === "waiting" && (
-                <SentRequestFriends />
+                <SentRequestFriends userReceiver={user} onSelectUser={() => { }} />
             )}
 
-            {/* Main Chat Header */}
             <div className="px-4 py-3 flex items-center justify-between bg-white">
                 <div className="flex items-center gap-3 flex-1 min-w-0">
-                    {/* Mobile Back Button */}
                     <Button
                         variant="ghost"
                         size="sm"
@@ -72,17 +64,17 @@ export default function HeaderWindownChat({
                         <Avatar className="w-10 h-10">
                             <AvatarImage src={user.avatar || "/placeholder.svg"} />
                             <AvatarFallback className="bg-gray-300 text-gray-700 font-semibold text-sm">
-                                {user.name.charAt(0)}
+                                {user.username.charAt(0)}
                             </AvatarFallback>
                         </Avatar>
-                        {user.isOnline && (
+                        {user.status === 'online' && (
                             <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 border-2 border-white rounded-full"></div>
                         )}
                     </div>
 
                     <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 mb-0.5">
-                            <span className="font-semibold text-base text-gray-900 truncate">{user.name}</span>
+                            <span className="font-semibold text-base text-gray-900 truncate">{user.username}</span>
                             <Badge className="text-xs px-2 py-0.5 font-medium rounded bg-gray-200 text-gray-700 border-0">
                                 NGƯỜI LẠ
                             </Badge>

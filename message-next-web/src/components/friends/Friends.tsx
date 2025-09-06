@@ -9,9 +9,10 @@ import { cn } from "@/lib/utils"
 import { mockFriends, mockFriendRequests, mockGroupInvitations, Friend } from "./components/mock/data"
 import SearchFilterFriends from "./components/SearchFilterFriends"
 import ListFriends from "./components/TabsFriends/ListFriends"
-import FriendsRequest from "./components/TabsFriends/FriendsRequest"
+import FriendsRequest from "./components/TabsFriends/FriendRequest/FriendsRequest"
 import GroupInvitations from "./components/TabsFriends/GroupInvitations"
 import SearchUser from "./components/SearchUser/SearchUser"
+import { SiderNavigation } from "./components/SiderNavigation"
 
 
 
@@ -155,36 +156,13 @@ export function FriendsPage({ onBack }: FriendsPageProps) {
 
             <div className="flex h-screen">
                 {/* Sidebar */}
-                <div className="hidden lg:flex w-100! flex-col bg-card border-r border-border">
-                    {/* Sidebar Header */}
+                <div className="flex w-72 flex-col bg-card border-r border-border">
+
                     <SearchUser onBack={() => console.log("Back")} />
 
 
                     {/* Sidebar Navigation */}
-                    <div className="flex-1 overflow-y-auto py-6">
-                        <div className="space-y-4 p-2">
-                            {sidebarItems.map((item) => (
-                                <Button
-                                    key={item.id}
-                                    variant={activeSection === item.id ? "ghost" : "ghost"}
-                                    onClick={() => setActiveSection(item.id)}
-                                    className={cn(
-                                        "w-full flex  items-center gap-4 py-8! px-6 rounded-xl cursor-pointer text-left transition-colors",
-                                        activeSection === item.id ? "bg-blue-300 text-blue-900" : ""
-                                    )}
-                                >
-                                    <item.icon className="w-5 h-5" />
-                                    <span className="flex-1 font-semibold text-sm text ">{item.label}</span>
-                                    {item.count > 0 && (
-                                        <Badge variant="secondary" className="ml-auto">
-                                            {item.count}
-                                        </Badge>
-                                    )}
-                                </Button>
-
-                            ))}
-                        </div>
-                    </div>
+                    <SiderNavigation activeSection={activeSection} setActiveSection={setActiveSection} />
                 </div>
 
                 {/* Main Content */}

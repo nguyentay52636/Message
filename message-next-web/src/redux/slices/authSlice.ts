@@ -23,6 +23,7 @@ const getLocalStorageData = () => {
       
       console.log('Loading from localStorage:', {
         isAuthenticated,
+        
         currentUser,
         token
       });

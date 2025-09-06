@@ -1,5 +1,6 @@
 export interface IUser {
     _id?: string
+    id?: string  // Added for compatibility with authSlice
     username: string
     email: string
     phone: string
@@ -22,13 +23,6 @@ export interface ICall {
     isAccepted: boolean;
   }
 
-  export interface IFriend { 
-    sender: string;
-    receiver: string;
-    status: "pending" | "accepted" | "rejected";
-    createdAt: Date;
-    updatedAt: Date;
-  }
 
   export interface IGroup { 
     name: string;
@@ -51,11 +45,19 @@ export interface ICall {
     updatedAt?: Date;
   }
   
+  export interface IFriend { 
+    sender: string;
+    receiver: string;
+    status: "pending" | "accepted" | "rejected";
+    createdAt?: Date;
+    updatedAt?: Date;
+  }
 
   export interface IFriendRequest {
-    sender : string
-    receiver : string
-    status? : string
+    _id?: string
+    sender : string | IUser
+    receiver : string | IUser
+    status: "pending" | "accepted" | "rejected";
     createdAt? : Date
     updatedAt?: Date
      } 

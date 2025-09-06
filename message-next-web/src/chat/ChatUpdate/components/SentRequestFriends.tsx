@@ -12,7 +12,12 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-export default function SentRequestFriends() {
+import { IUser } from '@/types/types'
+interface SentRequestFriendsProps {
+    onSelectUser: (user: IUser) => void
+    userReceiver: IUser
+}
+export default function SentRequestFriends({ userReceiver, onSelectUser }: SentRequestFriendsProps) {
     const { isAuthenticated, user } = useSelector(selectAuth)
     const onSentFriendRequest = () => {
         console.log("Sent friend request")

@@ -4,7 +4,6 @@ import userRouter from "./userRouter";
 import friendsRequestRouter from "./friendsRequestRouter";
 import conversationRouter from "./conversationRouter";
 import messageRouter from "./messageRouter";
-import mongoose from "mongoose";
 
 const router = Router();
 

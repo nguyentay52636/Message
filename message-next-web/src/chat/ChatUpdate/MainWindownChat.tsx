@@ -43,14 +43,13 @@ export function MainWindownChat({
     console.log("MainWindownChat render - user:", user)
     console.log("MainWindownChat render - messages:", messages)
 
-    const headerUser = {
+    // Convert IUser to the format expected by other components
+    const userForComponents = {
         id: user._id || user.username,
         name: user.username,
         avatar: user.avatar || "/placeholder.svg",
-        isOnline: false
+        isOnline: user.status === 'online'
     }
-
-    console.log("MainWindownChat render - headerUser:", headerUser)
 
     const strangerMessages = messages.map(msg => ({
         id: msg.id,
@@ -96,7 +95,7 @@ export function MainWindownChat({
 
             <div className="flex-shrink-0">
                 <HeaderWindownChat
-                    user={headerUser}
+                    user={user}
                     onBack={onBack}
                     onToggleInfo={handleToggleInfo}
                     onSendFriendRequest={handleSendFriendRequest}
@@ -113,7 +112,7 @@ export function MainWindownChat({
                 <div className="flex-1 flex flex-col min-w-0">
                     {/* Messages Area */}
                     <div className="flex-1 overflow-hidden">
-                        <MessageAreaWindownChat messages={strangerMessages} user={headerUser} />
+                        <MessageAreaWindownChat messages={strangerMessages} user={userForComponents} />
                     </div>
 
                     {/* Message Input */}
@@ -131,14 +130,14 @@ export function MainWindownChat({
                 {/* Info Panel - Desktop Only */}
                 {showInfoPanel && (
                     <div className="hidden lg:block flex-shrink-0">
-                        <InfoUserWindownChat user={headerUser} onClose={() => setShowInfoPanel(false)} />
+                        <InfoUserWindownChat user={userForComponents} onClose={() => setShowInfoPanel(false)} />
                     </div>
                 )}
             </div>
             {showChatBubble && (
                 <BubbleStartChat
                     handleToggleChatBubble={handleToggleChatBubble}
-                  
+
                 />
             )}
 
