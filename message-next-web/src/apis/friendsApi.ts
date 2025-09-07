@@ -1,5 +1,5 @@
 import baseApi from "./baseApi"
-import { IFriendRequest } from "@/types/types"
+import { IFriend, IFriendRequest, IFriendDisplay, IUser } from "@/types/types"
 
  export const addRequestFriend = async (friendRequest: IFriendRequest) => { 
     const {sender,receiver} = friendRequest;
@@ -7,7 +7,7 @@ import { IFriendRequest } from "@/types/types"
     throw new Error("Sender and receiver are required")
    }
     try {
-        const newRequest =      {sender,receiver}; 
+        const newRequest =   {sender,receiver}; 
         const {data} = await baseApi.post("/friendsRequest/", newRequest)
         return data
     }catch(error:any){
@@ -26,7 +26,6 @@ import { IFriendRequest } from "@/types/types"
 export const getAllFriendRequestUser = async (userId: string) => { 
     try {
 
-        
         if (!userId) {
             console.error('User ID is missing or empty')
             throw new Error("User ID is required")
@@ -64,11 +63,30 @@ export const refuseFriendRequest = async (id:string) => {
     }
 } 
 
-export const getAllFriendByUserId =  async (userId:string) => {
+export const getAllFriendByUserId =  async (userId:string)  : Promise<IFriendDisplay[]>=> {
     try {
-        const {data} = await baseApi.get(`/friendsRequest/friends/${userId}`)
-        if(data.success && data.data) {
-            return data.data
+        const {data} = await baseApi.get(`/friendsRequest/user-friends/${userId}`)
+        if(data.status === 200 && data.data) {
+            // Transform API data to display format
+            const friends: IFriendDisplay[] = data.data.map((friend: IFriend) => {
+                // Determine which user is the friend (not the current user)
+                const friendUser = friend.sender._id === userId ? friend.receiver : friend.sender;
+                
+                return {
+                    _id: friend._id,
+                    id: friendUser._id,
+                    name: friendUser.username,
+                    username: friendUser.username,
+                    email: friendUser.email,
+                    phone: friendUser.phone,
+                    avatar: friendUser.avatar || "",
+                    status: friendUser.status === "online" ? "online" : "offline",
+                    lastSeen: friendUser.lastSeen,
+                    isOnline: friendUser.status === "online"
+                };
+            });
+            
+            return friends;
         }
         throw new Error(data.message || "Failed to fetch friends")
     }catch(error:any){  

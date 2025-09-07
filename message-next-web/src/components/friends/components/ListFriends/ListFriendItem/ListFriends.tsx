@@ -1,53 +1,72 @@
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Card, CardContent } from '@/components/ui/card'
-import React from 'react'
-import { Friend, mockFriends } from '../../mock/data'
-import ListFriendsAction from './ListFriendsAction'
-interface ListFriendsProps {
-    groupedFriends: Record<string, Friend[]>
-}
-export default function ListFriendsComponent({ groupedFriends }: ListFriendsProps) {
+import React, { useEffect, useState } from 'react'
+import FriendItem from './FriendItem'
+import { getAllFriendByUserId } from '@/apis/friendsApi';
+import { useSelector } from 'react-redux';
+import { selectAuth } from '@/redux/slices/authSlice';
+import { IFriendDisplay } from '@/types/types';
+
+export default function ListFriendsComponent() {
+    const [friends, setFriends] = useState<IFriendDisplay[]>([]);
+    const [isLoading, setIsLoading] = useState(false);
+    const { user } = useSelector(selectAuth);
+    const userId = user?.id;
+
+    useEffect(() => {
+        const fetchFriends = async () => {
+            if (!userId) return;
+            
+            setIsLoading(true);
+            try {
+                const friendsData = await getAllFriendByUserId(userId);
+                console.log('Friends data:', friendsData);
+                setFriends(friendsData);
+            } catch (error) {
+                console.error('Error fetching friends:', error);
+            } finally {
+                setIsLoading(false);
+            }
+        }
+        fetchFriends();
+    }, [userId]);
+    // Group friends by first letter of name
+    const groupFriendsByLetter = (friends: IFriendDisplay[]) => {
+        const grouped: Record<string, IFriendDisplay[]> = {};
+        friends.forEach(friend => {
+            const firstLetter = friend.name.charAt(0).toUpperCase();
+            if (!grouped[firstLetter]) {
+                grouped[firstLetter] = [];
+            }
+            grouped[firstLetter].push(friend);
+        });
+        return grouped;
+    };
+
+    const groupedFriendsData = groupFriendsByLetter(friends);
+
+    if (isLoading) {
+        return (
+            <div className="space-y-6">
+                <div className="bg-gray-100 rounded-xl p-4">
+                    <p className="text-lg font-semibold">Đang tải...</p>
+                </div>
+            </div>
+        );
+    }
+
     return (
         <div className="space-y-6">
             <div className="bg-gray-100 rounded-xl p-4">
-                <p className="text-lg font-semibold">Bạn bè ({mockFriends.length})</p>
+                <p className="text-lg font-semibold">Bạn bè ({friends.length})</p>
             </div>
 
-            {Object.entries(groupedFriends)
+            {Object.entries(groupedFriendsData)
                 .sort(([a], [b]) => a.localeCompare(b, "vi"))
-                .map(([letter, friends]) => (
+                .map(([letter, friendsList]) => (
                     <div key={letter} className="space-y-3">
                         <h3 className="text-lg font-bold text-muted-foreground">{letter}</h3>
                         <div className="space-y-6">
-                            {friends.map((friend) => (
-                                <Card key={friend.id} className="hover:bg-gray-100 transition-shadow">
-                                    <CardContent className="p-2 ">
-                                        <div className="flex items-center justify-between cursor-pointer 0 rounded-xl">
-                                            <div className="flex items-center gap-3 cursor-pointer">
-                                                <div className="relative px-4 ">
-                                                    <Avatar className="w-12 h-12">
-                                                        <AvatarImage src={friend.avatar || "/placeholder.svg"} />
-                                                        <AvatarFallback className="bg-gradient-to-br from-primary/80 to-secondary/80 text-white font-semibold">
-                                                            {friend.name.charAt(0)}
-                                                        </AvatarFallback>
-                                                    </Avatar>
-                                                    {friend.isOnline && (
-                                                        <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 border-2 border-white rounded-full"></div>
-                                                    )}
-                                                </div>
-                                                <div>
-                                                    <p className="font-semibold">{friend.name}</p>
-                                                    {friend.isOnline ? (
-                                                        <p className="text-sm text-green-600">Đang hoạt động</p>
-                                                    ) : (
-                                                        <p className="text-sm text-muted-foreground">Hoạt động {friend.lastSeen || "lâu rồi"}</p>
-                                                    )}
-                                                </div>
-                                            </div>
-                                            <ListFriendsAction />
-                                        </div>
-                                    </CardContent>
-                                </Card>
+                            {friendsList.map((friend) => (
+                                <FriendItem key={friend._id} friend={friend} />
                             ))}
                         </div>
                     </div>

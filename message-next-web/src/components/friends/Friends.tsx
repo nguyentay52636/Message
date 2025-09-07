@@ -1,10 +1,8 @@
 "use client"
 
 import { useState } from "react"
-import { Search, Users, UserPlus, ArrowLeft, Group } from "lucide-react"
-
+import { Group } from "lucide-react"
 import { mockFriends, Friend } from "./components/mock/data"
-import SearchFilterFriends from "./components/SearchFilterFriends"
 import FriendsRequest from "./components/TabsFriends/FriendRequest/FriendsRequest"
 import GroupInvitations from "./components/TabsFriends/GroupInvitations"
 import SearchUser from "./components/SearchUser/SearchUser"
@@ -46,7 +44,6 @@ export function FriendsPage({ onBack }: FriendsPageProps) {
             }
         })
 
-    // Group friends by first letter
     const groupedFriends = filteredFriends.reduce(
         (groups, friend) => {
             const firstLetter = friend.name.charAt(0).toUpperCase()
@@ -92,17 +89,6 @@ export function FriendsPage({ onBack }: FriendsPageProps) {
                     <div className="mx-auto p-6">{renderContent()}</div>
                 </div>
             </div>
-            {/* <>
-                <SearchFilterFriends
-                    searchQuery={searchQuery}
-                    setSearchQuery={setSearchQuery}
-                    sortBy={sortBy}
-                    setSortBy={setSortBy}
-                    filterBy={filterBy}
-                    setFilterBy={setFilterBy}
-                />
-            </> */}
-
         </div>
 
 

@@ -162,3 +162,45 @@ export const rejectFriendRequest = async (req: Request, res: Response) => {
     return ResponseApi(res, 500, null, error.message);
   }
 };
+export const getFriendsByUserId = async (req: Request, res: Response) => { 
+  const { id } = req.params;
+  if (!isValidId(id)) return ResponseApi(res, 400, null, "Id is required");
+  try {
+    const friendRequests = await FriendRequest.find({
+      $or: [
+        { sender: id, status: "accepted" },
+        { receiver: id, status: "accepted" }
+      ]
+    })
+    .populate('sender')
+    .populate('receiver')
+    .sort({ updatedAt: -1 });
+
+    // const friends = friendRequests.map(request => {
+    //   const sender = request.sender as any;
+    //   const receiver = request.receiver as any;
+      
+    //   if (sender._id.toString() === id) {
+    //     return {
+    //       _id: receiver._id,
+    //       username: receiver.username,
+    //       avatar: receiver.avatar,
+    //       status: receiver.status,
+    //       lastSeen: receiver.lastSeen,
+    //     };
+    //   } else {
+    //     return {
+    //       _id: sender._id,
+    //       username: sender.username,
+    //       avatar: sender.avatar,
+    //       status: sender.status,
+    //       lastSeen: sender.lastSeen,
+    //     };
+    //   }
+    // });
+
+    return ResponseApi(res, 200, friendRequests, "Danh sách bạn bè");
+  } catch (error: any) {
+    return ResponseApi(res, 500, null, error.message);
+  }
+} 

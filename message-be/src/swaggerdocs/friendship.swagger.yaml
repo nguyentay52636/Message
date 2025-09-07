@@ -379,6 +379,50 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
 
+  /api/friendsRequest/user-friends/{id}:
+    get:
+      summary: Lấy danh sách bạn bè theo ID người dùng
+      description: Lấy danh sách tất cả bạn bè (đã chấp nhận kết bạn) của một người dùng cụ thể
+      tags: [Friend Request]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID của người dùng
+          schema:
+            type: string
+          example: "507f1f77bcf86cd799439011"
+      responses:
+        '200':
+          description: Thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/FriendInfo'
+                  message:
+                    type: string
+                    example: "Danh sách bạn bè"
+        '400':
+          description: ID không hợp lệ
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Lỗi server
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
 
 
 components:
@@ -500,6 +544,37 @@ components:
           description: Thời gian hoạt động cuối cùng
           example: "2024-01-01T00:00:00.000Z"
 
+    FriendInfo:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: ID của bạn bè
+          example: "507f1f77bcf86cd799439011"
+        username:
+          type: string
+          description: Tên đăng nhập của bạn bè
+          example: "nguyenvana"
+        avatar:
+          type: string
+          description: URL ảnh đại diện của bạn bè
+          example: "https://example.com/avatar.jpg"
+        status:
+          type: string
+          enum: ["online", "offline", "away"]
+          description: Trạng thái của bạn bè
+          example: "online"
+        lastSeen:
+          type: string
+          format: date-time
+          description: Thời gian hoạt động cuối cùng của bạn bè
+          example: "2024-01-01T00:00:00.000Z"
+        friendshipDate:
+          type: string
+          format: date-time
+          description: Thời gian kết bạn
+          example: "2024-01-01T00:00:00.000Z"
+
     UserSearchResult:
       type: object
       properties:
@@ -532,6 +607,55 @@ components:
           type: string
           format: date-time
           description: Thời gian hoạt động cuối cùng
+          example: "2024-01-01T00:00:00.000Z"
+
+    User:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: ID của người dùng
+          example: "507f1f77bcf86cd799439011"
+        username:
+          type: string
+          description: Tên đăng nhập
+          example: "nguyenvana"
+        email:
+          type: string
+          description: Email
+          example: "nguyenvana@example.com"
+        phone:
+          type: string
+          description: Số điện thoại
+          example: "0123456789"
+        avatar:
+          type: string
+          description: URL ảnh đại diện
+          example: "https://example.com/avatar.jpg"
+        status:
+          type: string
+          enum: ["online", "offline", "away"]
+          description: Trạng thái người dùng
+          example: "online"
+        lastSeen:
+          type: string
+          format: date-time
+          description: Thời gian hoạt động cuối cùng
+          example: "2024-01-01T00:00:00.000Z"
+        friends:
+          type: array
+          description: Danh sách bạn bè
+          items:
+            $ref: '#/components/schemas/UserBasicInfo'
+        createdAt:
+          type: string
+          format: date-time
+          description: Thời gian tạo tài khoản
+          example: "2024-01-01T00:00:00.000Z"
+        updatedAt:
+          type: string
+          format: date-time
+          description: Thời gian cập nhật cuối cùng
           example: "2024-01-01T00:00:00.000Z"
 
     ErrorResponse:

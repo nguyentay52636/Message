@@ -46,11 +46,26 @@ export interface ICall {
   }
   
   export interface IFriend { 
-    sender: string;
-    receiver: string;
+    _id: string;
+    sender: IUser;
+    receiver: IUser;
     status: "pending" | "accepted" | "rejected";
     createdAt?: Date;
     updatedAt?: Date;
+  }
+
+  // Interface for friend list display
+  export interface IFriendDisplay {
+    _id: string;
+    id: string;
+    name: string;
+    username: string;
+    email: string;
+    phone: string;
+    avatar?: string;
+    status: "online" | "offline";
+    lastSeen?: string;
+    isOnline: boolean;
   }
 
   export interface IFriendRequest {
