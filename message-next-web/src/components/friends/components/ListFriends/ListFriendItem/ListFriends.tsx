@@ -1,27 +1,30 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
-import { MessageCircle, MoreHorizontal, Phone, Video } from 'lucide-react'
 import React from 'react'
-import { Friend } from '../mock/data'
+import { Friend, mockFriends } from '../../mock/data'
+import ListFriendsAction from './ListFriendsAction'
 interface ListFriendsProps {
     groupedFriends: Record<string, Friend[]>
 }
-export default function ListFriends({ groupedFriends }: ListFriendsProps) {
+export default function ListFriendsComponent({ groupedFriends }: ListFriendsProps) {
     return (
         <div className="space-y-6">
+            <div className="bg-gray-100 rounded-xl p-4">
+                <p className="text-lg font-semibold">Bạn bè ({mockFriends.length})</p>
+            </div>
+
             {Object.entries(groupedFriends)
                 .sort(([a], [b]) => a.localeCompare(b, "vi"))
                 .map(([letter, friends]) => (
                     <div key={letter} className="space-y-3">
                         <h3 className="text-lg font-bold text-muted-foreground">{letter}</h3>
-                        <div className="space-y-2">
+                        <div className="space-y-6">
                             {friends.map((friend) => (
-                                <Card key={friend.id} className="hover:shadow-md transition-shadow">
-                                    <CardContent className="p-4">
-                                        <div className="flex items-center justify-between">
-                                            <div className="flex items-center gap-3">
-                                                <div className="relative">
+                                <Card key={friend.id} className="hover:bg-gray-100 transition-shadow">
+                                    <CardContent className="p-2 ">
+                                        <div className="flex items-center justify-between cursor-pointer 0 rounded-xl">
+                                            <div className="flex items-center gap-3 cursor-pointer">
+                                                <div className="relative px-4 ">
                                                     <Avatar className="w-12 h-12">
                                                         <AvatarImage src={friend.avatar || "/placeholder.svg"} />
                                                         <AvatarFallback className="bg-gradient-to-br from-primary/80 to-secondary/80 text-white font-semibold">
@@ -41,20 +44,7 @@ export default function ListFriends({ groupedFriends }: ListFriendsProps) {
                                                     )}
                                                 </div>
                                             </div>
-                                            <div className="flex items-center gap-2">
-                                                <Button variant="ghost" size="sm" className="p-2 cursor-pointer rounded-xl hover:bg-accent">
-                                                    <MessageCircle className="w-4 h-4" />
-                                                </Button>
-                                                <Button variant="ghost" size="sm" className="p-2 cursor-pointer rounded-xl hover:bg-accent">
-                                                    <Phone className="w-4 h-4" />
-                                                </Button>
-                                                <Button variant="ghost" size="sm" className="p-2 cursor-pointer rounded-xl hover:bg-accent">
-                                                    <Video className="w-4 h-4" />
-                                                </Button>
-                                                <Button variant="ghost" size="sm" className="p-2 cursor-pointer rounded-xl hover:bg-accent">
-                                                    <MoreHorizontal className="w-4 h-4" />
-                                                </Button>
-                                            </div>
+                                            <ListFriendsAction />
                                         </div>
                                     </CardContent>
                                 </Card>

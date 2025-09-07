@@ -35,7 +35,6 @@ export default function SearchFilterFriends({
         try {
             setLoading(true);
             const res = await FindUserByPhone(searchQuery);
-            // backend trả về mảng -> lấy user đầu tiên
             if (res && res.length > 0) {
                 setUser(res[0]);
             } else {
@@ -56,16 +55,15 @@ export default function SearchFilterFriends({
         }
         const delay = setTimeout(() => {
             handleSearch();
-        }, 400); // debounce 400ms
+        }, 400);
         return () => clearTimeout(delay);
     }, [searchQuery]);
 
     return (
         <div className="flex flex-col gap-4">
-            {/* Thanh search + filter */}
             <div className="flex flex-col sm:flex-row gap-4">
                 <div className="flex-1 relative">
-                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-black" />
                     <Input
                         placeholder="Tìm bạn"
                         value={searchQuery}
@@ -74,7 +72,7 @@ export default function SearchFilterFriends({
                     />
                 </div>
                 <Select value={sortBy} onValueChange={setSortBy}>
-                    <SelectTrigger className="w-full sm:w-48 h-12 rounded-xl">
+                    <SelectTrigger className="w-full sm:w-50 h-[50px]! rounded-xl">
                         <SelectValue placeholder="Sắp xếp" />
                     </SelectTrigger>
                     <SelectContent>
@@ -84,7 +82,7 @@ export default function SearchFilterFriends({
                     </SelectContent>
                 </Select>
                 <Select value={filterBy} onValueChange={setFilterBy}>
-                    <SelectTrigger className="w-full sm:w-32 h-12 rounded-xl">
+                    <SelectTrigger className="w-full sm:w-40 h-[50px]! rounded-xl">
                         <SelectValue placeholder="Lọc" />
                     </SelectTrigger>
                     <SelectContent>
@@ -95,7 +93,7 @@ export default function SearchFilterFriends({
                 </Select>
             </div>
 
-            {/* Hiển thị kết quả */}
+
             <div className="mt-4">
                 {loading && (
                     <p className="text-sm text-muted-foreground">Đang tìm kiếm...</p>

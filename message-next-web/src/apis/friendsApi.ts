@@ -1,4 +1,3 @@
-import { ReactJsxRuntime } from "next/dist/server/route-modules/app-page/vendored/rsc/entrypoints";
 import baseApi from "./baseApi"
 import { IFriendRequest } from "@/types/types"
 
@@ -26,30 +25,17 @@ import { IFriendRequest } from "@/types/types"
   } 
 export const getAllFriendRequestUser = async (userId: string) => { 
     try {
-        console.log('=== DEBUG getAllFriendRequestUser ===')
-        console.log('userId received:', userId)
-        console.log('userId type:', typeof userId)
+
         
         if (!userId) {
             console.error('User ID is missing or empty')
             throw new Error("User ID is required")
         }
         
-        console.log('Making API call to:', `/friendsRequest/user/${userId}`)
-        const {data} = await baseApi.get(`/friendsRequest/user/${userId}`)
-        console.log('API response data:', data)
-        console.log('API response data type:', typeof data)
-        console.log('API response data length:', Array.isArray(data) ? data.length : 'Not an array')
-        
+        const response = await baseApi.get(`/friendsRequest/user/${userId}`)
+        const data = response.data?.data || response.data
         return data
-    } catch(error: any) {
-        console.error('=== ERROR in getAllFriendRequestUser ===')
-        console.error('Error object:', error)
-        console.error('Error message:', error.message)
-        console.error('Error response:', error.response)
-        console.error('Error status:', error.response?.status)
-        console.error('Error data:', error.response?.data)
-        
+    } catch(error: any) {        
         if (error.response?.status === 404) {
             throw new Error("Không tìm thấy lời mời kết bạn")
         } else if (error.response?.status === 401) {

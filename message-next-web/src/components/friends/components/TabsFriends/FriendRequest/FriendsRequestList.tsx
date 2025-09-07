@@ -1,13 +1,10 @@
 import React from 'react'
 import { Avatar } from "@/components/ui/avatar";
 import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Check, X } from "lucide-react";
-// import { mockFriendRequests } from '../../mock/data';
 import { AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { IFriendRequest, IUser } from '@/types/types';
-import { acceptFriendRequest, refuseFriendRequest } from '@/apis/friendsApi';
-import { toast } from 'sonner';
+
+import ButtonAccessFriends from './ButtonAccessFriends';
 
 interface FriendsRequestListProps {
     friendRequests: IFriendRequest[]
@@ -15,25 +12,9 @@ interface FriendsRequestListProps {
     onRequestUpdate?: () => void
 }
 export default function FriendsRequestList({ friendRequests, loading, onRequestUpdate }: FriendsRequestListProps) {
-    const handleAcceptRequest = async (requestId: string) => {
-        try {
-            await acceptFriendRequest(requestId);
-            toast.success("Đã chấp nhận lời mời kết bạn");
-            onRequestUpdate?.();
-        } catch (error: any) {
-            toast.error(error.message || "Có lỗi xảy ra khi chấp nhận lời mời");
-        }
-    };
 
-    const handleRejectRequest = async (requestId: string) => {
-        try {
-            await refuseFriendRequest(requestId);
-            toast.success("Đã từ chối lời mời kết bạn");
-            onRequestUpdate?.();
-        } catch (error: any) {
-            toast.error(error.message || "Có lỗi xảy ra khi từ chối lời mời");
-        }
-    };
+
+
     if (loading) {
         return (
             <div className="space-y-2">
@@ -44,7 +25,7 @@ export default function FriendsRequestList({ friendRequests, loading, onRequestU
         )
     }
 
-    if (!friendRequests || friendRequests.length === 0) {
+    if (!friendRequests || !Array.isArray(friendRequests) || friendRequests.length === 0) {
         return (
             <div className="text-sm text-muted-foreground">Không có lời mời kết bạn nào.</div>
         )
@@ -52,7 +33,7 @@ export default function FriendsRequestList({ friendRequests, loading, onRequestU
 
     return (
         <div className="space-y-4">
-            {friendRequests.map((request:IFriendRequest, index:number) => {
+            {friendRequests.map((request: IFriendRequest, index: number) => {
                 const sender = typeof request.sender === 'string' ? null : request.sender as IUser;
                 const senderName = sender?.username || (typeof request.sender === 'string' ? request.sender : 'Unknown');
                 const senderAvatar = sender?.avatar;
@@ -76,25 +57,7 @@ export default function FriendsRequestList({ friendRequests, loading, onRequestU
                                         </p>
                                     </div>
                                 </div>
-                                <div className="flex items-center gap-2">
-                                    <Button
-                                        onClick={() => request._id && handleAcceptRequest(request._id)}
-                                        className="px-4 py-2 rounded-xl cursor-pointer"
-                                        disabled={!request._id}
-                                    >
-                                        <Check className="w-4 h-4 mr-2" />
-                                        Chấp nhận
-                                    </Button>
-                                    <Button
-                                        onClick={() => request._id && handleRejectRequest(request._id)}
-                                        variant="outline"
-                                        className="px-4 py-2 rounded-xl bg-transparent cursor-pointer"
-                                        disabled={!request._id}
-                                    >
-                                        <X className="w-4 h-4 mr-2" />
-                                        Từ chối
-                                    </Button>
-                                </div>
+                                <ButtonAccessFriends requestId={request._id || ""} />
                             </div>
                         </CardContent>
                     </Card>
