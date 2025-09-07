@@ -14,7 +14,7 @@ export default function ListFriendsComponent() {
     useEffect(() => {
         const fetchFriends = async () => {
             if (!userId) return;
-            
+
             setIsLoading(true);
             try {
                 const friendsData = await getAllFriendByUserId(userId);
