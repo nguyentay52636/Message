@@ -18,9 +18,12 @@ export function ModeToggle() {
     return (
         <DropdownMenu  >
             <DropdownMenuTrigger asChild className="mx-2">
-                <Button variant="outline" size="icon">
-                    <Sun className=" scale-100  rotate-0 transition-all dark:scale-0 dark:-rotate-90" />
-                    <Moon className="absolute w-[30px]! hover: h-[30px]! sm:w-10 sm:h-10 scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0" />
+                <Button
+                    variant="ghost"
+                    onClick={() => { }}
+                    className="w-full p-[30px]!  cursor-pointer text-white hover:bg-white/10 hover:text-white  p-4 sm:p-3 rounded-xl bg-white/10 backdrop-blur-sm transition-all duration-200 hover:scale-105">
+                    <Sun className=" scale-100  rotate-0 transition-all dark:scale-0 dark:-rotate-90 w-[30px]! hover: h-[30px]! sm:w-10 sm:h-10" />
+                    <Moon className="absolute w-[30px]! hover: h-[30px]! sm:w-10 sm:h-10 scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0 w-[30px]! hover: h-[30px]! sm:w-10 sm:h-10" />
                     <span className="sr-only">Chuyển đổi màu</span>
                 </Button>
             </DropdownMenuTrigger>
@@ -33,6 +36,6 @@ export function ModeToggle() {
                 </DropdownMenuItem>
 
             </DropdownMenuContent>
-        </DropdownMenu>
+        </DropdownMenu >
     )
 }

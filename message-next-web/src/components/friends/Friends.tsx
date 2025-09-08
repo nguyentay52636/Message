@@ -79,11 +79,13 @@ export function FriendsPage({ onBack }: FriendsPageProps) {
         <div className="min-h-screen bg-background">
             <HeaderMobile onBack={onBack || (() => { })} />
 
-            <div className="flex h-screen">
+            <div className="flex h-screen w-full">
                 <div className="flex w-72 flex-col bg-card border-r border-border">
 
                     <SearchUser onBack={() => console.log("Back")} />
-                    <SiderNavigation activeSection={activeSection} setActiveSection={setActiveSection} />
+                    <div className="">
+                        <SiderNavigation activeSection={activeSection} setActiveSection={setActiveSection} />
+                    </div>
                 </div>
                 <div className="flex-1 overflow-y-auto">
                     <div className="mx-auto p-6">{renderContent()}</div>

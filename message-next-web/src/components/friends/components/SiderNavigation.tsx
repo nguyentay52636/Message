@@ -40,29 +40,34 @@ export const SiderNavigation = ({ activeSection, setActiveSection }: SiderNaviga
     return (
         <>
             <div className="flex-1 overflow-y-auto py-6">
-                <div className="space-y-4 p-2">
+                <div className="space-y-4 py-2">
                     {sidebarItems.map((item) => (
+
                         <Button
                             key={item.id}
                             variant={activeSection === item.id ? "ghost" : "ghost"}
                             onClick={() => setActiveSection(item.id)}
                             className={cn(
-                                "w-full flex  items-center gap-4 py-8! px-6 rounded-xl cursor-pointer text-left transition-colors",
+                                "w-full flex justify-start items-center gap-4 py-8! px-6 rounded-xl cursor-pointer text-left transition-colors",
                                 activeSection === item.id ? "bg-blue-300 text-blue-900" : ""
                             )}
                         >
-                            <item.icon className="w-5 h-5" />
-                            <span className="flex-1 font-semibold text-sm text ">{item.label}</span>
-                            {item.count > 0 && (
-                                <Badge variant="secondary" className="ml-auto">
-                                    {item.count}
-                                </Badge>
-                            )}
+                            <div className="flex items-center gap-4">
+                                <item.icon className="w-10 h-10" />
+                            </div>
+                            <span className=" font-semibold text-sm ">{item.label}</span>
+                            {
+                                item.count > 0 && (
+                                    <Badge variant="secondary" className="ml-auto text-sm  rounded-full text-white bg-red-500">
+                                        {item.count}
+                                    </Badge>
+                                )
+                            }
                         </Button>
 
                     ))}
                 </div>
-            </div>
+            </div >
         </>
     )
 }

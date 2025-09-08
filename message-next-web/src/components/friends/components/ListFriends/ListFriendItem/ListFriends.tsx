@@ -4,7 +4,7 @@ import { getAllFriendByUserId } from '@/apis/friendsApi';
 import { useSelector } from 'react-redux';
 import { selectAuth } from '@/redux/slices/authSlice';
 import { IFriendDisplay } from '@/types/types';
-
+import Loading from '@/components/loading/Loading';
 export default function ListFriendsComponent() {
     const [friends, setFriends] = useState<IFriendDisplay[]>([]);
     const [isLoading, setIsLoading] = useState(false);
@@ -45,11 +45,7 @@ export default function ListFriendsComponent() {
 
     if (isLoading) {
         return (
-            <div className="space-y-6">
-                <div className="bg-gray-100 rounded-xl p-4">
-                    <p className="text-lg font-semibold">Đang tải...</p>
-                </div>
-            </div>
+            <Loading />
         );
     }
 

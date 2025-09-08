@@ -38,12 +38,12 @@ export function ChatItem({ user, index, isSelected, onClick }: ChatListItemProps
         <div
             onClick={handleClick}
             className={cn(
-                "flex items-center gap-2 sm:gap-3 p-2 sm:p-3 mx-1 sm:mx-2 my-0.5 sm:my-1 cursor-pointer transition-all duration-200 rounded-xl hover:scale-[1.02] active:scale-[0.9]",
-                isSelected ? "bg-accent/50 shadow-lg border-primary" : "hover:bg-accent/30",
+                "flex items-center gap-2 sm:gap-3  p-2 sm:p-4 cursor-pointer transition-all duration-200 rounded-xl hover:scale-[1.02] active:scale-[0.9]",
+                isSelected ? "bg-accent/50 shadow-lg border-primary" : "hover:bg-gray-200!",
             )}
         >
             <div className="relative flex-shrink-0">
-                <Avatar className="w-10 h-10 sm:w-11 sm:h-11 lg:w-12 lg:h-12 shadow-md">
+                <Avatar className="w-15 h-15 sm:w-11 sm:h-11 lg:w-12 lg:h-12 shadow-md">
                     <AvatarImage src={user.avatar} />
                     <AvatarFallback className="bg-blue-600 text-primary-foreground font-semibold text-sm">
                         {user.name.charAt(0)}
@@ -110,8 +110,8 @@ export function ChatItem({ user, index, isSelected, onClick }: ChatListItemProps
                 {user.unreadCount && user.unreadCount > 0 && (
                     <Badge
                         className={cn(
-                            "text-white text-xs px-1.5 sm:px-2 py-0.5 sm:py-1 h-4 sm:h-5 min-w-[16px] sm:min-w-[20px] font-bold shadow-lg",
-                            user.unreadCount >= 5 ? "bg-destructive" : "bg-primary",
+                            " px-2 py-1 rounded-full text-white!",
+                            user.unreadCount >= 5 ? "bg-primary!" : "bg-red-500!",
                         )}
                     >
                         {user.unreadCount >= 5 ? "5+" : user.unreadCount}

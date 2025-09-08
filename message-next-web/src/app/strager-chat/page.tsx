@@ -46,25 +46,7 @@ export default function page() {
         transform transition-transform duration-300 ease-in-out
         ${isMobileSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
     `}>
-            {/* {selectedUser ? (
-                // <MainWindownChat
-                //     messages={messages}
-                //     setSelectedChat={setSelectedChat}
-                //     selectedChat={selectedChat}
-                //     message={message}
-                //     setMessage={setMessage}
-                //     onSendMessage={onSendMessage}
-                //     recipientName={selectedUser.username}
-                //     user={selectedUser}
-                //     onBack={handleBack}
-                //     onToggleMobileSidebar={() => setIsMobileSidebarOpen(!isMobileSidebarOpen)}
-                // />
-                <div className="flex items-center justify-center h-full text-muted-foreground">
-                    <ChatVide />
-                </div>
-            ) : (
-               
-            )} */}
+
             <ChatListSidebar
                 onChatSelect={() => { }}
                 selectedChat={null}
