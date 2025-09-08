@@ -1,9 +1,19 @@
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuItem } from '@/components/ui/dropdown-menu'
 import React from 'react'
+import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { MessageCircle, MoreHorizontal, Phone, Users, Video } from 'lucide-react'
+import InformationAccount from '@/components/profile/InformationAccount/InformationAccount'
 
 export default function ListFriendsAction() {
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => {
+    setOpen(true);
+  }
+  const handleClose = () => {
+    setOpen(false);
+  }
+
   return (
     <>
       <div className="flex items-center gap-2">
@@ -23,7 +33,7 @@ export default function ListFriendsAction() {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent>
-            <DropdownMenuItem>Xem thông tin chi tiết</DropdownMenuItem>
+            <DropdownMenuItem onClick={handleOpen}>Xem thông tin chi tiết</DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem>Phân loại</DropdownMenuItem>
             <DropdownMenuItem>Đặt tên gợi nhớ</DropdownMenuItem>
@@ -34,6 +44,7 @@ export default function ListFriendsAction() {
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
+      <InformationAccount isOpen={open} onClose={handleClose} />
     </>
   )
 }
