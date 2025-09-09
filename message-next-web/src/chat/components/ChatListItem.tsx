@@ -1,4 +1,4 @@
-import { mockUsers, ChatUser } from '@/lib/Mock/dataMock'
+import { ChatUser } from '@/lib/Mock/dataMock'
 import React from 'react'
 import { ChatItem } from './ChatItem'
 
