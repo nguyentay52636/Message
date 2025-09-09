@@ -104,10 +104,10 @@ export const getConversationOfUser = async (req: CustomRequest, res: Response) =
     }
 
     const conversations = await Conversation.find({ members: userId })
-      .populate('members', 'username avatar status')
+      .populate('members', 'username avatar status lastSeen')
       .populate('groupAdmin', 'username')
       .populate('lastMessage')
-      .populate('lastMessage.sender', 'username avatar')
+      .populate('lastMessage.sender', 'username avatar lastSeen')
       .sort({ lastUpdated: -1 });
 
     if (!conversations.length) {

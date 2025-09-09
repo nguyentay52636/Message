@@ -22,7 +22,7 @@ export function SiderBar({ onToggleMobileSidebar }: NavigationStripProps) {
         {
             label: "Tin nhắn",
             icon: MessageCircle,
-            onClick: () => router.push("/stranger-chat"),
+            onClick: () => router.push("/strager-chat"),
             badge: 10,
         },
         {

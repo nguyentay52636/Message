@@ -17,7 +17,6 @@ interface StrangerChatInfoProps {
     }
     onClose?: () => void
 }
-
 export default function InfoUserWindownChat({ user, onClose }: StrangerChatInfoProps) {
     const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>({
         photos: false,

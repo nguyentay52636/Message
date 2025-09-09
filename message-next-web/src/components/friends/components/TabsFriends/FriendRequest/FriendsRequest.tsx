@@ -15,31 +15,18 @@ export default function FriendsRequest() {
     const handleGetFriendRequests = async () => {
         try {
             setLoading(true)
-            console.log('=== DEBUG FriendsRequest ===')
-            console.log('Auth state:', { isAuthenticated, user, userId: user?.id })
-            console.log('isAuthenticated type:', typeof isAuthenticated)
-            console.log('user type:', typeof user)
-            console.log('user.id type:', typeof user?.id)
+
 
             if (isAuthenticated && user?.id) {
-                console.log('Đang gọi API getAllFriendRequestUser với userId:', user.id)
                 const requests: IFriendRequest[] = await getAllFriendRequestUser(user.id)
-                console.log("API response:", requests)
-                console.log("Response type:", typeof requests)
-                console.log("Response length:", Array.isArray(requests) ? requests.length : 'Not an array')
                 setFriendRequests(requests)
+                console.log('Lời mời kết bạn:', requests)
             } else {
                 console.warn('User not authenticated or missing user ID', { isAuthenticated, user })
                 setFriendRequests([])
             }
         } catch (error: any) {
-            console.error('Error fetching friend requests:', error)
-            console.error('Error details:', {
-                message: error.message,
-                response: error.response,
-                status: error.response?.status,
-                data: error.response?.data
-            })
+
             toast.error(error.message || 'Có lỗi xảy ra khi tải danh sách lời mời kết bạn')
             setFriendRequests([])
         } finally {

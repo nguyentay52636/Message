@@ -1,0 +1,319 @@
+tags:
+  - name: Device
+    description: API quản lý thiết bị người dùng
+
+paths:
+  /api/device/add-or-update-device/{userId}:
+    post:
+      summary: Thêm hoặc cập nhật thiết bị
+      description: Thêm thiết bị mới hoặc cập nhật thông tin thiết bị hiện có cho người dùng. Nếu thiết bị đã tồn tại (theo deviceId), sẽ cập nhật thời gian đăng nhập cuối và địa chỉ IP.
+      tags: [Device]
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          schema:
+            type: string
+            format: objectId
+          description: ID của người dùng
+          example: "507f1f77bcf86cd799439011"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - deviceId
+                - deviceName
+              properties:
+                deviceId:
+                  type: string
+                  description: ID duy nhất của thiết bị
+                  example: "device-uuid-12345"
+                deviceName:
+                  type: string
+                  description: Tên thiết bị
+                  example: "iPhone 13 Pro"
+                ipAddress:
+                  type: string
+                  description: Địa chỉ IP của thiết bị
+                  example: "192.168.1.100"
+      responses:
+        '200':
+          description: Cập nhật/thêm thiết bị thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Device'
+                    description: Danh sách tất cả thiết bị của người dùng
+                  message:
+                    type: string
+                    example: "Device updated/added successfully"
+        '404':
+          description: Không tìm thấy người dùng
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Lỗi server
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/device/get-user-device/{userId}/{deviceId}:
+    get:
+      summary: Lấy thông tin thiết bị theo ID
+      description: Lấy thông tin chi tiết của một thiết bị cụ thể thuộc về người dùng.
+      tags: [Device]
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          schema:
+            type: string
+            format: objectId
+          description: ID của người dùng
+          example: "507f1f77bcf86cd799439011"
+        - in: path
+          name: deviceId
+          required: true
+          schema:
+            type: string
+          description: ID của thiết bị
+          example: "device-uuid-12345"
+      responses:
+        '200':
+          description: Lấy thông tin thiết bị thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    $ref: '#/components/schemas/Device'
+                  message:
+                    type: string
+                    example: "Get device success"
+        '404':
+          description: Không tìm thấy người dùng hoặc thiết bị
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Lỗi server
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/device/check-login-device/{userId}:
+    post:
+      summary: Kiểm tra thiết bị đăng nhập
+      description: Kiểm tra xem thiết bị có được tin cậy hay không. Nếu là thiết bị lạ, sẽ đánh dấu là nghi ngờ và yêu cầu xác minh OTP.
+      tags: [Device]
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          schema:
+            type: string
+            format: objectId
+          description: ID của người dùng
+          example: "507f1f77bcf86cd799439011"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - deviceId
+                - deviceName
+              properties:
+                deviceId:
+                  type: string
+                  description: ID duy nhất của thiết bị
+                  example: "device-uuid-12345"
+                deviceName:
+                  type: string
+                  description: Tên thiết bị
+                  example: "iPhone 13 Pro"
+                ipAddress:
+                  type: string
+                  description: Địa chỉ IP của thiết bị
+                  example: "192.168.1.100"
+      responses:
+        '200':
+          description: Đăng nhập thành công từ thiết bị quen thuộc
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    $ref: '#/components/schemas/Device'
+                  message:
+                    type: string
+                    example: "Login thành công từ thiết bị quen"
+        '403':
+          description: Thiết bị lạ - cần xác minh OTP
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  data:
+                    $ref: '#/components/schemas/Device'
+                  message:
+                    type: string
+                    example: "Thiết bị lạ! Cần xác minh OTP"
+        '404':
+          description: Không tìm thấy người dùng
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Lỗi server
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/device/remove-device/{userId}/{deviceId}:
+    delete:
+      summary: Xóa thiết bị
+      description: Xóa một thiết bị khỏi danh sách thiết bị của người dùng.
+      tags: [Device]
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          schema:
+            type: string
+            format: objectId
+          description: ID của người dùng
+          example: "507f1f77bcf86cd799439011"
+        - in: path
+          name: deviceId
+          required: true
+          schema:
+            type: string
+          description: ID của thiết bị cần xóa
+          example: "device-uuid-12345"
+      responses:
+        '200':
+          description: Xóa thiết bị thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Device'
+                    description: Danh sách thiết bị còn lại của người dùng
+                  message:
+                    type: string
+                    example: "Device removed successfully"
+        '404':
+          description: Không tìm thấy người dùng
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Lỗi server
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+components:
+  schemas:
+    Device:
+      type: object
+      properties:
+        deviceId:
+          type: string
+          description: ID duy nhất của thiết bị
+          example: "device-uuid-12345"
+        deviceName:
+          type: string
+          description: Tên thiết bị
+          example: "iPhone 13 Pro"
+        ipAddress:
+          type: string
+          description: Địa chỉ IP của thiết bị
+          example: "192.168.1.100"
+        lastLogin:
+          type: string
+          format: date-time
+          description: Thời gian đăng nhập cuối cùng
+          example: "2024-01-15T10:30:00Z"
+        isSuspicious:
+          type: boolean
+          description: Đánh dấu thiết bị có nghi ngờ hay không
+          example: false
+      required:
+        - deviceId
+        - deviceName
+        - lastLogin
+        - isSuspicious
+    
+    ErrorResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          description: Trạng thái thành công
+          example: false
+        data:
+          type: null
+          description: Dữ liệu trả về (null cho lỗi)
+        message:
+          type: string
+          description: Thông báo lỗi
+          example: "User not found"
+      required:
+        - success
+        - message
+
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
