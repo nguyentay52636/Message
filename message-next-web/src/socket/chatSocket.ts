@@ -2,7 +2,7 @@ import { io } from "socket.io-client";
 import { AppDispatch } from "@/redux/store/store";
 import { addMessage, setTyping, setOnlineUsers } from "@/redux/slices/chatSlice";
 
-const socket = io("http://localhost:000", { withCredentials: true });
+const socket = io("http://localhost8000", { withCredentials: true });
 
 export const initChatSocket = (dispatch: AppDispatch, userId: string) => {
   socket.emit("join", userId);

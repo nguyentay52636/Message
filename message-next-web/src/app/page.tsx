@@ -2,6 +2,7 @@
 
 import { useEffect } from "react"
 import { useRouter } from "next/navigation"
+import { SiderBar } from "@/components/shared/SiderBar/SiderBar"
 
 export default function Home() {
   const router = useRouter()
@@ -13,11 +14,8 @@ export default function Home() {
 
   // Show loading while redirecting
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100">
-      <div className="text-center">
-        <div className="w-16 h-16 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-        <p className="text-gray-600">Đang chuyển hướng...</p>
-      </div>
+    <div className="w-20 flex-shrink-0 z-30">
+      <SiderBar />
     </div>
   )
 }

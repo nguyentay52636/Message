@@ -3,14 +3,11 @@ import FeaturesLogin from './FeaturesLogin'
 export default function LeftPanelLogin() {
     return (
         <>
-            <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-blue-600 via-blue-700 to-purple-800 relative overflow-hidden">
-                {/* Background Pattern */}
-                <div className="absolute inset-0 opacity-10">
-                    <div className="absolute top-20 left-20 w-32 h-32 bg-white rounded-full blur-3xl"></div>
-                    <div className="absolute top-40 right-32 w-24 h-24 bg-white rounded-full blur-2xl"></div>
-                    <div className="absolute bottom-32 left-32 w-40 h-40 bg-white rounded-full blur-3xl"></div>
-                    <div className="absolute bottom-20 right-20 w-28 h-28 bg-white rounded-full blur-2xl"></div>
-                </div>
+            <div className="lg:flex lg:w-1/2  bg-[url('/zalo-bg.png')]! bg-cover bg-center bg-no-repeat">
+
+                <div className="absolute top-20 left-20 w-32 h-32 bg-white rounded-full blur-3xl"></div>
+
+
 
                 <div className="relative z-10 flex flex-col justify-center items-center text-white p-12 w-full">
                     {/* Logo */}

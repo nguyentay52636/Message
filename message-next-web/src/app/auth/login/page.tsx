@@ -1,12 +1,10 @@
 "use client"
 
-import React, { useState, useEffect } from "react"
+import React from "react"
 import { useRouter } from "next/navigation"
-import { toast } from "sonner"
-import { login, clearError } from "@/redux/slices/authSlice"
-import { useDispatch, useSelector } from "react-redux"
-import { AppDispatch, RootState } from "@/redux/store/store"
-import FormInput from "@/components/auth/components/login/FormInput"
+import { useSelector } from "react-redux"
+import { RootState } from "@/redux/store/store"
+import FormLogin from "@/components/auth/components/login/FormLogin"
 import FooterLogin from "@/components/auth/components/login/FooterLogin"
 import LeftPanelLogin from "@/components/auth/components/login/LeftPanel/LeftPanelLogin"
 import { Alert } from "@/components/ui/alert"
@@ -18,184 +16,7 @@ interface LoginFormProps {
 }
 
 function LoginForm({ onSwitchToRegister, onLoginSuccess }: LoginFormProps) {
-    const router = useRouter()
-
-
-    const [loginMethod, setLoginMethod] = useState<"phone" | "email">("phone")
-    const [showPassword, setShowPassword] = useState(false)
-    const [isRememberMe, setIsRememberMe] = useState(false)
-
-    const dispatch = useDispatch<AppDispatch>()
-    const { isLoading, error, isAuthenticated } = useSelector((state: RootState) => state.auth)
-
-    const [formData, setFormData] = useState({
-        phone: "",
-        password: "",
-        rememberMe: false,
-    })
-
-    useEffect(() => {
-        router.prefetch("/chat")
-    }, [router])
-
-    // Update form field name based on login method
-    const handleLoginMethodChange = (method: "phone" | "email") => {
-        setLoginMethod(method);
-        // Clear the input field when switching methods
-        setFormData(prev => ({ ...prev, phone: "" }));
-        // Clear saved credentials
-        localStorage.removeItem('savedPhone');
-        localStorage.removeItem('savedEmail');
-    }
-
-    const handleSubmitLogin = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-
-        // Form validation
-        if (!formData.phone.trim()) {
-            toast.error("Vui lòng nhập số điện thoại hoặc email");
-            return;
-        }
-
-        if (loginMethod === "email") {
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailRegex.test(formData.phone.trim())) {
-                toast.error("Vui lòng nhập email hợp lệ");
-                return;
-            }
-        } else if (loginMethod === "phone") {
-            const phoneRegex = /^[0-9]{10,11}$/;
-            if (!phoneRegex.test(formData.phone.trim())) {
-                toast.error("Vui lòng nhập số điện thoại hợp lệ (10-11 số)");
-                return;
-            }
-        }
-
-        if (!formData.password.trim()) {
-            toast.error("Vui lòng nhập mật khẩu");
-            return;
-        }
-
-        if (formData.password.length < 6) {
-            toast.error("Mật khẩu phải có ít nhất 6 ký tự");
-            return;
-        }
-
-        try {
-            const loginData = loginMethod === "phone"
-                ? { phone: formData.phone.trim(), password: formData.password }
-                : { email: formData.phone.trim(), password: formData.password };
-
-            const response = await dispatch(login(loginData)).unwrap();
-
-            console.log('Full login response:', response);
-
-            const resolvedUser = response?.user
-                || response?.data?.user
-                || response?.currentUser
-                || response?.data?.currentUser
-                || response?.userData;
-            const resolvedToken = response?.accessToken
-                || response?.token
-                || response?.data?.accessToken
-                || response?.data?.token
-                || response?.jwt;
-
-            if (response && resolvedUser && resolvedToken) {
-                const userData = resolvedUser as any;
-                const displayName = userData?.username || userData?.name || userData?.email || '';
-
-                toast.success(`Đăng nhập thành công! Chào mừng ${displayName}`, {
-                    duration: 3000,
-                });
-
-                console.log('User data:', userData);
-                console.log('User role:', userData.vaiTro);
-                console.log('User role name:', userData.vaiTro?.ten);
-
-                // Save credentials if remember me is checked
-                if (formData.rememberMe) {
-                    if (loginMethod === "phone") {
-                        localStorage.setItem('savedPhone', formData.phone.trim());
-                    } else {
-                        localStorage.setItem('savedEmail', formData.phone.trim());
-                    }
-                }
-
-                router.replace("/strager-chat");
-
-                onLoginSuccess();
-            } else {
-                toast.error("Đăng nhập thất bại - Dữ liệu không hợp lệ");
-            }
-        } catch (err: unknown) {
-            console.error('Login error:', err);
-            const errorMessage = (typeof err === 'object' && err !== null && 'message' in err)
-                ? String((err as { message?: string }).message)
-                : "Đăng nhập thất bại. Vui lòng kiểm tra lại thông tin.";
-            toast.error(errorMessage);
-        }
-    }
-
-    // Chuyển hướng nếu đã đăng nhập
-    useEffect(() => {
-        if (isAuthenticated) {
-            router.push("/strager-chat");
-        }
-    }, [isAuthenticated, router]);
-
-    // Load saved credentials if remember me was checked
-    useEffect(() => {
-        if (typeof window !== 'undefined') {
-            const savedPhone = localStorage.getItem('savedPhone');
-            const savedEmail = localStorage.getItem('savedEmail');
-            const savedRememberMe = localStorage.getItem('rememberMe') === 'true';
-
-            if (savedRememberMe) {
-                if (savedPhone) {
-                    setFormData(prev => ({
-                        ...prev,
-                        phone: savedPhone,
-                        rememberMe: true
-                    }));
-                    setIsRememberMe(true);
-                    setLoginMethod("phone");
-                } else if (savedEmail) {
-                    setFormData(prev => ({
-                        ...prev,
-                        phone: savedEmail,
-                        rememberMe: true
-                    }));
-                    setIsRememberMe(true);
-                    setLoginMethod("email");
-                }
-            }
-        }
-    }, []);
-
-    const handleInputChange = (field: string, value: string | boolean) => {
-        setFormData((prev) => ({ ...prev, [field]: value }))
-
-        // Clear error when user starts typing
-        if (field === 'phone' || field === 'password') {
-            dispatch(clearError());
-        }
-
-        // Save phone when remember me is checked
-        if (field === 'rememberMe' && value === true) {
-            localStorage.setItem('rememberMe', 'true');
-        } else if (field === 'rememberMe' && value === false) {
-            localStorage.removeItem('rememberMe');
-            localStorage.removeItem('savedPhone');
-            localStorage.removeItem('savedEmail');
-        } else if (field === 'phone' && formData.rememberMe) {
-            if (loginMethod === "phone") {
-                localStorage.setItem('savedPhone', value as string);
-            } else {
-                localStorage.setItem('savedEmail', value as string);
-            }
-        }
-    }
+    const { isLoading, error } = useSelector((state: RootState) => state.auth)
 
     return (
         <div className="min-h-screen flex relative">
@@ -242,20 +63,9 @@ function LoginForm({ onSwitchToRegister, onLoginSuccess }: LoginFormProps) {
                     )}
 
                     {/* Login Form */}
-                    <FormInput
-                        onSubmit={(data) => {
-                            setFormData(data);
-                            // FormInput sẽ tự động gọi handleSubmitLogin thông qua form submit
-                        }}
-                        isLoading={isLoading}
-                        loginMethod={loginMethod}
-                        setLoginMethod={handleLoginMethodChange}
-                        formData={formData}
-                        handleInputChange={handleInputChange}
-                        showPassword={showPassword}
-                        setShowPassword={setShowPassword}
-                        handleSubmitLogin={handleSubmitLogin}
+                    <FormLogin
                         onSwitchToRegister={onSwitchToRegister}
+                        onLoginSuccess={onLoginSuccess}
                     />
 
                     {/* Footer */}
