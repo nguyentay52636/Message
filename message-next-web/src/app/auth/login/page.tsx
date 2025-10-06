@@ -4,7 +4,7 @@ import React from "react"
 import { useRouter } from "next/navigation"
 import { useSelector } from "react-redux"
 import { RootState } from "@/redux/store/store"
-import FormLogin from "@/components/auth/components/login/FormLogin"
+import FormLogin from "@/components/auth/components/login/RightPanel/FormLogin"
 import FooterLogin from "@/components/auth/components/login/FooterLogin"
 import LeftPanelLogin from "@/components/auth/components/login/LeftPanel/LeftPanelLogin"
 import { Alert } from "@/components/ui/alert"
@@ -20,10 +20,9 @@ function LoginForm({ onSwitchToRegister, onLoginSuccess }: LoginFormProps) {
 
     return (
         <div className="min-h-screen flex relative">
-            {/* Loading Overlay */}
             {isLoading && (
                 <div className="absolute inset-0 bg-black/20 backdrop-blur-sm z-50 flex items-center justify-center">
-                    <div className="bg-white rounded-2xl p-8 shadow-2xl flex flex-col items-center gap-4">
+                    <div className="bg-white rounded-2xl p-8 flex flex-col items-center gap-4">
                         <Spinner size="lg" className="text-blue-600" />
                         <p className="text-gray-700 font-medium">Đang đăng nhập...</p>
                     </div>
@@ -32,11 +31,10 @@ function LoginForm({ onSwitchToRegister, onLoginSuccess }: LoginFormProps) {
 
             <LeftPanelLogin />
 
-            <div className="w-full lg:w-1/2 flex items-center justify-center p-8 bg-gray-50">
+            <div className="w-full lg:w-1/2 flex items-center justify-center p-10 bg-gray-50 rounded-3xl">
                 <div className="w-full max-w-md">
-                    {/* Mobile Logo */}
                     <div className="lg:hidden text-center mb-8">
-                        <div className="w-16 h-16 bg-gradient-to-br from-blue-600 to-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
+                        <div className="w-16 h-16 bg-blue-400 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
                             <svg className="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
                                 <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10c1.54 0 3-.35 4.31-.99l3.91 1.99c.39.2.85-.13.85-.56v-3.6C22.35 17.2 23 14.7 23 12c0-5.52-4.48-10-11-10zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z" />
                             </svg>
@@ -50,8 +48,6 @@ function LoginForm({ onSwitchToRegister, onLoginSuccess }: LoginFormProps) {
                         <h1 className="text-3xl font-bold text-gray-900 mb-2">Đăng nhập</h1>
                         <p className="text-gray-600">Chào mừng bạn trở lại với Zalo</p>
                     </div>
-
-                    {/* Error Display */}
                     {error && (
                         <Alert
                             variant="destructive"
@@ -61,14 +57,10 @@ function LoginForm({ onSwitchToRegister, onLoginSuccess }: LoginFormProps) {
                             {error}
                         </Alert>
                     )}
-
-                    {/* Login Form */}
                     <FormLogin
                         onSwitchToRegister={onSwitchToRegister}
                         onLoginSuccess={onLoginSuccess}
                     />
-
-                    {/* Footer */}
                     <FooterLogin />
                 </div>
             </div>

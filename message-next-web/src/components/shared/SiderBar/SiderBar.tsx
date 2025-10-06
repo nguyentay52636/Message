@@ -9,6 +9,7 @@ import { useSelector } from "react-redux"
 import { selectAuth } from "@/redux/slices/authSlice"
 import { UserDropdown } from "./UserDropdown"
 import { useRouter } from "next/navigation"
+import SiderBarItem from "./components/SiderBarItem"
 
 interface NavigationStripProps {
     onToggleMobileSidebar?: () => void
@@ -45,7 +46,7 @@ export function SiderBar({ onToggleMobileSidebar }: NavigationStripProps) {
     ];
     return (
         <TooltipProvider>
-            <div className=" h-full bg-blue-600 flex flex-col items-center py-2 sm:py-4 space-y-2 sm:space-y-4 shadow-lg">
+            <div className=" h-full w-17! bg-blue-600 flex flex-col items-center py-2 sm:py-4 space-y-2 sm:space-y-4 shadow-lg ">
                 {/* User Avatar */}
                 <div className="relative group">
                     {
@@ -56,31 +57,9 @@ export function SiderBar({ onToggleMobileSidebar }: NavigationStripProps) {
                     <div className="absolute -bottom-1 -right-1 w-3 h-3 sm:w-4 sm:h-4 bg-green-500 border-2 border-blue-500 shadow-lg rounded-full cursor-pointer"></div>
                 </div>
 
-                {/* Navigation Icons */}
-                <div className="flex flex-col sm:space-y-4 w-full cursor-pointer px-2! py-6!">
+                <div className="flex flex-col sm:space-y-4 w-full cursor-pointer m-2 p-2! ">
                     {menuItems.map((item, index) => (
-                        <Tooltip key={index}>
-                            <TooltipTrigger asChild className="w-full">
-                                <div className="relative !">
-                                    <Button
-                                        variant="ghost"
-                                        onClick={item.onClick}
-                                        className="w-full p-[30px]!  cursor-pointer text-white hover:bg-white/10 hover:text-white  p-4 sm:p-3 rounded-xl bg-white/10 backdrop-blur-sm transition-all duration-200 hover:scale-105"
-                                    >
-                                        <item.icon className="w-[30px]! hover: h-[30px]! sm:w-10 sm:h-10" />
-                                    </Button>
-
-                                    {item.badge && (
-                                        <Badge className="absolute -top-3 right-0 bg-red-500 text-white text-xs px-1 py-0.5 h-6 sm:h-5 min-w-4 sm:min-w-5 rounded-full cursor-pointer flex items-center justify-center shadow-lg border-0 px-2 py-4">
-                                            {item.badge}
-                                        </Badge>
-                                    )}
-                                </div>
-                            </TooltipTrigger>
-                            <TooltipContent side="right" className="hidden md:block">
-                                <p>{item.label}</p>
-                            </TooltipContent>
-                        </Tooltip>
+                        <SiderBarItem key={index} item={item} index={index} />
                     ))}
                 </div>
 

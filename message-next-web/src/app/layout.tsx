@@ -1,10 +1,8 @@
 import "./globals.css";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { ReduxProvider } from "@/components/ReduxProvider";
-import { SiderBar } from "@/components/shared/SiderBar/SiderBar";
 import { Toaster } from "sonner";
-import { useSelector } from "react-redux";
-import { RootState } from "@/redux/store/store";
+import { SiderBar } from "@/components/shared/SiderBar/SiderBar";
 
 export default function RootLayout({
   children,
@@ -25,14 +23,9 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <ReduxProvider>
-            <div className="h-screen w-full flex overflow-hidden bg-background">
-
-
-      
-
-              <div className="flex-1 overflow-hidden">
-                {children}
-              </div>
+            <div className="flex h-screen w-full bg-background">
+              <SiderBar />
+              {children}
             </div>
             <Toaster position="top-right" richColors />
           </ReduxProvider>

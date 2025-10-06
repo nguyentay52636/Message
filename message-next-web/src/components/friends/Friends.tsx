@@ -80,7 +80,7 @@ export function FriendsPage({ onBack }: FriendsPageProps) {
             <HeaderMobile onBack={onBack || (() => { })} />
 
             <div className="flex h-screen w-full">
-                <div className="flex w-72 flex-col bg-card border-r border-border">
+                <div className="flex w-1/3 flex-col bg-card border-r border-border">
 
                     <SearchUser onBack={() => console.log("Back")} />
                     <div className="">
