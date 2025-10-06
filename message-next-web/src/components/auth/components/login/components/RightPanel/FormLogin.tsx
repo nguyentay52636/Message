@@ -10,18 +10,15 @@ import PasswordInput from "./components/PasswordInput"
 import RememberForgotRow from "./components/RememberForgotRow"
 import SocialButtons from "./components/SocialButtons"
 import { useLoginForm } from "./hooks/useLoginForm"
+import { useRouter } from "next/navigation"
 
-interface FormLoginProps {
-    onSwitchToRegister: () => void
-    onLoginSuccess: () => void
-}
-
-export default function FormLogin({ onSwitchToRegister, onLoginSuccess }: FormLoginProps) {
-    const { state, actions } = useLoginForm({ onLoginSuccess })
+export default function FormLogin() {
+    const router = useRouter()
+    const { state, actions } = useLoginForm({ onLoginSuccess: () => router.push('/strager-chat') })
     const { formData, loginMethod, showPassword, isLoading } = state
 
     return (
-        <div className="bg-white w-full p-4 border border-gray-100">
+        <div className="bg-white w-full p-4 border border-gray-100 w-full">
             <form onSubmit={actions.handleSubmitLogin} className="space-y-6">
                 <LoginMethodToggle
                     loginMethod={loginMethod}
@@ -71,8 +68,6 @@ export default function FormLogin({ onSwitchToRegister, onLoginSuccess }: FormLo
                         </>
                     )}
                 </Button>
-
-                {/* Divider */}
                 <div className="relative">
                     <div className="absolute inset-0 flex items-center">
                         <div className="w-full border-t border-gray-300" />
@@ -92,7 +87,7 @@ export default function FormLogin({ onSwitchToRegister, onLoginSuccess }: FormLo
                     Chưa có tài khoản?{" "}
                     <Button
                         variant='link'
-                        onClick={onSwitchToRegister}
+                        onClick={() => router.push('/auth/register')}
                         className="text-blue-600 hover:text-blue-700 font-semibold"
                     >
                         Đăng ký ngay

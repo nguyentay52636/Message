@@ -16,7 +16,7 @@ export default function LoginMethodToggle({ loginMethod, onChange, disabled }: L
             <Button
                 variant="outline"
                 onClick={() => onChange("phone")}
-                className={`flex-1 flex items-center bg-white! justify-center gap-2 py-3 px-4 rounded-xl text-sm font-semibold transition-all ${loginMethod === "phone" ? "bg-white text-blue-600 shadow-md" : "text-gray-600 hover:text-gray-800"}`}
+                className={`flex-1 flex text-black! items-center bg-white! justify-center gap-2 py-3 px-4 rounded-xl text-sm font-semibold transition-all ${loginMethod === "phone" ? "bg-white text-blue-600 shadow-md" : "text-gray-600 hover:text-gray-800"}`}
                 disabled={disabled}
             >
                 <Phone className="w-4 h-4" />
