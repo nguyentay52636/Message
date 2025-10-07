@@ -29,9 +29,9 @@ export default function BottomActions() {
               onClick={() => router.push("/settings")}
               variant="ghost"
               size="sm"
-              className="w-full px-[30px]! cursor-pointer p-2! text-white! hover:bg-white/20 p-2 sm:p-3 rounded-xl transition-all duration-200 hover:scale-105"
+              className="w-full my-4! px-[30px]! cursor-pointer p-2! text-white! hover:bg-white/20 p-2 sm:p-3 rounded-xl transition-all duration-200 hover:scale-105"
             >
-              <Settings className="w-[30px]! hover: h-[30px]! sm:w-10 sm:h-10" />
+              <Settings className="w-[30px]! my-4 hover: h-[30px]! sm:w-10 sm:h-10" />
             </Button>
           </TooltipTrigger>
           <TooltipContent side="right" className="hidden md:block">

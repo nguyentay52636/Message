@@ -9,7 +9,7 @@ import ResponeUser from "../Respone/ResponeUser"
 import { IUser } from "@/types/types"
 import { ChatAreaWithUser } from "@/chat/components/ChatArea/ChatAreaWithUser"
 import { Message } from "@/lib/Mock/dataMock"
-import { MainWindownChat } from "@/chat/ChatUpdate/MainWindownChat"
+import { MainWindownChat } from "@/components/StrangerChat/components/MainWindownChat"
 
 interface SearchUserProps {
   onBack: () => void

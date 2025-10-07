@@ -6,7 +6,6 @@ interface ResponeUserProps {
     loading?: boolean;
     searchQuery?: string;
     onSelectUser?: (user: IUser) => void;
-    // Legacy support for old prop name
     onSelect?: (user: IUser) => void;
 }
 
