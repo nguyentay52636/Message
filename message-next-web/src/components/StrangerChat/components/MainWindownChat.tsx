@@ -3,7 +3,7 @@
 import { useState } from "react"
 import MessageAreaWindownChat from "./MessageAreaWindownChat"
 import InputWindownChat from "./InputWindownChat"
-import InfoUserWindownChat from "./components/InfoUserWindownChat/InfoUserWindownChat"
+import InfoUserWindownChat from "./InfoUserWindownChat/InfoUserWindownChat"
 import HeaderWindownChat from "./HeaderWindownChat"
 import { IUser } from "@/types/types"
 import { Message } from "@/lib/Mock/dataMock"

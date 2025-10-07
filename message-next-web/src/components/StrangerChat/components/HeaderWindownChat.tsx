@@ -5,8 +5,8 @@ import { ArrowLeft, Search, Phone, Video, MoreHorizontal, UserCheck, Info, Menu,
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
-import SentRequestFriends from "./components/SentRequestFriends"
 import { IUser } from "@/types/types"
+import SentRequestFriends from "./SentRequestFriends"
 
 interface StrangerChatHeaderProps {
     user: IUser

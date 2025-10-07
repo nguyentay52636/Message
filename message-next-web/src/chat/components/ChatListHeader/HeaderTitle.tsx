@@ -3,10 +3,23 @@ import { Plus } from "lucide-react";
 import { Button } from '@/components/ui/button'
 import React from 'react'
 import { MoreHorizontal } from "lucide-react";
-export default function HeaderTitle() {
+import { IUser } from '@/types/types'
+
+interface HeaderTitleProps {
+    user: IUser | null
+}
+
+export default function HeaderTitle({ user }: HeaderTitleProps) {
     return (
         <div className="flex items-center justify-between mb-3 sm:mb-4">
-            <h1 className="text-lg sm:text-xl font-bold text-foreground">Tin nhắn</h1>
+            <div className="flex flex-col">
+                <h1 className="text-lg sm:text-xl font-bold text-foreground">Tin nhắn</h1>
+                {user && (
+                    <p className="text-xs text-muted-foreground">
+                        Xin chào, {user.username}
+                    </p>
+                )}
+            </div>
             <div className="flex items-center gap-1 sm:gap-2">
                 <Button
                     variant="ghost"

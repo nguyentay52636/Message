@@ -11,13 +11,13 @@ export default function SiderBarItem({ item, index }: SiderBarItemProps) {
         <>
             <Tooltip key={index}>
                 <TooltipTrigger asChild className="w-full">
-                    <div className="relative !">
+                    <div className="relative my-5!">
                         <Button
                             variant="ghost"
                             onClick={item.onClick}
-                            className="w-full p-[30px]!  cursor-pointer text-white hover:bg-white/10 hover:text-white  p-4 sm:p-3 rounded-xl bg-white/10 backdrop-blur-sm transition-all duration-200 hover:scale-105"
+                            className="w-full p-[30px]! p-1  cursor-pointer text-white hover:bg-blue-700! hover:text-white  p-4 sm:p-3 rounded-xl bg-white/10 backdrop-blur-sm transition-all duration-200 hover:scale-105"
                         >
-                            <item.icon className="w-[30px]! hover: h-[30px]! sm:w-10 sm:h-10" />
+                            <item.icon className="w-[28px]! hover: h-[28px]! sm:w-10 sm:h-10" />
                         </Button>
 
                         {item.badge && (

@@ -44,7 +44,7 @@ export function SiderBar({ onToggleMobileSidebar }: NavigationStripProps) {
 
     return (
         <TooltipProvider>
-            <div className=" h-full w-17! bg-blue-600 flex flex-col items-center py-2 sm:py-4 space-y-2 sm:space-y-4 shadow-lg ">
+            <div className=" h-full w-20! bg-blue-600 flex flex-col items-center py-2 sm:py-4 space-y-2 sm:space-y-4 shadow-lg ">
                 <div className="relative group">
                     {
                         isAuthenticated && user && (
@@ -63,6 +63,8 @@ export function SiderBar({ onToggleMobileSidebar }: NavigationStripProps) {
                 <BottomActions />
 
             </div>
+        {/* Settings */}
+
         </TooltipProvider >
     )
 }
