@@ -3,12 +3,10 @@ import { Pin } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { cn } from "@/lib/utils"
-import { ChatUser } from "@/lib/Mock/dataMock"
-
-
+import { IConversationDisplay } from "@/types/types"
 
 interface ChatListItemProps {
-    user: ChatUser
+    user: IConversationDisplay
     index: number
     isSelected: boolean
     onClick: () => void

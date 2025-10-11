@@ -1,13 +1,13 @@
-import { ChatUser } from '@/lib/Mock/dataMock'
 import React from 'react'
 import { ChatItem } from './ChatItem'
+import { IConversationDisplay } from '@/types/types'
 
 interface chatListProps {
     activeTab: "all" | "unread"
     onChatSelect: (chatId: string) => void
     selectedChat: string | null
     onToggleMobileSidebar?: () => void
-    user: ChatUser
+    user: IConversationDisplay
     index: number
 }
 
