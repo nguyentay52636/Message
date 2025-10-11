@@ -32,16 +32,21 @@ export const getAllConversations = async (): Promise<IConversation[]> => {
   }
 };
 
-// Get conversations of specific user
+
 export const getConversationOfUser = async (userId: string): Promise<IConversation[]> => {
   try {
-    const { data } = await baseApi.get<ApiResponse<IConversation[]>>(`/conversations/user/${userId}`);
-    if (data.success && data.data) {
+    const { data } = await baseApi.get<any>(`/conversations/user/${userId}`);
+    
+    if (data.status === 200 && data.data) {
+      return data.data;
+    } else if (data.success && data.data) {
       return data.data;
     }
+    
     throw new Error(data.message || 'Failed to fetch user conversations');
   } catch (error: any) {
-    throw new Error(error.message || 'Failed to fetch user conversations');
+    console.error('API Error:', error.response?.data || error.message);
+    throw new Error(error.response?.data?.message || error.message || 'Failed to fetch user conversations');
   }
 };
 

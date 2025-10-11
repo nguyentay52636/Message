@@ -113,3 +113,20 @@ export interface ICall {
   export interface AddMemberRequest {
     userId: string;
   }
+
+  // Interface for conversation display in chat list
+  export interface IConversationDisplay {
+    _id: string;
+    id: string;
+    name: string;
+    avatar: string;
+    lastMessage: string;
+    timestamp: string;
+    unreadCount?: number;
+    isOnline?: boolean;
+    isPinned?: boolean;
+    messageType?: "text" | "image" | "video" | "sticker" | "file";
+    type: 'personal' | 'group';
+    members: IUser[];
+    lastUpdated: Date;
+  }
