@@ -8,18 +8,19 @@ import { IFriendDisplay, IUser } from "@/types/types"
 interface ChatHeaderProps {
   activeTab: "all" | "unread"
   setActiveTab: (tab: "all" | "unread") => void
-  user: IUser
+  user: IUser | null
   friends: IFriendDisplay[]
   loadingFriends: boolean
   onToggleMobileSidebar?: () => void
   onSelectUser?: (u: IUser) => void
+  onConversationCreated?: (conversationId: string) => void
 }
 
-export function ChatListHeader({ activeTab, setActiveTab, user, friends, loadingFriends, onToggleMobileSidebar, onSelectUser }: ChatHeaderProps) {
+export function ChatListHeader({ activeTab, setActiveTab, user, friends, loadingFriends, onToggleMobileSidebar, onSelectUser, onConversationCreated }: ChatHeaderProps) {
   return (
     <div className="p-3 sm:p-4 border-b bg-card border-border">
       <HeaderTitle user={user} />
-      <ChatFilterSearch friends={friends} loadingFriends={loadingFriends} onSelectUser={onSelectUser} />
+      <ChatFilterSearch friends={friends} loadingFriends={loadingFriends} onSelectUser={onSelectUser} onConversationCreated={onConversationCreated} />
       <ChatTabsBar activeTab={activeTab} setActiveTab={setActiveTab} />
     </div>
   )

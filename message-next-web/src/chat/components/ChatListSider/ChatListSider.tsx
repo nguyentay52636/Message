@@ -12,11 +12,12 @@ interface ChatListSidebarProps {
     selectedChat: string | null
     onToggleMobileSidebar?: () => void
     onSelectUser?: (u: IUser) => void
+    onConversationCreated?: (conversationId: string) => void
 }
 
 
 
-export function ChatListSidebar({ onChatSelect, selectedChat, onToggleMobileSidebar, onSelectUser }: ChatListSidebarProps) {
+export function ChatListSidebar({ onChatSelect, selectedChat, onToggleMobileSidebar, onSelectUser, onConversationCreated }: ChatListSidebarProps) {
     const [activeTab, setActiveTab] = useState<"all" | "unread">("all")
     const [friends, setFriends] = useState<IFriendDisplay[]>([])
     const [loadingFriends, setLoadingFriends] = useState(false)
@@ -38,6 +39,7 @@ export function ChatListSidebar({ onChatSelect, selectedChat, onToggleMobileSide
                     loadingFriends={loadingFriends}
                     onToggleMobileSidebar={onToggleMobileSidebar}
                     onSelectUser={onSelectUser}
+                    onConversationCreated={onConversationCreated}
                 />
             </div>
 
@@ -45,6 +47,7 @@ export function ChatListSidebar({ onChatSelect, selectedChat, onToggleMobileSide
                 activeTab={activeTab}
                 onChatSelect={handleChatSelection}
                 selectedChat={selectedChat}
+                onConversationCreated={onConversationCreated}
             />
         </div>
     )

@@ -1,4 +1,6 @@
-import type React from "react"
+"use client"
+
+import React from "react"
 import { Pin } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
@@ -13,12 +15,13 @@ interface ChatListItemProps {
 }
 
 export function ChatItem({ user, index, isSelected, onClick }: ChatListItemProps) {
+    console.log(user)
     const getMessageIcon = (type: string) => {
         switch (type) {
             case "image":
                 return "📷"
             case "video":
-                return "▶️"
+                return "🎥"
             case "sticker":
                 return "😊"
             case "file":
@@ -28,88 +31,69 @@ export function ChatItem({ user, index, isSelected, onClick }: ChatListItemProps
         }
     }
 
-    const handleClick = (e: React.MouseEvent) => {
-        onClick()
-    }
-
     return (
         <div
-            onClick={handleClick}
+            onClick={onClick}
             className={cn(
-                "flex items-center gap-2 sm:gap-3  p-2 sm:p-4 cursor-pointer transition-all duration-200 rounded-xl hover:scale-[1.02] active:scale-[0.9]",
-                isSelected ? "bg-accent/50 shadow-lg border-primary" : "hover:bg-gray-200!",
+                "flex items-center gap-3 p-3 sm:p-4 cursor-pointer transition-all duration-200 rounded-2xl border border-transparent hover:bg-[#f1f5f9] hover:shadow-sm",
+                isSelected && "bg-[#e6f3ff] border-[#107bbd] shadow-sm"
             )}
         >
+            {/* Avatar + trạng thái */}
             <div className="relative flex-shrink-0">
-                <Avatar className="w-15 h-15 sm:w-11 sm:h-11 lg:w-12 lg:h-12 shadow-md">
+                <Avatar className="w-12 h-12 sm:w-14 sm:h-14 border border-gray-200 shadow-sm">
                     <AvatarImage src={user.avatar} />
-                    <AvatarFallback className="bg-blue-600 text-primary-foreground font-semibold text-sm">
+                    <AvatarFallback className="bg-[#107bbd] text-white font-semibold">
                         {user.name.charAt(0)}
                     </AvatarFallback>
                 </Avatar>
+
                 {user.isOnline && (
-                    <div className="absolute -bottom-1 -right-1 w-3 h-3 sm:w-3.5 sm:h-3.5 lg:w-4 lg:h-4 bg-green-500 border-2 border-background rounded-full shadow-sm"></div>
-                )}
-                {/* Special badges for specific users */}
-                {index === 0 && user.unreadCount && (
-                    <div className="absolute -top-1 -right-1 w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6 bg-destructive text-destructive-foreground text-xs flex items-center justify-center rounded-full shadow-lg font-bold">
-                        {user.unreadCount}
-                    </div>
-                )}
-                {index === 3 && user.unreadCount && (
-                    <div className="absolute -top-1 -right-1 w-3.5 h-3.5 sm:w-4 sm:h-4 lg:w-5 lg:h-5 bg-orange-500 text-white text-xs flex items-center justify-center rounded-full shadow-lg font-bold">
-                        {user.unreadCount}
-                    </div>
-                )}
-                {index === 6 && user.unreadCount && (
-                    <div className="absolute -top-1 -right-1 w-3.5 h-3.5 sm:w-4 sm:h-4 lg:w-5 lg:h-5 bg-destructive text-destructive-foreground text-xs flex items-center justify-center rounded-full shadow-lg font-bold">
-                        {user.unreadCount}
-                    </div>
+                    <div className="absolute bottom-0 right-0 w-3.5 h-3.5 bg-green-500 border-2 border-white rounded-full shadow-sm"></div>
                 )}
             </div>
 
+            {/* Nội dung chính */}
             <div className="flex-1 min-w-0 overflow-hidden">
-                <div className="flex items-center gap-1 sm:gap-2 mb-0.5 sm:mb-1">
-                    <span
-                        className={cn("font-semibold text-xs sm:text-sm truncate flex-1", isSelected ? "text-primary" : "text-foreground")}
+                <div className="flex items-center justify-between mb-0.5">
+                    <p
+                        className={cn(
+                            "font-semibold text-[15px] sm:text-[16px] text-gray-900 truncate",
+                            isSelected && "text-[#107bbd]"
+                        )}
                     >
                         {user.name}
-                    </span>
-                    {user.isPinned && <Pin className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-amber-500 flex-shrink-0" />}
-                    {index === 2 && (
-                        <div className="flex items-center gap-1 flex-shrink-0">
-                            <span className="text-yellow-500 text-xs">⚡</span>
-                            <span className="text-xs text-primary font-medium hidden sm:inline">{user.timestamp}</span>
-                        </div>
-                    )}
+                    </p>
+                    <div className="flex items-center gap-1 text-xs text-gray-500">
+                        {user.isPinned && <Pin className="w-3 h-3 text-amber-500" />}
+                        {user.timestamp && <span>{user.timestamp}</span>}
+                    </div>
                 </div>
+
                 <div className="flex items-center gap-1">
                     {user.messageType && getMessageIcon(user.messageType) && (
-                        <span className="text-xs mr-1 flex-shrink-0">{getMessageIcon(user.messageType)}</span>
+                        <span className="text-sm mr-1 flex-shrink-0 opacity-80">
+                            {getMessageIcon(user.messageType)}
+                        </span>
                     )}
-                    <span
-                        className={cn("text-xs truncate flex-1", isSelected ? "text-primary/80" : "text-muted-foreground")}
-                        style={{
-                            display: "-webkit-box",
-                            WebkitLineClamp: 2,
-                            WebkitBoxOrient: "vertical",
-                            overflow: "hidden",
-                        }}
+                    <p
+                        className={cn(
+                            "text-sm text-gray-600 truncate",
+                            isSelected && "text-[#107bbd]/80"
+                        )}
                     >
-                        {user.lastMessage}
-                    </span>
+                        {user.lastMessage || " "}
+                    </p>
                 </div>
             </div>
 
-            <div className="flex flex-col items-end gap-1 flex-shrink-0">
-                {user.timestamp && index !== 2 && (
-                    <span className="text-xs whitespace-nowrap text-muted-foreground hidden sm:block">{user.timestamp}</span>
-                )}
+            {/* Badge tin chưa đọc */}
+            <div className="flex flex-col items-end justify-between h-full text-center  text-gray-100! rounded-full bg-red-600 px-3 py-1   ">
                 {user.unreadCount && user.unreadCount > 0 && (
                     <Badge
                         className={cn(
-                            " px-2 py-1 rounded-full text-white!",
-                            user.unreadCount >= 5 ? "bg-primary!" : "bg-red-500!",
+                            "px-2 py-1 rounded-full text-[12px ] font-semibold text-white",
+                            user.unreadCount >= 5 ? "bg-[#107bbd]" : "bg-red-500"
                         )}
                     >
                         {user.unreadCount >= 5 ? "5+" : user.unreadCount}
