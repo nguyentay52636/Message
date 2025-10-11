@@ -1,94 +1,109 @@
-import { Users } from 'lucide-react'
-import { UserPlus } from 'lucide-react'
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
-import { Search } from 'lucide-react'
-import React, { useState, useEffect, useCallback } from 'react'
-import { IUser, IFriendDisplay } from '@/types/types'
-import { FindUserByPhone } from '@/apis/friendsRequestApi'
-import ResponeUser from '@/components/friends/components/Respone/ResponeUser'
+"use client"
+
+import { Users, UserPlus, Search } from "lucide-react"
+import { Input } from "@/components/ui/input"
+import { Button } from "@/components/ui/button"
+import React, { useState, useEffect, useCallback } from "react"
+import { IUser, IFriendDisplay } from "@/types/types"
+import { FindUserByPhone } from "@/apis/friendsRequestApi"
+import ResponeUser from "@/components/friends/components/Respone/ResponeUser"
 
 interface ChatFilterSearchProps {
     friends: IFriendDisplay[]
     loadingFriends: boolean
     onSelectUser?: (u: IUser) => void
+    onConversationCreated?: (conversationId: string) => void
 }
 
-export default function ChatFilterSearch({ friends, loadingFriends, onSelectUser }: ChatFilterSearchProps) {
-    const [searchQuery, setSearchQuery] = useState("");
-    const [user, setUser] = useState<IUser | null>(null);
-    const [loading, setLoading] = useState(false);
+export default function ChatFilterSearch({
+    friends,
+    loadingFriends,
+    onSelectUser,
+    onConversationCreated,
+}: ChatFilterSearchProps) {
+    const [searchQuery, setSearchQuery] = useState("")
+    const [user, setUser] = useState<IUser | null>(null)
+    const [loading, setLoading] = useState(false)
 
-    const handleSelectUser = useCallback((u: IUser) => {
-        console.log("ChatFilterSearch - onSelectUser:", u);
-        setUser(u); //
-        onSelectUser?.(u);
-    }, [onSelectUser]);
+    const handleSelectUser = useCallback(
+        (u: IUser) => {
+            console.log("ChatFilterSearch - onSelectUser:", u)
+            setUser(u)
+            onSelectUser?.(u)
+        },
+        [onSelectUser]
+    )
 
     useEffect(() => {
         if (!searchQuery) {
-            setUser(null);
-            return;
+            setUser(null)
+            return
         }
 
         const delay = setTimeout(async () => {
             try {
-                setLoading(true);
-                const res = await FindUserByPhone(searchQuery);
-                if (res && res.length > 0) {
-                    setUser(res[0]);
-                } else {
-                    setUser(null);
-                }
+                setLoading(true)
+                const res = await FindUserByPhone(searchQuery)
+                if (res && res.length > 0) setUser(res[0])
+                else setUser(null)
             } catch (error) {
-                console.error(error);
-                setUser(null);
+                console.error(error)
+                setUser(null)
             } finally {
-                setLoading(false);
+                setLoading(false)
             }
-        }, 400); // debounce 400ms
+        }, 400)
 
-        return () => clearTimeout(delay);
-    }, [searchQuery]);
+        return () => clearTimeout(delay)
+    }, [searchQuery])
 
     return (
-        <div className="">
-            <div className="flex items-center justify-between mb-3 sm:mb-4">
-                <div className="w-full">
+        <div className="w-full px-3 sm:px-0">
+            <div className="flex items-center gap-2 mb-3">
+                <div className="relative flex-1">
                     <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                     <Input
-                        placeholder="Tìm kiếm tin nhắn, bạn bè..."
-                        className="pl-10 pr-12 border-0 focus:ring-2 focus:ring-ring rounded-xl h-9 sm:h-10 text-sm bg-muted text-foreground placeholder:text-muted-foreground focus:bg-background focus:shadow-md"
+                        placeholder="Tìm kiếm bạn bè hoặc tin nhắn..."
+                        className="pl-9 pr-10 h-10 bg-[#f4f5f7] border-none rounded-full text-sm placeholder:text-gray-400 focus-visible:ring-2 focus-visible:ring-blue-400"
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                     />
                 </div>
-                <div className="right-3 top-1/2 transform  flex gap-1">
-                    <Button variant="ghost" className="p-1 text-medium text-black cursor-pointer h-8 w-68 sm:h-8 sm:w-8 rounded-full hover:bg-accent">
-                        <Users className="w-10  h-10 sm:w-7 sm:h-7 text-black " />
+                <div className="flex gap-1">
+                    <Button
+                        variant="ghost"
+                        className="h-10 w-10 rounded-full bg-[#e9eef5] hover:bg-[#d8e3f2] transition"
+                    >
+                        <Users className="w-5 h-5 text-[#107bbd]" />
                     </Button>
-                    <Button variant="ghost" className="p-1 cursor-pointer h-8 w-8 sm:h-8 sm:w-8 rounded-full hover:bg-accent">
-                        <UserPlus className="w-10  h-10 sm:w-7 sm:h-7 text-black " />
+                    <Button
+                        variant="ghost"
+                        className="h-10 w-10 rounded-full bg-[#e9eef5] hover:bg-[#d8e3f2] transition"
+                    >
+                        <UserPlus className="w-5 h-5 text-[#107bbd]" />
                     </Button>
                 </div>
             </div>
 
-            {/* Friends List Section */}
+            {/* --- Danh sách bạn bè --- */}
             {!searchQuery && (
-                <div className="mb-3">
+                <div>
                     <div className="flex items-center justify-between mb-2">
-                        <h3 className="text-sm font-medium text-foreground">Bạn bè ({friends.length})</h3>
+                        <h3 className="text-sm font-semibold text-[#107bbd]">
+                            Bạn bè ({friends.length})
+                        </h3>
                         {loadingFriends && (
-                            <div className="text-xs text-muted-foreground">Đang tải...</div>
+                            <div className="text-xs text-gray-400">Đang tải...</div>
                         )}
                     </div>
-                    <div className="max-h-32 overflow-y-auto">
+
+                    {/* <div className="max-h-[250px] overflow-y-auto">
                         {friends.length > 0 ? (
                             <div className="space-y-1">
                                 {friends.map((friend) => (
                                     <div
                                         key={friend.id}
-                                        className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent cursor-pointer"
+                                        className="flex items-center gap-3 p-2 rounded-xl hover:bg-[#f0f4f8] cursor-pointer transition"
                                         onClick={() => {
                                             const userData: IUser = {
                                                 _id: friend.id,
@@ -96,50 +111,60 @@ export default function ChatFilterSearch({ friends, loadingFriends, onSelectUser
                                                 username: friend.username,
                                                 email: friend.email,
                                                 phone: friend.phone,
-                                                password: '', // Required field but not used for display
+                                                password: "",
                                                 avatar: friend.avatar,
                                                 status: friend.status,
-                                                lastSeen: friend.lastSeen ? new Date(friend.lastSeen) : undefined
+                                                lastSeen: friend.lastSeen
+                                                    ? new Date(friend.lastSeen)
+                                                    : undefined,
                                             }
                                             handleSelectUser(userData)
                                         }}
                                     >
-                                        <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
-                                            {friend.avatar ? (
-                                                <img
-                                                    src={friend.avatar}
-                                                    alt={friend.username}
-                                                    className="w-8 h-8 rounded-full object-cover"
-                                                />
-                                            ) : (
-                                                <span className="text-xs font-medium text-primary">
-                                                    {friend.username.charAt(0).toUpperCase()}
-                                                </span>
-                                            )}
+                                        <div className="relative">
+                                            <img
+                                                src={
+                                                    friend.avatar ||
+                                                    `https://ui-avatars.com/api/?name=${friend.username}&background=107bbd&color=fff`
+                                                }
+                                                alt={friend.username}
+                                                className="w-10 h-10 rounded-full object-cover border border-[#e6ebf2]"
+                                            />
+                                            <span
+                                                className={`absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full border border-white ${friend.isOnline ? "bg-green-500" : "bg-gray-400"
+                                                    }`}
+                                            ></span>
                                         </div>
                                         <div className="flex-1 min-w-0">
-                                            <p className="text-sm font-medium text-foreground truncate">
+                                            <p className="text-sm font-medium text-gray-800 truncate">
                                                 {friend.username}
                                             </p>
-                                            <p className="text-xs text-muted-foreground">
-                                                {friend.isOnline ? 'Đang hoạt động' : 'Ngoại tuyến'}
+                                            <p className="text-xs text-gray-500">
+                                                {friend.isOnline ? "Đang hoạt động" : "Ngoại tuyến"}
                                             </p>
                                         </div>
-                                        <div className={`w-2 h-2 rounded-full ${friend.isOnline ? 'bg-green-500' : 'bg-gray-400'
-                                            }`} />
                                     </div>
                                 ))}
                             </div>
-                        ) : !loadingFriends && (
-                            <p className="text-xs text-muted-foreground text-center py-2">
-                                Chưa có bạn bè nào
-                            </p>
+                        ) : (
+                            !loadingFriends && (
+                                <p className="text-xs text-gray-400 text-center py-3">
+                                    Chưa có bạn bè nào 😢
+                                </p>
+                            )
                         )}
-                    </div>
+                    </div> */}
                 </div>
             )}
 
-            <ResponeUser user={user} loading={loading} searchQuery={searchQuery} onSelectUser={handleSelectUser} />
+            {/* --- Kết quả tìm kiếm --- */}
+            <ResponeUser
+                users={user}
+                loading={loading}
+                searchQuery={searchQuery}
+                onSelectUser={handleSelectUser}
+                onConversationCreated={onConversationCreated}
+            />
         </div>
     )
 }

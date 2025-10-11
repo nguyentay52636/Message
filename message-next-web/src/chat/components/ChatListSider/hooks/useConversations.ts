@@ -9,6 +9,7 @@ interface UseConversationsReturn {
     loading: boolean
     error: string | null
     refetch: () => void
+    refreshConversations: () => void
 }
 
 export const useConversations = (): UseConversationsReturn => {
@@ -119,10 +120,16 @@ export const useConversations = (): UseConversationsReturn => {
         fetchConversations()
     }, [user, isAuthenticated])
 
+    const refreshConversations = () => {
+        console.log("🔄 Refreshing conversations...")
+        fetchConversations()
+    }
+
     return {
         conversations,
         loading,
         error,
-        refetch: fetchConversations
+        refetch: fetchConversations,
+        refreshConversations
     }
 }

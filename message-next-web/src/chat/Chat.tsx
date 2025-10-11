@@ -58,6 +58,11 @@ export default function Chat({ setSelectedChat, selectedChat, onToggleMobileSide
         setIsMobileSidebarOpen(false)
     }
 
+    const handleConversationCreated = (conversationId: string) => {
+        console.log("🎉 New conversation created:", conversationId)
+        // Conversation list will automatically refresh via the callback chain
+    }
+
     return (
         <div className="flex h-full w-full relative">
             {isMobileSidebarOpen && (
@@ -77,6 +82,7 @@ export default function Chat({ setSelectedChat, selectedChat, onToggleMobileSide
                     selectedChat={selectedChat}
                     onToggleMobileSidebar={() => setIsMobileSidebarOpen(false)}
                     onSelectUser={handleSelectUserFromSearch}
+                    onConversationCreated={handleConversationCreated}
                 />
             </div>
 
