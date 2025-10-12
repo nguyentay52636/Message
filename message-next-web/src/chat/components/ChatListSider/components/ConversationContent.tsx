@@ -3,7 +3,7 @@ import { ConversationList } from "./ConversationList"
 import { ConversationEmptyState } from "./ConversationEmptyState"
 import { ConversationErrorState } from "./ConversationErrorState"
 import { ConversationLoadingState } from "./ConversationLoadingState"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 
 interface ConversationContentProps {
     activeTab: "all" | "unread"
@@ -19,18 +19,24 @@ export const ConversationContent = ({
     onConversationCreated
 }: ConversationContentProps) => {
     const { conversations, loading, error, refreshConversations } = useConversations()
+    const [refreshTrigger, setRefreshTrigger] = useState(0)
 
     const filteredConversations = activeTab === "unread"
         ? conversations.filter((conv) => conv.unreadCount && conv.unreadCount > 0)
         : conversations
 
-    // Listen for new conversation creation
     useEffect(() => {
         if (onConversationCreated) {
             console.log("🔄 Conversation created, refreshing list...")
+            setRefreshTrigger(prev => prev + 1)
+        }
+    }, [onConversationCreated])
+
+    useEffect(() => {
+        if (refreshTrigger > 0) {
             refreshConversations()
         }
-    }, [onConversationCreated, refreshConversations])
+    }, [refreshTrigger, refreshConversations])
 
     const renderContent = () => {
         if (error) {

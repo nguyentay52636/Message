@@ -1,6 +1,5 @@
 import { Card } from "@/components/ui/card";
 import { Users } from "lucide-react";
-import FriendRequestItem from "./FriendRequest/FriendRequestItem";
 
 export default function Group() {
     return (

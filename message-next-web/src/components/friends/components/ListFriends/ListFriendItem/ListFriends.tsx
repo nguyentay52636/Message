@@ -18,10 +18,10 @@ export default function ListFriendsComponent() {
             setIsLoading(true);
             try {
                 const friendsData = await getAllFriendByUserId(userId);
-                console.log('Friends data:', friendsData);
+                // console.log('Friends data:', friendsData);
                 setFriends(friendsData);
             } catch (error) {
-                console.error('Error fetching friends:', error);
+                // console.error('Error fetching friends:', error);
             } finally {
                 setIsLoading(false);
             }

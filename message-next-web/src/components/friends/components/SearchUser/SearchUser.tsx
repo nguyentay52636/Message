@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/button"
 import { FindUserByPhone } from "@/apis/friendsRequestApi"
 import ResponeUser from "../Respone/ResponeUser"
 import { IUser } from "@/types/types"
-import { ChatAreaWithUser } from "@/chat/components/ChatArea/ChatAreaWithUser"
 import { Message } from "@/lib/Mock/dataMock"
 import { MainWindownChat } from "@/components/StrangerChat/components/MainWindownChat"
 
@@ -24,7 +23,7 @@ export default function SearchUser({ onBack }: SearchUserProps) {
   const [selectedChat, setSelectedChat] = useState<string | null>(null)
   const [message, setMessage] = useState("")
 
-  console.log("SearchUser render - selectedUser:", selectedUser)
+  // console.log("SearchUser render - selectedUser:", selectedUser)
 
   const onSendMessage = () => {
     setMessage("")
@@ -35,9 +34,9 @@ export default function SearchUser({ onBack }: SearchUserProps) {
   }, [selectedUser])
 
   const handleUserSelect = useCallback((u: IUser) => {
-    console.log("SearchUser - handleUserSelect called with user:", u);
+    // console.log("SearchUser - handleUserSelect called with user:", u);
     setSelectedUser(u);
-    console.log("SearchUser - selectedUser should be set");
+    // console.log("SearchUser - selectedUser should be set");
   }, [])
 
   useEffect(() => {
@@ -67,7 +66,7 @@ export default function SearchUser({ onBack }: SearchUserProps) {
     return () => clearTimeout(delay)
   }, [searchQuery])
 
-  console.log("Rendering - selectedUser exists:", !!selectedUser);
+  // console.log("Rendering - selectedUser exists:", !!selectedUser);
 
   return (
     <div className="">
@@ -86,7 +85,6 @@ export default function SearchUser({ onBack }: SearchUserProps) {
             <h1 className="text-xl font-bold">Tìm bạn</h1>
           </div>
 
-          {/* Search Input */}
           <div className="relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
             <Input
@@ -98,7 +96,7 @@ export default function SearchUser({ onBack }: SearchUserProps) {
           </div>
 
           <ResponeUser
-            user={searchResult}
+            users={searchResult}
             loading={loading}
             searchQuery={searchQuery}
             onSelectUser={handleUserSelect}

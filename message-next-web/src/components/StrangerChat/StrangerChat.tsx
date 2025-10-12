@@ -21,8 +21,8 @@ export default function StrangerChat() {
 
     const handleSelectUser = (user: IUser) => {
         console.log("Strager-chat page - handleSelectUser:", user)
+        console.log(user._id)
         setSelectedUser(user)
-        // Reset messages when selecting a new user
         setMessages([])
         setSelectedChat(null)
     }

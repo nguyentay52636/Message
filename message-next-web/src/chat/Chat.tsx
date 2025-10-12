@@ -60,6 +60,7 @@ export default function Chat({ setSelectedChat, selectedChat, onToggleMobileSide
 
     const handleConversationCreated = (conversationId: string) => {
         console.log("🎉 New conversation created:", conversationId)
+        console.log("🔄 Conversation list should refresh automatically...")
         // Conversation list will automatically refresh via the callback chain
     }
 

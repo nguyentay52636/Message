@@ -8,7 +8,6 @@ interface FriendItemProps {
     friend: IFriendDisplay
 }
 export default function FriendItem({ friend }: FriendItemProps) {
-    // Format last seen time
     const formatLastSeen = (lastSeen?: string) => {
         if (!lastSeen) return "lâu rồi";
 

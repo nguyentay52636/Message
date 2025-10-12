@@ -21,6 +21,9 @@ export default function ResponeUser(props: ResponeUserProps) {
     const router = useRouter();
     const [creating, setCreating] = useState(false);
     const { user } = useSelector(selectAuth);
+    const userId = user?._id;
+    console.log(users?._id)
+    console.log(userId)
 
     if (loading) {
         return <p className="text-sm text-gray-500 mt-4">Đang tìm kiếm...</p>;
@@ -38,24 +41,24 @@ export default function ResponeUser(props: ResponeUserProps) {
 
     const handleChat = async (e: React.MouseEvent) => {
         e.stopPropagation();
-        if (!user?._id || !users?._id) return;
+        if (!userId || !users?._id) return;
         try {
             setCreating(true);
+            console.log("🚀 Creating conversation between:", userId, "and", users._id);
 
             const newConversation = await addConversation({
-                members: [user._id, users._id],
+                members: [userId, users._id],
                 type: "personal",
             });
-            console.log("✅ Conversation created:", newConversation);
 
-            // Notify parent component about new conversation
+            console.log("✅ Conversation created successfully:", newConversation);
+
             if (onConversationCreated) {
+                console.log("📞 Calling onConversationCreated with ID:", newConversation._id);
                 onConversationCreated(newConversation._id);
             }
-
-            router.push(`/chat/${newConversation._id}`);
+            router.push(`/strager-chat/${newConversation._id}`);
         } catch (error: any) {
-            console.error("❌ Lỗi khi tạo cuộc trò chuyện:", error.message);
             alert("Không thể tạo cuộc trò chuyện!");
         } finally {
             setCreating(false);

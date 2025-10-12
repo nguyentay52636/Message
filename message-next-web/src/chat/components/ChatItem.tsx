@@ -15,7 +15,6 @@ interface ChatListItemProps {
 }
 
 export function ChatItem({ user, index, isSelected, onClick }: ChatListItemProps) {
-    console.log(user)
     const getMessageIcon = (type: string) => {
         switch (type) {
             case "image":

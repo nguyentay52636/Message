@@ -1,51 +1,70 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { Check, X } from "lucide-react";
+import { Check, X, Users } from "lucide-react";
 import { mockGroupInvitations } from "../mock/data";
-import { Users } from "lucide-react";
 
 export default function GroupInvitations() {
     return (
         <div className="space-y-6">
             {/* Header */}
             <div className="flex items-center gap-3">
-                <Users className="w-6 h-6 text-primary" />
-                <h1 className="text-2xl font-bold">Lời mời vào nhóm và cộng đồng</h1>
+                <Users className="w-6 h-6 text-blue-600" />
+                <h1 className="text-xl font-semibold text-gray-900">
+                    Lời mời vào nhóm & cộng đồng
+                </h1>
             </div>
 
             {/* Stats */}
-            <div className="bg-muted/30 rounded-xl p-4">
-                <p className="text-lg font-semibold">Lời mời ({mockGroupInvitations.length})</p>
+            <div className="bg-blue-50 border border-blue-100 rounded-lg p-3 flex items-center justify-between">
+                <p className="text-sm text-gray-700">
+                    Tổng cộng <span className="font-semibold text-blue-700">{mockGroupInvitations.length}</span> lời mời
+                </p>
             </div>
 
             {/* Group Invitations List */}
-            <div className="space-y-4">
+            <div className="space-y-3">
                 {mockGroupInvitations.map((invitation) => (
-                    <Card key={invitation.id} className="hover:shadow-md transition-shadow">
+                    <Card
+                        key={invitation.id}
+                        className="rounded-xl border border-gray-100 hover:border-blue-200 hover:shadow-sm transition-all duration-200 bg-white"
+                    >
                         <CardContent className="p-4">
-                            <div className="flex items-center justify-between">
-                                <div className="flex items-center gap-3">
-                                    <Avatar className="w-12 h-12">
-                                        <AvatarImage src={invitation.groupAvatar || "/placeholder.svg"} />
-                                        <AvatarFallback className="bg-gradient-to-br from-primary/80 to-secondary/80 text-white font-semibold">
-                                            {invitation.groupName.charAt(0)}
-                                        </AvatarFallback>
-                                    </Avatar>
-                                    <div>
-                                        <p className="font-semibold">{invitation.groupName}</p>
-                                        <p className="text-sm text-muted-foreground">
-                                            {invitation.inviterName} mời bạn • {invitation.memberCount} thành viên • {invitation.inviteTime}
+                            <div className="flex items-center justify-between gap-4">
+                                {/* Thông tin nhóm */}
+                                <div className="flex items-center gap-4">
+                                    <div className="relative">
+                                        <Avatar className="w-12 h-12">
+                                            <AvatarImage
+                                                src={invitation.groupAvatar || "/placeholder.svg"}
+                                            />
+                                            <AvatarFallback className="bg-gradient-to-br from-blue-500 to-indigo-500 text-white font-semibold">
+                                                {invitation.groupName.charAt(0).toUpperCase()}
+                                            </AvatarFallback>
+                                        </Avatar>
+                                    </div>
+                                    <div className="flex flex-col">
+                                        <p className="font-medium text-gray-900 leading-tight">
+                                            {invitation.groupName}
+                                        </p>
+                                        <p className="text-sm text-gray-500">
+                                            {invitation.inviterName} mời bạn • {invitation.memberCount} thành viên •{" "}
+                                            {invitation.inviteTime}
                                         </p>
                                     </div>
                                 </div>
-                                <div className="flex items-center gap-2">
-                                    <Button className="px-4 py-2 rounded-xl cursor-pointer">
-                                        <Check className="w-4 h-4 mr-2" />
+
+                                {/* Nút hành động */}
+                                <div className="flex items-center gap-2 shrink-0">
+                                    <Button className="px-3 py-2 h-auto text-sm rounded-lg bg-blue-600 hover:bg-blue-700 text-white flex items-center gap-1">
+                                        <Check className="w-4 h-4" />
                                         Tham gia
                                     </Button>
-                                    <Button variant="outline" className="px-4 py-2 rounded-xl bg-transparent cursor-pointer ">
-                                        <X className="w-4 h-4 mr-2" />
+                                    <Button
+                                        variant="outline"
+                                        className="px-3 py-2 h-auto text-sm rounded-lg border-gray-300 hover:bg-gray-100 flex items-center gap-1 text-gray-600"
+                                    >
+                                        <X className="w-4 h-4" />
                                         Từ chối
                                     </Button>
                                 </div>
@@ -55,5 +74,5 @@ export default function GroupInvitations() {
                 ))}
             </div>
         </div>
-    )
+    );
 }

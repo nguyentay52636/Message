@@ -40,10 +40,9 @@ export function MainWindownChat({
     const [showChatBubble, setShowChatBubble] = useState(false)
     const [friendRequestStatus, setFriendRequestStatus] = useState<"pending" | "waiting" | "accepted">("waiting")
 
-    console.log("MainWindownChat render - user:", user)
-    console.log("MainWindownChat render - messages:", messages)
+    // console.log("MainWindownChat render - user:", user)
+    // console.log("MainWindownChat render - messages:", messages)
 
-    // Convert IUser to the format expected by other components
     const userForComponents = {
         id: user._id || user.username,
         name: user.username,
@@ -73,12 +72,12 @@ export function MainWindownChat({
         setTimeout(() => {
             setFriendRequestStatus("waiting")
         }, 1000)
-        console.log("Friend request sent to:", user.username)
+        // console.log("Friend request sent to:", user.username)
     }
 
     const handleAcceptFriendRequest = () => {
         setFriendRequestStatus("accepted")
-        console.log("Friend request accepted for:", user.username)
+        // console.log("Friend request accepted for:", user.username)
     }
 
     const handleToggleInfo = () => {
@@ -87,7 +86,7 @@ export function MainWindownChat({
 
     const handleToggleChatBubble = () => {
         setShowChatBubble(!showChatBubble)
-        console.log("Toggle chat bubble clicked")
+        // console.log("Toggle chat bubble clicked")
     }
 
     return (
@@ -105,17 +104,12 @@ export function MainWindownChat({
                     onToggleChatBubble={handleToggleChatBubble}
                 />
             </div>
-
-            {/* Main Content Area */}
             <div className="flex-1 flex overflow-hidden">
-                {/* Chat Area */}
                 <div className="flex-1 flex flex-col min-w-0">
-                    {/* Messages Area */}
                     <div className="flex-1 overflow-hidden">
                         <MessageAreaWindownChat messages={strangerMessages} user={userForComponents} />
                     </div>
 
-                    {/* Message Input */}
                     <div className="flex-shrink-0">
                         <InputWindownChat
                             message={message}
@@ -127,7 +121,6 @@ export function MainWindownChat({
                     </div>
                 </div>
 
-                {/* Info Panel - Desktop Only */}
                 {showInfoPanel && (
                     <div className="hidden lg:block flex-shrink-0">
                         <InfoUserWindownChat user={userForComponents} onClose={() => setShowInfoPanel(false)} />

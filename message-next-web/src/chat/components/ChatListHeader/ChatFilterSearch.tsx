@@ -27,7 +27,7 @@ export default function ChatFilterSearch({
 
     const handleSelectUser = useCallback(
         (u: IUser) => {
-            console.log("ChatFilterSearch - onSelectUser:", u)
+            // console.log("ChatFilterSearch - onSelectUser:", u)
             setUser(u)
             onSelectUser?.(u)
         },

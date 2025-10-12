@@ -19,7 +19,6 @@ export const addConversation = async (conversation: ConversationCreateRequest): 
   }
 };
 
-// (for admin)
 export const getAllConversations = async (): Promise<IConversation[]> => {
   try {
     const { data } = await baseApi.get<ApiResponse<IConversation[]>>("/conversations");

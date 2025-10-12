@@ -1,3 +1,5 @@
+"use client"
+
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { UserPlus, Users } from "lucide-react"
@@ -18,7 +20,7 @@ const sidebarItems = [
     },
     {
         id: "groups",
-        label: "Danh sách nhóm và cộng đồng",
+        label: "Danh sách nhóm & cộng đồng",
         icon: Users,
         count: 15,
     },
@@ -30,7 +32,7 @@ const sidebarItems = [
     },
     {
         id: "group-invites",
-        label: "Lời mời vào nhóm và cộng đồng",
+        label: "Lời mời vào nhóm",
         icon: Users,
         count: mockFriendRequests.length,
     },
@@ -38,36 +40,41 @@ const sidebarItems = [
 
 export const SiderNavigation = ({ activeSection, setActiveSection }: SiderNavigationProps) => {
     return (
-        <>
-            <div className="flex-1 overflow-y-auto py-6">
-                <div className="space-y-4 py-2">
+        <div className="flex cursor-pointer flex-col bg-white h-full border-r border-gray-200">
+            <div className="flex-1 overflow-y-auto py-4">
+                <div className="space-y-1 px-2">
                     {sidebarItems.map((item) => (
-
                         <Button
                             key={item.id}
-                            variant={activeSection === item.id ? "ghost" : "ghost"}
+                            variant="ghost"
                             onClick={() => setActiveSection(item.id)}
                             className={cn(
-                                "w-full flex justify-start items-center gap-4 py-8! px-6 rounded-xl cursor-pointer text-left transition-colors",
-                                activeSection === item.id ? "bg-blue-300 text-blue-900" : ""
+                                "w-full flex items-center cursor-pointer justify-start gap-3 rounded-lg px-4 py-5! transition-all duration-200 text-gray-800 hover:bg-gray-100",
+                                activeSection === item.id && "bg-blue-100 text-blue-600 font-medium"
                             )}
                         >
-                            <div className="flex items-center gap-4">
-                                <item.icon className="w-10 h-10" />
-                            </div>
-                            <span className=" font-semibold text-sm ">{item.label}</span>
-                            {
-                                item.count > 0 && (
-                                    <Badge variant="secondary" className="ml-auto text-sm  rounded-full text-white bg-red-500">
-                                        {item.count}
-                                    </Badge>
-                                )
-                            }
-                        </Button>
+                            <item.icon
+                                className={cn(
+                                    "w-5 h-5",
+                                    activeSection === item.id ? "text-blue-600" : "text-gray-500"
+                                )}
+                            />
+                            <span className="flex-1 text-left text-sm">
+                                {item.label}
+                            </span>
 
+                            {item.count > 0 && (
+                                <Badge
+                                    variant="secondary"
+                                    className="text-xs px-2 py-0.5 rounded-full bg-red-500 text-white"
+                                >
+                                    {item.count}
+                                </Badge>
+                            )}
+                        </Button>
                     ))}
                 </div>
-            </div >
-        </>
+            </div>
+        </div>
     )
 }
