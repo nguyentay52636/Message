@@ -8,7 +8,7 @@ import HeaderWindownChat from "./HeaderWindownChat"
 import { IUser } from "@/types/types"
 import { Message } from "@/lib/Mock/dataMock"
 import { Button } from "@/components/ui/button"
-import { Phone, Video, Search, MoreHorizontal, MessageCircle, Users, Settings } from "lucide-react"
+import { MessageCircle } from "lucide-react"
 import BubbleStartChat from "./BubbleStartChat"
 
 interface MainWindownChatProps {
@@ -40,15 +40,11 @@ export function MainWindownChat({
     const [showChatBubble, setShowChatBubble] = useState(false)
     const [friendRequestStatus, setFriendRequestStatus] = useState<"pending" | "waiting" | "accepted">("waiting")
 
-    console.log("MainWindownChat render - user:", user)
-    console.log("MainWindownChat render - messages:", messages)
-
-    // Convert IUser to the format expected by other components
     const userForComponents = {
         id: user._id || user.username,
         name: user.username,
         avatar: user.avatar || "/placeholder.svg",
-        isOnline: user.status === 'online'
+        isOnline: user.status === "online"
     }
 
     const strangerMessages = messages.map(msg => ({
@@ -61,38 +57,22 @@ export function MainWindownChat({
     }))
 
     const handleSendMessage = () => {
-        if (message.trim()) {
-            // Call the parent's onSendMessage function
-            onSendMessage()
-        }
+        if (message.trim()) onSendMessage()
     }
 
     const handleSendFriendRequest = () => {
         setFriendRequestStatus("pending")
-        // Simulate friend request being sent
-        setTimeout(() => {
-            setFriendRequestStatus("waiting")
-        }, 1000)
-        console.log("Friend request sent to:", user.username)
+        setTimeout(() => setFriendRequestStatus("waiting"), 1000)
     }
 
-    const handleAcceptFriendRequest = () => {
-        setFriendRequestStatus("accepted")
-        console.log("Friend request accepted for:", user.username)
-    }
+    const handleAcceptFriendRequest = () => setFriendRequestStatus("accepted")
 
-    const handleToggleInfo = () => {
-        setShowInfoPanel(!showInfoPanel)
-    }
-
-    const handleToggleChatBubble = () => {
-        setShowChatBubble(!showChatBubble)
-        console.log("Toggle chat bubble clicked")
-    }
+    const handleToggleInfo = () => setShowInfoPanel(!showInfoPanel)
+    const handleToggleChatBubble = () => setShowChatBubble(!showChatBubble)
 
     return (
-        <div className="h-full w-full flex flex-col bg-white border-2">
-
+        <div className="h-full w-full flex flex-col bg-[#f7f9fb] rounded-2xl border border-gray-200 shadow-md overflow-hidden transition-all duration-300">
+            {/* Header */}
             <div className="flex-shrink-0">
                 <HeaderWindownChat
                     user={user}
@@ -106,17 +86,16 @@ export function MainWindownChat({
                 />
             </div>
 
-            {/* Main Content Area */}
+            {/* Nội dung chính */}
             <div className="flex-1 flex overflow-hidden">
-                {/* Chat Area */}
-                <div className="flex-1 flex flex-col min-w-0">
-                    {/* Messages Area */}
+                {/* Khu vực chat */}
+                <div className={`flex-1 flex flex-col bg-white transition-all duration-300 ${showInfoPanel ? "lg:rounded-l-2xl" : "rounded-2xl"}`}>
+                    {/* Vùng tin nhắn */}
                     <div className="flex-1 overflow-hidden">
                         <MessageAreaWindownChat messages={strangerMessages} user={userForComponents} />
                     </div>
 
-                    {/* Message Input */}
-                    <div className="flex-shrink-0">
+                    <div className="flex-shrink-0 border-t border-gray-100 bg-white">
                         <InputWindownChat
                             message={message}
                             setMessage={setMessage}
@@ -127,26 +106,26 @@ export function MainWindownChat({
                     </div>
                 </div>
 
-                {/* Info Panel - Desktop Only */}
-                {showInfoPanel && (
-                    <div className="hidden lg:block flex-shrink-0">
+                <div
+                    className={`hidden lg:flex flex-col border-l border-gray-100 bg-white transition-all duration-300 ${showInfoPanel ? "w-80 opacity-100" : "w-0 opacity-0"
+                        } overflow-hidden`}
+                >
+                    {showInfoPanel && (
                         <InfoUserWindownChat user={userForComponents} onClose={() => setShowInfoPanel(false)} />
-                    </div>
-                )}
+                    )}
+                </div>
             </div>
-            {showChatBubble && (
-                <BubbleStartChat
-                    handleToggleChatBubble={handleToggleChatBubble}
 
-                />
-            )}
+            {/* Bong bóng chat mini */}
+            {showChatBubble && <BubbleStartChat handleToggleChatBubble={handleToggleChatBubble} />}
 
+            {/* Nút mở bong bóng chat */}
             <div className="fixed bottom-6 right-6 z-40">
                 <Button
                     onClick={handleToggleChatBubble}
-                    className="w-12 h-12 rounded-full shadow-lg bg-blue-500 hover:bg-blue-600 text-white"
+                    className="w-14 h-14 rounded-full shadow-2xl bg-[#0084ff] hover:bg-[#0072e5] text-white flex items-center justify-center transition-transform hover:scale-105"
                 >
-                    <MessageCircle className="w-5 h-5" />
+                    <MessageCircle className="w-6 h-6" />
                 </Button>
             </div>
         </div>

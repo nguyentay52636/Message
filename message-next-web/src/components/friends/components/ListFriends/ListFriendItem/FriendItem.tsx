@@ -36,7 +36,7 @@ export default function FriendItem({ friend }: FriendItemProps) {
                         <div className="relative px-4">
                             <Avatar className="w-12 h-12">
                                 <AvatarImage src={friend.avatar || "/placeholder.svg"} />
-                                <AvatarFallback className="bg-gradient-to-br from-primary/80 to-secondary/80 text-white font-semibold">
+                                <AvatarFallback className="bg-gradient-to-br bg-blue-500 to-secondary/80 text-white font-semibold">
                                     {friend.name.charAt(0).toUpperCase()}
                                 </AvatarFallback>
                             </Avatar>

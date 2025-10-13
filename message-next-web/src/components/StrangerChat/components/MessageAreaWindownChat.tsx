@@ -33,7 +33,6 @@ interface StrangerMessageAreaProps {
 
 export default function MessageAreaWindownChat({ messages, user }: StrangerMessageAreaProps) {
     const messagesEndRef = useRef<HTMLDivElement>(null)
-    const containerRef = useRef<HTMLDivElement>(null)
 
     const scrollToBottom = () => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
@@ -46,24 +45,24 @@ export default function MessageAreaWindownChat({ messages, user }: StrangerMessa
     const renderMessageContent = (message: StrangerMessage) => {
         const isUser = message.sender === "user"
 
-        // Missed Call Message
+        // 🔔 Cuộc gọi nhỡ
         if (message.type === "missed-call") {
             return (
                 <div className="max-w-xs mx-auto">
-                    <div className="bg-card border border-border rounded-2xl p-4 shadow-sm">
+                    <div className="bg-red-50 border border-red-200 rounded-2xl p-4 shadow-sm">
                         <div className="flex items-center gap-3 mb-3">
-                            <div className="w-8 h-8 bg-red-100 dark:bg-red-900/20 rounded-full flex items-center justify-center">
-                                <Phone className="w-4 h-4 text-red-600 dark:text-red-400" />
+                            <div className="w-9 h-9 bg-red-100 rounded-full flex items-center justify-center">
+                                <Phone className="w-4 h-4 text-red-600" />
                             </div>
                             <div className="flex-1">
-                                <p className="text-sm font-medium text-red-600 dark:text-red-400">Bạn bị nhỡ</p>
+                                <p className="text-sm font-medium text-red-600">Bạn bị nhỡ</p>
                                 <p className="text-xs text-muted-foreground">📞 Cuộc gọi thoại</p>
                             </div>
                         </div>
                         <Button
                             variant="outline"
                             size="sm"
-                            className="w-full h-8 text-sm bg-transparent border-primary text-primary hover:bg-primary/10"
+                            className="w-full h-8 text-sm border-primary text-primary hover:bg-primary/10 transition"
                         >
                             Gọi lại
                         </Button>
@@ -72,35 +71,31 @@ export default function MessageAreaWindownChat({ messages, user }: StrangerMessa
             )
         }
 
-        // Sticker Message
+        // 🐰 Sticker
         if (message.type === "sticker") {
             return (
-                <div className="flex justify-start">
-                    <div className="relative">
-                        <img
-                            src="/placeholder.svg?height=120&width=120&text=🐰"
-                            alt="Sticker"
-                            className="w-24 h-24 object-contain"
-                        />
-                        {/* Download button for stickers */}
-                        <Button
-                            variant="ghost"
-                            size="sm"
-                            className="absolute top-1 right-1 p-1 h-6 w-6 bg-black/20 hover:bg-black/30 rounded-full"
-                        >
-                            <span className="text-white text-xs">↓</span>
-                        </Button>
-                    </div>
+                <div className="relative">
+                    <img
+                        src="/placeholder.svg?height=120&width=120&text=🐰"
+                        alt="Sticker"
+                        className="w-24 h-24 object-contain"
+                    />
+                    <Button
+                        variant="ghost"
+                        size="sm"
+                        className="absolute top-1 right-1 p-1 h-6 w-6 bg-black/20 hover:bg-black/30 rounded-full"
+                    >
+                        <span className="text-white text-xs">↓</span>
+                    </Button>
                 </div>
             )
         }
 
-        // Link Preview Message
+        // 🌐 Link Preview
         if (message.type === "link-preview" && message.linkData) {
             return (
                 <div className={`max-w-sm ${isUser ? "ml-auto" : ""}`}>
-                    <div className="bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm">
-                        {/* Link thumbnail */}
+                    <div className="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-md hover:shadow-lg transition">
                         <div className="aspect-video bg-gray-100">
                             <img
                                 src={message.linkData.thumbnail || "/placeholder.svg?height=200&width=400&text=Preview"}
@@ -108,10 +103,10 @@ export default function MessageAreaWindownChat({ messages, user }: StrangerMessa
                                 className="w-full h-full object-cover"
                             />
                         </div>
-
-                        {/* Link content */}
                         <div className="p-3">
-                            <h4 className="font-medium text-gray-900 text-sm mb-1 line-clamp-2">{message.linkData.title}</h4>
+                            <h4 className="font-semibold text-gray-900 text-sm mb-1 line-clamp-2">
+                                {message.linkData.title}
+                            </h4>
                             <p className="text-xs text-gray-600 mb-2 line-clamp-2">{message.linkData.description}</p>
                             <div className="flex items-center justify-between">
                                 <span className="text-xs text-blue-600">{message.linkData.domain}</span>
@@ -129,28 +124,21 @@ export default function MessageAreaWindownChat({ messages, user }: StrangerMessa
                             </div>
                         </div>
                     </div>
-
-                    {/* Timestamp below link preview */}
-                    <div className="flex justify-center mt-1">
-                        <span className="text-xs text-gray-500 bg-gray-100 px-2 py-0.5 rounded-full">{message.timestamp}</span>
-                    </div>
                 </div>
             )
         }
 
+        // 😄 Emoji lớn
         if (message.type === "emoji") {
-            return (
-                <div className={`flex ${isUser ? "justify-end" : "justify-start"}`}>
-                    <div className="text-6xl">{message.content}</div>
-                </div>
-            )
+            return <div className={`flex ${isUser ? "justify-end" : "justify-start"}`}><div className="text-6xl">{message.content}</div></div>
         }
 
+        // 💬 Tin nhắn text
         return (
             <div
-                className={`px-3 py-2 rounded-2xl max-w-xs ${isUser
-                    ? "bg-blue-500 text-white rounded-br-md ml-auto"
-                    : "bg-white border border-gray-200 text-gray-900 rounded-bl-md"
+                className={`px-3 py-2 rounded-2xl shadow-sm max-w-xs transition ${isUser
+                    ? "bg-blue-500 text-white ml-auto rounded-br-md hover:bg-blue-600"
+                    : "bg-white border border-gray-200 text-gray-900 rounded-bl-md hover:bg-gray-50"
                     }`}
             >
                 <p className="text-sm leading-relaxed break-words whitespace-pre-wrap">{message.content}</p>
@@ -158,12 +146,13 @@ export default function MessageAreaWindownChat({ messages, user }: StrangerMessa
         )
     }
 
+    // 🕊 Khi chưa có tin nhắn
     if (!messages || messages.length === 0) {
         return (
-            <div className="w-full h-full flex items-center justify-center bg-gray-50">
+            <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-50 to-white">
                 <div className="text-center p-8 max-w-md">
-                    <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                        <svg className="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div className="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <svg className="w-10 h-10 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path
                                 strokeLinecap="round"
                                 strokeLinejoin="round"
@@ -172,108 +161,67 @@ export default function MessageAreaWindownChat({ messages, user }: StrangerMessa
                             />
                         </svg>
                     </div>
-                    <h3 className="text-xl font-semibold mb-3 text-gray-900">Bắt đầu trò chuyện</h3>
+                    <h3 className="text-xl font-semibold mb-3 text-gray-800">Bắt đầu trò chuyện 💬</h3>
                     <p className="text-sm text-gray-600 leading-relaxed">
-                        Hãy gửi lời chào đầu tiên để bắt đầu cuộc trò chuyện với {user.name}
+                        Gửi lời chào đầu tiên để bắt đầu cuộc trò chuyện với <span className="font-semibold text-blue-600">{user.name}</span>
                     </p>
                 </div>
             </div>
         )
     }
 
+    // 💬 Khu vực hiển thị tin nhắn
     return (
-        <div ref={containerRef} className="w-full h-full flex flex-col bg-gray-50">
-            {/* Background pattern */}
-            <div className="absolute inset-0 opacity-[0.02] pointer-events-none">
-                <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_50%_50%,rgba(59,130,246,0.1),transparent_50%)]"></div>
-            </div>
+        <div className="w-full h-full flex flex-col bg-gray-50 relative">
+            {/* Background gradient */}
+            <div className="absolute inset-0 opacity-[0.04] pointer-events-none bg-[radial-gradient(circle_at_20%_20%,rgba(59,130,246,0.2),transparent_60%)]" />
 
-            {/* Messages Container */}
-            <div className="flex-1 overflow-y-auto overflow-x-hidden">
-                <div className="w-full min-h-full px-4 py-6">
-                    {/* Today timestamp */}
-                    <div className="flex justify-center mb-6">
-                        <div className="px-3 py-1 rounded-full bg-gray-300 text-gray-700 text-xs font-medium">Hôm nay</div>
+            {/* Tin nhắn */}
+            <div className="flex-1 overflow-y-auto">
+                <div className="px-4 py-6 space-y-4">
+                    {/* Label ngày */}
+                    <div className="flex justify-center">
+                        <div className="px-3 py-1 rounded-full bg-gray-300 text-gray-700 text-xs font-medium shadow-sm">
+                            Hôm nay
+                        </div>
                     </div>
 
-                    {/* Messages */}
-                    <div className="space-y-3 pb-6">
-                        {messages.map((message, index) => {
-                            const isUser = message.sender === "user"
-                            const prevMessage = messages[index - 1]
-                            const nextMessage = messages[index + 1]
+                    {/* Các tin nhắn */}
+                    {messages.map((message, index) => {
+                        const isUser = message.sender === "user"
+                        const prevMessage = messages[index - 1]
+                        const nextMessage = messages[index + 1]
+                        const showAvatar = !isUser && (!prevMessage || prevMessage.sender !== message.sender)
+                        const isLastInGroup = !nextMessage || nextMessage.sender !== message.sender
 
-                            // Show avatar only for first message in a group from other users
-                            const showAvatar =
-                                !isUser && (index === 0 || prevMessage?.sender !== message.sender || prevMessage?.sender === "user")
-
-                            // Add more spacing between different senders
-                            const isNewSender = prevMessage && prevMessage.sender !== message.sender
-                            const isLastInGroup = !nextMessage || nextMessage.sender !== message.sender
-
-                            // Special handling for missed call messages
-                            if (message.type === "missed-call") {
-                                return (
-                                    <div key={message.id} className={`${isNewSender ? "mt-6" : ""}`}>
-                                        <div className="flex justify-center">{renderMessageContent(message)}</div>
-                                        {/* Timestamp for missed call */}
-                                        <div className="flex justify-center mt-2">
-                                            <span className="text-xs text-muted-foreground bg-muted/50 px-2 py-1 rounded-full">
-                                                {message.timestamp}
-                                            </span>
-                                        </div>
-                                    </div>
-                                )
-                            }
-
-                            // Special handling for link preview messages
-                            if (message.type === "link-preview") {
-                                return (
-                                    <div key={message.id} className={`${isNewSender ? "mt-6" : ""}`}>
-                                        <div className="flex justify-start">{renderMessageContent(message)}</div>
-                                    </div>
-                                )
-                            }
-
-                            return (
-                                <div key={message.id} className={`${isNewSender ? "mt-4" : ""}`}>
-                                    <div className={`flex w-full ${isUser ? "justify-end" : "justify-start"} group`}>
-                                        {/* Avatar for other users */}
-                                        {!isUser && (
-                                            <div className="mr-3 flex flex-col items-center flex-shrink-0">
-                                                {showAvatar ? (
-                                                    <Avatar className="w-8 h-8">
-                                                        <AvatarImage src={user.avatar || "/placeholder.svg"} />
-                                                        <AvatarFallback className="bg-gray-300 text-gray-700 font-semibold text-xs">
-                                                            {user.name?.charAt(0) || "U"}
-                                                        </AvatarFallback>
-                                                    </Avatar>
-                                                ) : (
-                                                    <div className="w-8 h-8" />
-                                                )}
-                                            </div>
+                        return (
+                            <div key={message.id} className={`flex ${isUser ? "justify-end" : "justify-start"} gap-2`}>
+                                {!isUser && (
+                                    <div className="flex-shrink-0">
+                                        {showAvatar ? (
+                                            <Avatar className="w-8 h-8">
+                                                <AvatarImage src={user.avatar} />
+                                                <AvatarFallback className="bg-gray-300 text-gray-700 font-semibold text-xs">
+                                                    {user.name.charAt(0)}
+                                                </AvatarFallback>
+                                            </Avatar>
+                                        ) : (
+                                            <div className="w-8 h-8" />
                                         )}
-
-                                        {/* Message Content */}
-                                        <div className={`${isUser ? "ml-auto" : ""} flex flex-col min-w-0`}>
-                                            {/* Message Bubble */}
-                                            <div>{renderMessageContent(message)}</div>
-
-                                            {/* Timestamp - Only show for last message in group and non-link messages */}
-                                            {isLastInGroup && (
-                                                <div
-                                                    className={`flex items-center gap-2 mt-1 px-2 ${isUser ? "justify-end" : "justify-start"}`}
-                                                >
-                                                    <span className="text-xs text-gray-500">{message.timestamp}</span>
-                                                </div>
-                                            )}
-                                        </div>
                                     </div>
+                                )}
+                                <div className="flex flex-col max-w-[75%]">
+                                    {renderMessageContent(message)}
+                                    {isLastInGroup && (
+                                        <span className={`text-xs text-gray-400 mt-1 ${isUser ? "text-right" : ""}`}>
+                                            {message.timestamp}
+                                        </span>
+                                    )}
                                 </div>
-                            )
-                        })}
-                    </div>
-                    <div ref={messagesEndRef} className="h-1" />
+                            </div>
+                        )
+                    })}
+                    <div ref={messagesEndRef} />
                 </div>
             </div>
         </div>
