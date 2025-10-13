@@ -1,14 +1,14 @@
-import { Request, Response } from 'express';
+import { Request, Response, RequestHandler } from 'express';
 import Conversation from '../models/conversation';
 import User from '../models/user';
-import { Socket } from 'socket.io';
+import { Server as SocketIOServer } from 'socket.io';
 import { ResponseApi } from '../config/response';
 
 interface CustomRequest extends Request {
-  io?: Socket;
+  io?: SocketIOServer;
 }
 
-export const addConversation = async (req: CustomRequest, res: Response) => {
+export const addConversation: RequestHandler = async (req: CustomRequest, res: Response) => {
   try {
     const { members, type, groupName, groupAvatar, groupAdmin } = req.body;
 
@@ -75,7 +75,7 @@ export const addConversation = async (req: CustomRequest, res: Response) => {
   }
 };
 
-export const getAllConversations = async (req: CustomRequest, res: Response) => {
+export const getAllConversations: RequestHandler = async (req: CustomRequest, res: Response) => {
   try {
     const conversations = await Conversation.find()
       .populate('members', 'username avatar status email')
@@ -90,7 +90,7 @@ export const getAllConversations = async (req: CustomRequest, res: Response) => 
   }
 };
 
-export const getConversationOfUser = async (req: CustomRequest, res: Response) => {
+export const getConversationOfUser: RequestHandler = async (req: CustomRequest, res: Response) => {
   try {
     const { userId } = req.params;
 
@@ -120,7 +120,7 @@ export const getConversationOfUser = async (req: CustomRequest, res: Response) =
   }
 };
 
-export const updateConversation = async (req: CustomRequest, res: Response) => {
+export const updateConversation: RequestHandler = async (req: CustomRequest, res: Response) => {
   try {
     const { conversationId } = req.params;
     const { groupName, groupAvatar, groupAdmin } = req.body;
@@ -170,7 +170,7 @@ export const updateConversation = async (req: CustomRequest, res: Response) => {
   }
 };
 
-export const addMemberToConversation = async (req: CustomRequest, res: Response) => {
+export const addMemberToConversation: RequestHandler = async (req: CustomRequest, res: Response) => {
   try {
     const { conversationId } = req.params;
     const { userId } = req.body;
@@ -227,7 +227,7 @@ export const addMemberToConversation = async (req: CustomRequest, res: Response)
 };
 
 
-export const deleteConversation = async (req: CustomRequest, res: Response) => {
+export const deleteConversation: RequestHandler = async (req: CustomRequest, res: Response) => {
   try {
     const { conversationId } = req.params;
 
@@ -253,7 +253,7 @@ export const deleteConversation = async (req: CustomRequest, res: Response) => {
   }
 };
 
-export const getConversationBetweenUsers = async (req: CustomRequest, res: Response) => {
+export const getConversationBetweenUsers: RequestHandler = async (req: CustomRequest, res: Response) => {
   try {
     const { userId1, userId2 } = req.params;
 

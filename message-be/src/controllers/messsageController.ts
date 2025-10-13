@@ -1,18 +1,18 @@
-import { Request, Response } from 'express';
+import { Request, Response, RequestHandler } from 'express';
 import mongoose from 'mongoose';
 import Message from '../models/message';
 import Conversation from '../models/conversation';
 import Image from '../models/image';
-import { Socket } from 'socket.io'; 
+import { Socket, Server as SocketIOServer } from 'socket.io'; 
 import { ResponseApi } from '../config/response';
 
 interface CustomRequest extends Request {
-  io?: Socket;
+  io?: SocketIOServer;
   user?: { id: string };
   file?: Express.Multer.File;
 }
 
-export const uploadImage = async (req: CustomRequest, res: Response) => {
+export const uploadImage: RequestHandler = async (req: CustomRequest, res: Response) => {
   try {
     const { userId } = req.body;
     const file = req.file;
@@ -48,7 +48,7 @@ export const uploadImage = async (req: CustomRequest, res: Response) => {
   }
 };
 
-export const getMessages = async (req: CustomRequest, res: Response) => {
+export const getMessages: RequestHandler = async (req: CustomRequest, res: Response) => {
   try {
     const { conversationId } = req.params;
 
@@ -69,7 +69,7 @@ export const getMessages = async (req: CustomRequest, res: Response) => {
   }
 };
 
-export const createMessageHandler = async (req: CustomRequest, res: Response) => {
+export const createMessageHandler: RequestHandler = async (req: CustomRequest, res: Response) => {
   try {
     const { conversationId, content, messageType = 'text', imageId, senderId } = req.body;
     
@@ -148,7 +148,88 @@ export const createMessageHandler = async (req: CustomRequest, res: Response) =>
   }
 };
 
-export const createReplyMessage = async (req: CustomRequest, res: Response) => {
+export const sendDirectMessage: RequestHandler = async (req: CustomRequest, res: Response) => {
+  try {
+    const { receiverId, content, messageType = 'text', imageId, senderId } = req.body;
+    const userId = req.user?.id || senderId;
+
+    if (!userId || !receiverId || !content) {
+      return ResponseApi(res, 400, null, 'Missing required fields');
+    }
+
+    if (!mongoose.Types.ObjectId.isValid(userId) || !mongoose.Types.ObjectId.isValid(receiverId)) {
+      return ResponseApi(res, 400, null, 'Invalid user ids');
+    }
+
+    let conversation = await Conversation.findOne({
+      type: 'personal',
+      members: { $all: [userId, receiverId], $size: 2 },
+    });
+
+    if (!conversation) {
+      conversation = new Conversation({
+        type: 'personal',
+        members: [userId, receiverId],
+      });
+      await conversation.save();
+    }
+
+    if (messageType === 'image' && imageId) {
+      const image = await Image.findById(imageId);
+      if (!image) return ResponseApi(res, 404, null, 'Image not found');
+    }
+
+    const message = new Message({
+      sender: userId,
+      conversation: conversation._id,
+      content,
+      messageType,
+      imageId: messageType === 'image' ? imageId : null,
+      mediaUrl: null,
+      isRead: false,
+      readBy: [],
+    });
+    await message.save();
+
+    conversation.lastMessage = message._id as mongoose.Types.ObjectId;
+    conversation.lastUpdated = new Date();
+    await conversation.save();
+
+    const populatedConversation = await Conversation.findById(conversation._id as mongoose.Types.ObjectId)
+      .populate('members', 'username avatar status')
+      .populate('lastMessage');
+
+    const populatedMessage = await Message.findById(message._id)
+      .populate('sender', 'username avatar')
+      .populate('imageId', 'fileUrl mimeType');
+
+    const conversationIdStr = (conversation._id as mongoose.Types.ObjectId).toString();
+    req.io?.to(conversationIdStr).emit('receiveMessage', {
+      senderId: userId,
+      conversationId: conversationIdStr,
+      content,
+      messageType,
+      imageId: populatedMessage?.imageId,
+      mediaUrl: null,
+      timestamp: message.createdAt,
+      messageId: message._id,
+      sender: populatedMessage?.sender,
+      image: populatedMessage?.imageId,
+    });
+
+    req.io?.to(conversationIdStr).emit('conversationUpdated', {
+      conversationId: conversationIdStr,
+      lastMessage: populatedMessage,
+      lastUpdated: conversation.lastUpdated,
+    });
+
+    return ResponseApi(res, 201, { conversation: populatedConversation, message: populatedMessage }, 'Message sent');
+  } catch (error: any) {
+    return ResponseApi(res, 500, null, `Failed to send direct message: ${error.message}`);
+  }
+};
+
+export const createReplyMessage: RequestHandler = async (req: CustomRequest, res: Response) => {
   try {
     const { conversationId, content, replyTo, messageType = 'text', imageId } = req.body;
     const senderId = req.user?.id;
@@ -223,7 +304,7 @@ export const createReplyMessage = async (req: CustomRequest, res: Response) => {
     return ResponseApi(res, 500, null, `Failed to send reply: ${error.message}`);
   }
 };  
-export const markMessagesAsRead = async (req: CustomRequest, res: Response) => {
+export const markMessagesAsRead: RequestHandler = async (req: CustomRequest, res: Response) => {
   try {
     const { conversationId } = req.params;
     const { senderId } = req.body;
@@ -246,7 +327,7 @@ export const markMessagesAsRead = async (req: CustomRequest, res: Response) => {
   }
 };
 
-export const recallMessage = async (req: CustomRequest, res: Response) => {
+export const recallMessage: RequestHandler = async (req: CustomRequest, res: Response) => {
   const { messageId } = req.params;
   const userId = req.user?.id;
 
@@ -262,7 +343,7 @@ export const recallMessage = async (req: CustomRequest, res: Response) => {
 
   return ResponseApi(res, 200, message, "Message recalled");
 };
-export const forwardMessage = async (req: CustomRequest, res: Response) => {
+export const forwardMessage: RequestHandler = async (req: CustomRequest, res: Response) => {
   const { messageId, targetConversationId } = req.body;
   const userId = req.user?.id;
 
@@ -284,7 +365,7 @@ export const forwardMessage = async (req: CustomRequest, res: Response) => {
 
   return ResponseApi(res, 201, forwarded, "Message forwarded");
 };
- export const deleteMessage = async (req: CustomRequest, res: Response) => {
+ export const deleteMessage: RequestHandler = async (req: CustomRequest, res: Response) => {
   const { messageId } = req.params;
 try { 
 
