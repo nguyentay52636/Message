@@ -7,7 +7,8 @@ import {
   markMessagesAsRead,
   recallMessage,
   forwardMessage,
-  deleteMessage
+  deleteMessage,
+  sendDirectMessage
 } from "../controllers/messsageController";
 
 const Router = express.Router();
@@ -20,6 +21,9 @@ Router.get("/:conversationId", getMessages);
 
 // Gửi tin nhắn mới
 Router.post("/send", createMessageHandler);
+
+// Gửi tin nhắn trực tiếp (auto tạo hội thoại personal nếu thiếu)
+Router.post("/send-direct", sendDirectMessage);
 
 // Gửi tin nhắn trả lời
 Router.post("/reply", createReplyMessage);

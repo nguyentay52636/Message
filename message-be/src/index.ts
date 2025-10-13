@@ -6,6 +6,7 @@ import cors from "cors";
 import rootRouter from "./routers/rootRouter";
 import { swaggerSpec, swaggerUi, swaggerUiOptions } from "./swaggerdocs/swagger";
 import { swaggerOptimization, swaggerRequestHandler, swaggerCompression } from "./middleware/swaggerMiddleware";
+import { attachSocket } from "./middleware/socketAttach";
 import connectDB from "./connection/monggodb";
 
 const app: Application = express();
@@ -23,6 +24,7 @@ app.use(express.json());
 
 app.use(swaggerCompression);
 app.use(swaggerRequestHandler);
+app.use(attachSocket);
 
 app.use("/api", rootRouter);
 
