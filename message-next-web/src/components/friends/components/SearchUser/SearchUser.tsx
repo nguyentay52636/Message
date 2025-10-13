@@ -98,7 +98,7 @@ export default function SearchUser({ onBack }: SearchUserProps) {
           </div>
 
           <ResponeUser
-            user={searchResult}
+            users={searchResult}
             loading={loading}
             searchQuery={searchQuery}
             onSelectUser={handleUserSelect}

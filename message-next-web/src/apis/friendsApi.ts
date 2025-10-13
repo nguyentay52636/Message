@@ -1,29 +1,32 @@
 import baseApi from "./baseApi"
-import { IFriend, IFriendRequest, IFriendDisplay, IUser } from "@/types/types"
+import { IFriend, IFriendRequest, IFriendDisplay } from "@/types/types"
+import type { AxiosError, AxiosResponse } from "axios"
 
  export const addRequestFriend = async (friendRequest: IFriendRequest) => { 
     const {sender,receiver} = friendRequest;
    if(!sender || !receiver) {
     throw new Error("Sender and receiver are required")
    }
-    try {
+   try {
         const newRequest =   {sender,receiver}; 
-        const {data} = await baseApi.post("/friendsRequest/", newRequest)
-        return data
-    }catch(error:any){
-        throw new Error(error.message)
+        const response: AxiosResponse<{ data?: unknown; message?: string }> = await baseApi.post("/friendsRequest/", newRequest)
+        return response.data
+    }catch(error: unknown){
+        const axiosError = error as AxiosError<{ message?: string }>
+        throw new Error(axiosError.response?.data?.message || axiosError.message)
     }
  }  
  export const getUserByPhone = async (phone: string) => {  
     const params = {phone} ; 
-    try {
-        const {data} = await baseApi.get(`search`,{params})
-        return data
-    }catch(error:any){
-        throw new Error(error.message)
+   try {
+        const response: AxiosResponse<{ data?: unknown; message?: string }> = await baseApi.get(`search`,{params})
+        return response.data
+    }catch(error: unknown){
+        const axiosError = error as AxiosError<{ message?: string }>
+        throw new Error(axiosError.response?.data?.message || axiosError.message)
     }   
   } 
-export const getAllFriendRequestUser = async (userId: string) => { 
+export const getAllFriendRequestUser = async (userId: string): Promise<IFriendRequest[]> => { 
     try {
 
         if (!userId) {
@@ -31,41 +34,46 @@ export const getAllFriendRequestUser = async (userId: string) => {
             throw new Error("User ID is required")
         }
         
-        const response = await baseApi.get(`/friendsRequest/user/${userId}`)
-        const data = response.data?.data || response.data
-        return data
-    } catch(error: any) {        
-        if (error.response?.status === 404) {
+        const response: AxiosResponse<{ data?: IFriendRequest[]; message?: string; status?: number } | IFriendRequest[]> = await baseApi.get(`/friendsRequest/user/${userId}`)
+        const raw = response.data as any
+        const list: IFriendRequest[] = Array.isArray(raw) ? raw : (raw?.data ?? [])
+        return list
+    } catch(error: unknown) {        
+        const axiosError = error as AxiosError<{ message?: string }>
+        if (axiosError.response?.status === 404) {
             throw new Error("Không tìm thấy lời mời kết bạn")
-        } else if (error.response?.status === 401) {
+        } else if (axiosError.response?.status === 401) {
             throw new Error("Bạn cần đăng nhập để xem lời mời kết bạn")
-        } else if (error.response?.status >= 500) {
+        } else if ((axiosError.response?.status || 0) >= 500) {
             throw new Error("Lỗi server, vui lòng thử lại sau")
         }
         
-        throw new Error(error.message || "Có lỗi xảy ra khi tải danh sách lời mời kết bạn")
+        throw new Error(axiosError.response?.data?.message || axiosError.message || "Có lỗi xảy ra khi tải danh sách lời mời kết bạn")
     }   
 } 
 export const acceptFriendRequest = async (id:string) => {  
  try { 
-    const {data} = await baseApi.put(`/friendsRequest/accept/${id}`)
-    return data
- }catch (error :any ) { 
-    throw new Error(error.message)
+    const response: AxiosResponse<{ data?: unknown; message?: string }> = await baseApi.put(`/friendsRequest/accept/${id}`)
+    return response.data
+ }catch (error: unknown ) { 
+    const axiosError = error as AxiosError<{ message?: string }>
+    throw new Error(axiosError.response?.data?.message || axiosError.message)
  }
 } 
 export const refuseFriendRequest = async (id:string) => {  
     try {
-        const {data} = await baseApi.delete(`/friendsRequest/${id}`)
-        return data
-    }catch(error:any){
-        throw new Error(error.message)
+        const response: AxiosResponse<{ data?: unknown; message?: string }> = await baseApi.delete(`/friendsRequest/${id}`)
+        return response.data
+    }catch(error: unknown){
+        const axiosError = error as AxiosError<{ message?: string }>
+        throw new Error(axiosError.response?.data?.message || axiosError.message)
     }
 } 
 
 export const getAllFriendByUserId =  async (userId:string)  : Promise<IFriendDisplay[]>=> {
     try {
-        const {data} = await baseApi.get(`/friendsRequest/user-friends/${userId}`)
+        const response: AxiosResponse<{ status?: number; data?: IFriend[]; message?: string }> = await baseApi.get(`/friendsRequest/user-friends/${userId}`)
+        const data = response.data
         if(data.status === 200 && data.data) {
             // Transform API data to display format
             const friends: IFriendDisplay[] = data.data.map((friend: IFriend) => {
@@ -74,14 +82,14 @@ export const getAllFriendByUserId =  async (userId:string)  : Promise<IFriendDis
                 
                 return {
                     _id: friend._id,
-                    id: friendUser._id,
+                    id: friendUser._id || friendUser.id || "",
                     name: friendUser.username,
                     username: friendUser.username,
                     email: friendUser.email,
                     phone: friendUser.phone,
                     avatar: friendUser.avatar || "",
                     status: friendUser.status === "online" ? "online" : "offline",
-                    lastSeen: friendUser.lastSeen,
+                    lastSeen: friendUser.lastSeen ? new Date(friendUser.lastSeen).toISOString() : undefined,
                     isOnline: friendUser.status === "online"
                 };
             });
@@ -89,7 +97,8 @@ export const getAllFriendByUserId =  async (userId:string)  : Promise<IFriendDis
             return friends;
         }
         throw new Error(data.message || "Failed to fetch friends")
-    }catch(error:any){  
-        throw new Error(error.message)
+    }catch(error: unknown){  
+        const axiosError = error as AxiosError<{ message?: string }>
+        throw new Error(axiosError.response?.data?.message || axiosError.message)
     }
 }

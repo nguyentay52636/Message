@@ -1,12 +1,13 @@
 
 "use client"
-import { MessageCircle, Users, Cloud, Settings, Briefcase, Phone } from "lucide-react"
+import { MessageCircle, Users, Cloud, Settings, Briefcase, Phone, Home } from "lucide-react"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import { useSelector } from "react-redux"
 import { selectAuth } from "@/redux/slices/authSlice"
 import { UserDropdown } from "./UserDropdown"
 import { useRouter } from "next/navigation"
 import SiderBarItem from "./components/SiderBarItem"
+import { createMenuItems } from "./router"
 import BottomActions from "./components/BottomActions"
 
 interface NavigationStripProps {
@@ -16,31 +17,7 @@ interface NavigationStripProps {
 export function SiderBar({ onToggleMobileSidebar }: NavigationStripProps) {
     const { isAuthenticated, user } = useSelector(selectAuth)
     const router = useRouter();
-    const menuItems = [
-        {
-            label: "Tin nhắn",
-            icon: MessageCircle,
-            onClick: () => router.push("/strager-chat"),
-            badge: 10,
-        },
-        {
-            label: "Cuộc gọi",
-            icon: Phone,
-        },
-        {
-            label: "Danh bạ",
-            icon: Users,
-            onClick: () => router.push("/friends"),
-        },
-        {
-            label: "Cloud của tôi",
-            icon: Cloud,
-        },
-        {
-            label: "Zalo OA",
-            icon: Briefcase,
-        },
-    ];
+    const menuItems = createMenuItems(router)
 
     return (
         <TooltipProvider>
@@ -63,7 +40,7 @@ export function SiderBar({ onToggleMobileSidebar }: NavigationStripProps) {
                 <BottomActions />
 
             </div>
-        {/* Settings */}
+            {/* Settings */}
 
         </TooltipProvider >
     )

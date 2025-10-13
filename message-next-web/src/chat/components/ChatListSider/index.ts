@@ -7,7 +7,7 @@ export { ConversationList } from './components/ConversationList'
 export { ConversationEmptyState } from './components/ConversationEmptyState'
 export { ConversationErrorState } from './components/ConversationErrorState'
 export { ConversationLoadingState } from './components/ConversationLoadingState'
-export { DebugInfo } from './components/DebugInfo'
+// export { DebugInfo } from './components/DebugInfo'
 
 // Hooks
 export { useConversations } from './hooks/useConversations'

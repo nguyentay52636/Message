@@ -1,4 +1,4 @@
-interface ConversationLoadingStateProps { }
+type ConversationLoadingStateProps = Record<string, never>
 
 export const ConversationLoadingState = ({ }: ConversationLoadingStateProps) => {
     return (

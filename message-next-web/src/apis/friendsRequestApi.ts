@@ -1,4 +1,5 @@
 import baseApi from "./baseApi";
+import type { AxiosError } from "axios";
 
 export const FindUserByPhone = async (phone: string) => {
     try {
@@ -6,8 +7,9 @@ export const FindUserByPhone = async (phone: string) => {
         params: { keyword: phone },
       });
       return res.data.data; 
-    } catch (error: any) {
-      throw new Error(error.response?.data?.message || "Search failed");
+  } catch (error: unknown) {
+      const axiosError = error as AxiosError<{ message?: string }>
+      throw new Error(axiosError.response?.data?.message || axiosError.message || "Search failed");
     }
   };
   

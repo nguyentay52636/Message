@@ -1,8 +1,9 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { useSelector } from "react-redux"
 import { IConversation, IConversationDisplay, IUser } from "@/types/types"
 import { getConversationOfUser } from "@/apis/conservationApi"
 import { selectAuth } from "@/redux/slices/authSlice"
+import type { AxiosError } from "axios"
 
 interface UseConversationsReturn {
     conversations: IConversationDisplay[]
@@ -70,7 +71,7 @@ export const useConversations = (): UseConversationsReturn => {
         }
     }
 
-    const fetchConversations = async () => {
+    const fetchConversations = useCallback(async () => {
         // Clear previous error
         setError(null)
 
@@ -106,22 +107,22 @@ export const useConversations = (): UseConversationsReturn => {
             console.log('All converted conversations:', convertedConversations)
             setConversations(convertedConversations)
             setError(null)
-        } catch (error: any) {
-            console.error('Error fetching conversations:', error)
-            const errorMessage = error?.message || 'Failed to fetch conversations'
+        } catch (error: unknown) {
+            const axiosError = error as AxiosError<{ message?: string }>
+            const errorMessage = axiosError.response?.data?.message || axiosError.message || 'Failed to fetch conversations'
             setError(errorMessage)
             setConversations([])
         } finally {
             setLoading(false)
         }
-    }
+    }, [isAuthenticated, user])
 
     useEffect(() => {
         fetchConversations()
-    }, [user, isAuthenticated])
+    }, [fetchConversations])
 
     const refreshConversations = () => {
-        console.log("🔄 Refreshing conversations...")
+        // console.log("🔄 Refreshing conversations...")
         fetchConversations()
     }
 

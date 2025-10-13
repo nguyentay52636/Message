@@ -1,5 +1,6 @@
 import baseApi from "./baseApi";
 import { IMessage } from "@/types/types";
+import type { AxiosError, AxiosResponse } from "axios";
 
 export interface IUploadImageResponse {
   imageId: string;
@@ -24,10 +25,11 @@ export const getMessageInConversation = async (conversationId: string) => {
     throw new Error("ConversationId is required")
   }
   try {
-    const { data } = await baseApi.get(`/${conversationId}`)
-    return data;
-  } catch (error: any) {
-    throw new Error(error.message)
+    const response: AxiosResponse<{ data?: IMessage[]; message?: string }> = await baseApi.get(`/${conversationId}`)
+    return response.data;
+  } catch (error: unknown) {
+    const axiosError = error as AxiosError<{ message?: string }>
+    throw new Error(axiosError.response?.data?.message || axiosError.message)
   }
 }
 
@@ -37,10 +39,11 @@ export const sendMessage = async (conversationId: string, message: IMessage) => 
     throw new Error("Sender, conversationId and content are required")
   }
   try {
-    const { data } = await baseApi.post(`/send`, message)
-    return data;
-  } catch (error: any) {
-    throw new Error(error.message)
+    const response: AxiosResponse<{ data?: IMessage; message?: string }> = await baseApi.post(`/send`, message)
+    return response.data;
+  } catch (error: unknown) {
+    const axiosError = error as AxiosError<{ message?: string }>
+    throw new Error(axiosError.response?.data?.message || axiosError.message)
   }
 }
 
@@ -54,14 +57,15 @@ export const uploadImage = async (userId: string, file: File) => {
   formData.append('image', file);
 
   try {
-    const { data } = await baseApi.post('/upload-image', formData, {
+    const response: AxiosResponse<{ data?: IUploadImageResponse; message?: string }> = await baseApi.post('/upload-image', formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
     });
-    return data;
-  } catch (error: any) {
-    throw new Error(error.message)
+    return response.data;
+  } catch (error: unknown) {
+    const axiosError = error as AxiosError<{ message?: string }>
+    throw new Error(axiosError.response?.data?.message || axiosError.message)
   }
 }
 
@@ -72,10 +76,11 @@ export const createReplyMessage = async (replyData: IReplyMessage) => {
     throw new Error("ConversationId, content and replyTo are required")
   }
   try {
-    const { data } = await baseApi.post('/reply', replyData)
-    return data;
-  } catch (error: any) {
-    throw new Error(error.message)
+    const response: AxiosResponse<{ data?: IMessage; message?: string }> = await baseApi.post('/reply', replyData)
+    return response.data;
+  } catch (error: unknown) {
+    const axiosError = error as AxiosError<{ message?: string }>
+    throw new Error(axiosError.response?.data?.message || axiosError.message)
   }
 }
 
@@ -85,10 +90,11 @@ export const markMessagesAsRead = async (conversationId: string, senderId: strin
     throw new Error("ConversationId and senderId are required")
   }
   try {
-    const { data } = await baseApi.put(`/${conversationId}/read`, { senderId })
-    return data;
-  } catch (error: any) {
-    throw new Error(error.message)
+    const response: AxiosResponse<{ data?: unknown; message?: string }> = await baseApi.put(`/${conversationId}/read`, { senderId })
+    return response.data;
+  } catch (error: unknown) {
+    const axiosError = error as AxiosError<{ message?: string }>
+    throw new Error(axiosError.response?.data?.message || axiosError.message)
   }
 }
 
@@ -97,10 +103,11 @@ export const recallMessage = async (messageId: string) => {
     throw new Error("MessageId is required")
   }
   try {
-    const { data } = await baseApi.put(`/recall/${messageId}`)
-    return data;
-  } catch (error: any) {
-    throw new Error(error.message)
+    const response: AxiosResponse<{ data?: unknown; message?: string }> = await baseApi.put(`/recall/${messageId}`)
+    return response.data;
+  } catch (error: unknown) {
+    const axiosError = error as AxiosError<{ message?: string }>
+    throw new Error(axiosError.response?.data?.message || axiosError.message)
   }
 }
 
@@ -110,10 +117,11 @@ export const forwardMessage = async (forwardData: IForwardMessage) => {
     throw new Error("MessageId and targetConversationId are required")
   }
   try {
-    const { data } = await baseApi.post('/forward', forwardData)
-    return data;
-  } catch (error: any) {
-    throw new Error(error.message)
+    const response: AxiosResponse<{ data?: unknown; message?: string }> = await baseApi.post('/forward', forwardData)
+    return response.data;
+  } catch (error: unknown) {
+    const axiosError = error as AxiosError<{ message?: string }>
+    throw new Error(axiosError.response?.data?.message || axiosError.message)
   }
 }
 
@@ -122,9 +130,10 @@ export const deleteMessage = async (messageId: string) => {
     throw new Error("MessageId is required")
   }
   try {
-    const { data } = await baseApi.delete(`/${messageId}`)
-    return data;
-  } catch (error: any) {
-    throw new Error(error.message)
+    const response: AxiosResponse<{ data?: unknown; message?: string }> = await baseApi.delete(`/${messageId}`)
+    return response.data;
+  } catch (error: unknown) {
+    const axiosError = error as AxiosError<{ message?: string }>
+    throw new Error(axiosError.response?.data?.message || axiosError.message)
   }
 }   

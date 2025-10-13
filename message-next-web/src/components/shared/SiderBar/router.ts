@@ -1,9 +1,17 @@
 import { MessageCircle, Phone, Users, Cloud, Briefcase } from "lucide-react"
-import { useRouter } from "next/navigation"
+import type React from "react"
 
-const router = useRouter()
+export type MenuItem = {
+    label: string
+    icon: React.ComponentType<{ className?: string }>
+    onClick?: () => void
+    badge?: number | string
+}
 
-export  const menuItems = [
+type RouterLike = { push: (href: string) => void }
+
+export const createMenuItems = (router: RouterLike): MenuItem[] => {
+    return [
     {
         label: "Tin nhắn",
         icon: MessageCircle,
@@ -27,4 +35,5 @@ export  const menuItems = [
         label: "Zalo OA",
         icon: Briefcase,
     },
-];
+    ]
+}

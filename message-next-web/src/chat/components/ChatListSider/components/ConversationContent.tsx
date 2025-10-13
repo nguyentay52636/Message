@@ -27,7 +27,7 @@ export const ConversationContent = ({
     // Listen for new conversation creation
     useEffect(() => {
         if (onConversationCreated) {
-            console.log("🔄 Conversation created, refreshing list...")
+            // console.log("🔄 Conversation created, refreshing list...")
             refreshConversations()
         }
     }, [onConversationCreated, refreshConversations])

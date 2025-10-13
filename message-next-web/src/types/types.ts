@@ -114,7 +114,6 @@ export interface ICall {
     userId: string;
   }
 
-  // Interface for conversation display in chat list
   export interface IConversationDisplay {
     _id: string;
     id: string;

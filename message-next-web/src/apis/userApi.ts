@@ -1,23 +1,26 @@
 import { IUser } from "@/types/types"
 import baseApi from "./baseApi"
+import type { AxiosError, AxiosResponse } from "axios"
 
 export const getUserById = async (id:string) => { 
     if(!id) {
         throw new Error("Id is required")
     }
     try {
-        const {data} = await baseApi.get(`/user/${id}`)
-        return data
-    }catch(error:any){
-        throw new Error(error.message)
+        const response: AxiosResponse<{ data?: IUser; message?: string }> = await baseApi.get(`/user/${id}`)
+        return response.data
+    }catch(error: unknown){
+        const axiosError = error as AxiosError<{ message?: string }>
+        throw new Error(axiosError.response?.data?.message || axiosError.message)
     }
 }
 export const getAllUser = async () => { 
     try {
-        const {data} = await baseApi.get(`/user`)
-        return data
-    }catch(error:any){
-        throw new Error(error.message)
+        const response: AxiosResponse<{ data?: IUser[]; message?: string }> = await baseApi.get(`/user`)
+        return response.data
+    }catch(error: unknown){
+        const axiosError = error as AxiosError<{ message?: string }>
+        throw new Error(axiosError.response?.data?.message || axiosError.message)
     }
 }   
 export const addUser = async (user:IUser) => { 
@@ -30,10 +33,11 @@ export const addUser = async (user:IUser) => {
     }
     try {
         const newUser = {username,email,phone,password}
-        const {data} = await baseApi.post(`/user`,newUser)
-        return data
-    }catch(error:any){
-        throw new Error(error.message)
+        const response: AxiosResponse<{ data?: IUser; message?: string }> = await baseApi.post(`/user`,newUser)
+        return response.data
+    }catch(error: unknown){
+        const axiosError = error as AxiosError<{ message?: string }>
+        throw new Error(axiosError.response?.data?.message || axiosError.message)
     }
 }
 export const updateUser = async (id:string,user:IUser) => { 
@@ -49,10 +53,11 @@ export const updateUser = async (id:string,user:IUser) => {
     }
     try {
         const newUser = {username,email,phone,password}    
-        const {data} = await baseApi.put(`/user/${id}`,newUser)
-        return data
-    }catch(error:any){
-        throw new Error(error.message)
+        const response: AxiosResponse<{ data?: IUser; message?: string }> = await baseApi.put(`/user/${id}`,newUser)
+        return response.data
+    }catch(error: unknown){
+        const axiosError = error as AxiosError<{ message?: string }>
+        throw new Error(axiosError.response?.data?.message || axiosError.message)
     }
 }
 export const deleteUser = async (id:string) => { 
@@ -60,9 +65,10 @@ export const deleteUser = async (id:string) => {
         throw new Error("Id is required")
     }
     try {
-        const {data} = await baseApi.delete(`/user/${id}`)
-        return data
-    }catch(error:any){
-        throw new Error(error.message)
+        const response: AxiosResponse<{ data?: { deleted: boolean }; message?: string }> = await baseApi.delete(`/user/${id}`)
+        return response.data
+    }catch(error: unknown){
+        const axiosError = error as AxiosError<{ message?: string }>
+        throw new Error(axiosError.response?.data?.message || axiosError.message)
     }
 }

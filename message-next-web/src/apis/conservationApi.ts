@@ -6,6 +6,7 @@ import {
   ApiResponse 
 } from "@/types/types";
 import baseApi from "./baseApi";
+import type { AxiosError, AxiosResponse } from "axios";
 
 export const addConversation = async (conversation: ConversationCreateRequest): Promise<IConversation> => {
   try {
@@ -14,52 +15,65 @@ export const addConversation = async (conversation: ConversationCreateRequest): 
       return data.data;
     }
     throw new Error(data.message || 'Failed to create conversation');
-  } catch (error: any) {
-    throw new Error(error.message || 'Failed to create conversation');
+  } catch (error: unknown) {
+    const axiosError = error as AxiosError<{ message?: string }>;
+    const message = axiosError.response?.data?.message || axiosError.message || 'Failed to create conversation';
+    throw new Error(message);
   }
 };
 
 // (for admin)
 export const getAllConversations = async (): Promise<IConversation[]> => {
   try {
-    const { data } = await baseApi.get<ApiResponse<IConversation[]>>("/conversations");
+    const response: AxiosResponse<ApiResponse<IConversation[]>> = await baseApi.get("/conversations");
+    const { data } = response;
     if (data.success && data.data) {
       return data.data;
     }
     throw new Error(data.message || 'Failed to fetch conversations');
-  } catch (error: any) {
-    throw new Error(error.message || 'Failed to fetch conversations');
+  } catch (error: unknown) {
+    const axiosError = error as AxiosError<{ message?: string }>;
+    const message = axiosError.response?.data?.message || axiosError.message || 'Failed to fetch conversations';
+    throw new Error(message);
   }
 };
 
 
 export const getConversationOfUser = async (userId: string): Promise<IConversation[]> => {
   try {
-    const { data } = await baseApi.get<any>(`/conversations/user/${userId}`);
-    
-    if (data.status === 200 && data.data) {
-      return data.data;
-    } else if (data.success && data.data) {
+    const response: AxiosResponse<ApiResponse<IConversation[]> | { status: number; data?: IConversation[]; message?: string }> = await baseApi.get(`/conversations/user/${userId}`);
+    const { data } = response;
+
+    if ('status' in data) {
+      if (data.status === 200 && data.data) return data.data;
+      throw new Error(data.message || 'Failed to fetch user conversations');
+    }
+
+    if (data.success && data.data) {
       return data.data;
     }
-    
+
     throw new Error(data.message || 'Failed to fetch user conversations');
-  } catch (error: any) {
-    console.error('API Error:', error.response?.data || error.message);
-    throw new Error(error.response?.data?.message || error.message || 'Failed to fetch user conversations');
+  } catch (error: unknown) {
+    const axiosError = error as AxiosError<{ message?: string }>;
+    const message = axiosError.response?.data?.message || axiosError.message || 'Failed to fetch user conversations';
+    throw new Error(message);
   }
 };
 
 // Get conversation between two users
 export const getConversationBetweenUsers = async (userId1: string, userId2: string): Promise<IConversation> => {
   try {
-    const { data } = await baseApi.get<ApiResponse<IConversation>>(`/conversations/between/${userId1}/${userId2}`);
+    const response: AxiosResponse<ApiResponse<IConversation>> = await baseApi.get(`/conversations/between/${userId1}/${userId2}`);
+    const { data } = response;
     if (data.success && data.data) {
       return data.data;
     }
     throw new Error(data.message || 'No conversation found between users');
-  } catch (error: any) {
-    throw new Error(error.message || 'Failed to fetch conversation between users');
+  } catch (error: unknown) {
+    const axiosError = error as AxiosError<{ message?: string }>;
+    const message = axiosError.response?.data?.message || axiosError.message || 'Failed to fetch conversation between users';
+    throw new Error(message);
   }
 };
 
@@ -69,40 +83,48 @@ export const updateConversation = async (
   updates: ConversationUpdateRequest
 ): Promise<IConversation> => {
   try {
-    const { data } = await baseApi.put<ApiResponse<IConversation>>(`/conversations/${conversationId}`, updates);
+    const response: AxiosResponse<ApiResponse<IConversation>> = await baseApi.put(`/conversations/${conversationId}`, updates);
+    const { data } = response;
     if (data.success && data.data) {
       return data.data;
     }
     throw new Error(data.message || 'Failed to update conversation');
-  } catch (error: any) {
-    throw new Error(error.message || 'Failed to update conversation');
+  } catch (error: unknown) {
+    const axiosError = error as AxiosError<{ message?: string }>;
+    const message = axiosError.response?.data?.message || axiosError.message || 'Failed to update conversation';
+    throw new Error(message);
   }
 };
 
 // Delete conversation
 export const deleteConversation = async (conversationId: string): Promise<string> => {
   try {
-    const { data } = await baseApi.delete<ApiResponse<string>>(`/conversations/${conversationId}`);
+    const response: AxiosResponse<ApiResponse<string>> = await baseApi.delete(`/conversations/${conversationId}`);
+    const { data } = response;
     if (data.success) {
       return data.message || 'Conversation deleted successfully';
     }
     throw new Error(data.message || 'Failed to delete conversation');
-  } catch (error: any) {
-    throw new Error(error.message || 'Failed to delete conversation');
+  } catch (error: unknown) {
+    const axiosError = error as AxiosError<{ message?: string }>;
+    const message = axiosError.response?.data?.message || axiosError.message || 'Failed to delete conversation';
+    throw new Error(message);
   }
 };
 
 // Add member to group conversation
 export const addMemberToConversation = async (conversationId: string, userId: string): Promise<IConversation> => {
   try {
-    const { data } = await baseApi.post<ApiResponse<IConversation>>(`/conversations/${conversationId}/addMember`, {
-      userId,
-    } as AddMemberRequest);
+    const payload: AddMemberRequest = { userId };
+    const response: AxiosResponse<ApiResponse<IConversation>> = await baseApi.post(`/conversations/${conversationId}/addMember`, payload);
+    const { data } = response;
     if (data.success && data.data) {
       return data.data;
     }
     throw new Error(data.message || 'Failed to add member to conversation');
-  } catch (error: any) {
-    throw new Error(error.message || 'Failed to add member to conversation');
+  } catch (error: unknown) {
+    const axiosError = error as AxiosError<{ message?: string }>;
+    const message = axiosError.response?.data?.message || axiosError.message || 'Failed to add member to conversation';
+    throw new Error(message);
   }
 };

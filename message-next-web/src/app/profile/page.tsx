@@ -4,7 +4,7 @@ import ProfileHeader from '@/components/profile/components/HeaderProfile/HeaderP
 import { profileData, userPhotos, currentUser } from '@/components/profile/mock/data'
 import { ImageSelectionModal } from '@/components/profile/components/ImageSelectionModal'
 import CoverPhoto from '@/components/profile/components/Photo/CoverPhoto';
-export default function page() {
+export default function Page() {
     const [showChatBubble, setShowChatBubble] = useState(false)
     const [selectedImages, setSelectedImages] = useState<string[]>([])
     const [showImageSelector, setShowImageSelector] = useState<"cover" | "avatar" | null>(null)

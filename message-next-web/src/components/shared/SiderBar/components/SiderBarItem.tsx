@@ -1,9 +1,10 @@
 import { Button } from '@/components/ui/button'
 import React from 'react'
+import type { MenuItem } from "../router"
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 import { Badge } from '@/components/ui/badge'
 interface SiderBarItemProps {
-    item: any
+    item: MenuItem
     index: number
 }
 export default function SiderBarItem({ item, index }: SiderBarItemProps) {
