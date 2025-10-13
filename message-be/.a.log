@@ -1,0 +1,193 @@
+A connected: 6tkhWbhGD2Rr_fLAAAAD
+A connected: SCmGVaV32aqIcv3ZAAAB
+A connected: 0vVciMO-BaSdUFyaAAAH
+A connected: suih2xoU3Q8v3DoXAAAH
+A connected: rw_V07G4q7Rb-4wuAAAB
+A connected: chnYQ3mnxqwWM1DmAAAH
+A connected: -8_UxLtZzAL6fpCcAAAF
+l,
+  mediaUrl: null,
+  timestamp: '2025-10-13T16:42:10.038Z',
+  messageId: '68ed2be29afe83b0f129e8c4',
+  sender: {
+    _id: '68a58f505da769247b3db6f7',
+    username: 'testzalo111',
+    avatar: 'https://scontent.fuih1-1.fna.fbcdn.net/v/t39.30808-6/499499551_3981598038780723_982113078773541381_n.jpg?stp=cp6_dst-jpg_tt6&_nc_cat=109&ccb=1-7&_nc_sid=6ee11a&_nc_eui2=AeEHNKotuxnXr4_Lpzi-4iCf8GJXGMh30X_wYlcYyHfRf9sQys6-kH6YcjO9K1GILkHNBAReBORsuLrTDdizJRWt&_nc_ohc=yqvUoUDQB1wQ7kNvwF2IybI&_nc_oc=AdnLdW5roJRH_d-0gV2GgOLaFENbaf86qRWw1rnyridWXut0mCfj8xRuZrGHZm9sYPs&_nc_zt=23&_nc_ht=scontent.fuih1-1.fna&_nc_gid=ogxVcjqUIClQR5ytvXeB3g&oh=00_AfU4lqKaByf0wYQs5Dg9IY1TKEnCs63Zd4QD0We-Sez6pA&oe=68ADB85C\n'
+  },
+  image: null
+}
+A conversationUpdated: 68ed295b75f12daba25ba9ea
+A messagesRead: {
+  conversationId: '68ed295b75f12daba25ba9ea',
+  userId: '68b939235a3c926e1b29bb25'
+}
+A connected: p-K2ogGIRkCpUWmLAAAD
+A receiveMessage: {
+  senderId: '68a58f505da769247b3db6f7',
+  conversationId: '68ed295b75f12daba25ba9ea',
+  content: 'Hello from A',
+  messageType: 'text',
+  imageId: null,
+  mediaUrl: null,
+  timestamp: '2025-10-13T16:44:22.375Z',
+  messageId: '68ed2c66825794550ea42e9b',
+  sender: {
+    _id: '68a58f505da769247b3db6f7',
+    username: 'testzalo111',
+    avatar: 'https://scontent.fuih1-1.fna.fbcdn.net/v/t39.30808-6/499499551_3981598038780723_982113078773541381_n.jpg?stp=cp6_dst-jpg_tt6&_nc_cat=109&ccb=1-7&_nc_sid=6ee11a&_nc_eui2=AeEHNKotuxnXr4_Lpzi-4iCf8GJXGMh30X_wYlcYyHfRf9sQys6-kH6YcjO9K1GILkHNBAReBORsuLrTDdizJRWt&_nc_ohc=yqvUoUDQB1wQ7kNvwF2IybI&_nc_oc=AdnLdW5roJRH_d-0gV2GgOLaFENbaf86qRWw1rnyridWXut0mCfj8xRuZrGHZm9sYPs&_nc_zt=23&_nc_ht=scontent.fuih1-1.fna&_nc_gid=ogxVcjqUIClQR5ytvXeB3g&oh=00_AfU4lqKaByf0wYQs5Dg9IY1TKEnCs63Zd4QD0We-Sez6pA&oe=68ADB85C\n'
+  },
+  image: null
+}
+A conversationUpdated: 68ed295b75f12daba25ba9ea
+A receiveMessage: {
+  senderId: '68a58f505da769247b3db6f7',
+  conversationId: '68ed295b75f12daba25ba9ea',
+  content: 'Hello from A',
+  messageType: 'text',
+  imageId: null,
+  mediaUrl: null,
+  timestamp: '2025-10-13T16:44:22.716Z',
+  messageId: '68ed2c66825794550ea42ea1',
+  sender: {
+    _id: '68a58f505da769247b3db6f7',
+    username: 'testzalo111',
+    avatar: 'https://scontent.fuih1-1.fna.fbcdn.net/v/t39.30808-6/499499551_3981598038780723_982113078773541381_n.jpg?stp=cp6_dst-jpg_tt6&_nc_cat=109&ccb=1-7&_nc_sid=6ee11a&_nc_eui2=AeEHNKotuxnXr4_Lpzi-4iCf8GJXGMh30X_wYlcYyHfRf9sQys6-kH6YcjO9K1GILkHNBAReBORsuLrTDdizJRWt&_nc_ohc=yqvUoUDQB1wQ7kNvwF2IybI&_nc_oc=AdnLdW5roJRH_d-0gV2GgOLaFENbaf86qRWw1rnyridWXut0mCfj8xRuZrGHZm9sYPs&_nc_zt=23&_nc_ht=scontent.fuih1-1.fna&_nc_gid=ogxVcjqUIClQR5ytvXeB3g&oh=00_AfU4lqKaByf0wYQs5Dg9IY1TKEnCs63Zd4QD0We-Sez6pA&oe=68ADB85C\n'
+  },
+  image: null
+}
+A conversationUpdated: 68ed295b75f12daba25ba9ea
+A messagesRead: {
+  conversationId: '68ed295b75f12daba25ba9ea',
+  userId: '68b939235a3c926e1b29bb25'
+}
+A connected: p6kKlmPv4xs1lfDdAAAF
+A receiveMessage: {
+  senderId: '68a58f505da769247b3db6f7',
+  conversationId: '68ed295b75f12daba25ba9ea',
+  content: 'Hello from A',
+  messageType: 'text',
+  imageId: null,
+  mediaUrl: null,
+  timestamp: '2025-10-13T16:48:36.429Z',
+  messageId: '68ed2d6488ecd5498524a170',
+  sender: {
+    _id: '68a58f505da769247b3db6f7',
+    username: 'testzalo111',
+    avatar: 'https://scontent.fuih1-1.fna.fbcdn.net/v/t39.30808-6/499499551_3981598038780723_982113078773541381_n.jpg?stp=cp6_dst-jpg_tt6&_nc_cat=109&ccb=1-7&_nc_sid=6ee11a&_nc_eui2=AeEHNKotuxnXr4_Lpzi-4iCf8GJXGMh30X_wYlcYyHfRf9sQys6-kH6YcjO9K1GILkHNBAReBORsuLrTDdizJRWt&_nc_ohc=yqvUoUDQB1wQ7kNvwF2IybI&_nc_oc=AdnLdW5roJRH_d-0gV2GgOLaFENbaf86qRWw1rnyridWXut0mCfj8xRuZrGHZm9sYPs&_nc_zt=23&_nc_ht=scontent.fuih1-1.fna&_nc_gid=ogxVcjqUIClQR5ytvXeB3g&oh=00_AfU4lqKaByf0wYQs5Dg9IY1TKEnCs63Zd4QD0We-Sez6pA&oe=68ADB85C\n'
+  },
+  image: null
+}
+A conversationUpdated: 68ed295b75f12daba25ba9ea
+A messagesRead: {
+  conversationId: '68ed295b75f12daba25ba9ea',
+  userId: '68b939235a3c926e1b29bb25'
+}
+A receiveMessage: {
+  senderId: '68a58f505da769247b3db6f7',
+  conversationId: '68ed295b75f12daba25ba9ea',
+  content: 'Hello from A',
+  messageType: 'text',
+  imageId: null,
+  mediaUrl: null,
+  timestamp: '2025-10-13T16:48:37.226Z',
+  messageId: '68ed2d6588ecd5498524a177',
+  sender: {
+    _id: '68a58f505da769247b3db6f7',
+    username: 'testzalo111',
+    avatar: 'https://scontent.fuih1-1.fna.fbcdn.net/v/t39.30808-6/499499551_3981598038780723_982113078773541381_n.jpg?stp=cp6_dst-jpg_tt6&_nc_cat=109&ccb=1-7&_nc_sid=6ee11a&_nc_eui2=AeEHNKotuxnXr4_Lpzi-4iCf8GJXGMh30X_wYlcYyHfRf9sQys6-kH6YcjO9K1GILkHNBAReBORsuLrTDdizJRWt&_nc_ohc=yqvUoUDQB1wQ7kNvwF2IybI&_nc_oc=AdnLdW5roJRH_d-0gV2GgOLaFENbaf86qRWw1rnyridWXut0mCfj8xRuZrGHZm9sYPs&_nc_zt=23&_nc_ht=scontent.fuih1-1.fna&_nc_gid=ogxVcjqUIClQR5ytvXeB3g&oh=00_AfU4lqKaByf0wYQs5Dg9IY1TKEnCs63Zd4QD0We-Sez6pA&oe=68ADB85C\n'
+  },
+  image: null
+}
+A conversationUpdated: 68ed295b75f12daba25ba9ea
+A messagesRead: {
+  conversationId: '68ed295b75f12daba25ba9ea',
+  userId: '68b939235a3c926e1b29bb25'
+}
+A connected: HtrMD1ZzVEqD3lbVAAAB
+A receiveMessage: {
+  senderId: '68a58f505da769247b3db6f7',
+  conversationId: '68ed295b75f12daba25ba9ea',
+  content: 'Hello from A',
+  messageType: 'text',
+  imageId: null,
+  mediaUrl: null,
+  timestamp: '2025-10-13T16:51:32.800Z',
+  messageId: '68ed2e146a7f81179e27a03b',
+  sender: {
+    _id: '68a58f505da769247b3db6f7',
+    username: 'testzalo111',
+    avatar: 'https://scontent.fuih1-1.fna.fbcdn.net/v/t39.30808-6/499499551_3981598038780723_982113078773541381_n.jpg?stp=cp6_dst-jpg_tt6&_nc_cat=109&ccb=1-7&_nc_sid=6ee11a&_nc_eui2=AeEHNKotuxnXr4_Lpzi-4iCf8GJXGMh30X_wYlcYyHfRf9sQys6-kH6YcjO9K1GILkHNBAReBORsuLrTDdizJRWt&_nc_ohc=yqvUoUDQB1wQ7kNvwF2IybI&_nc_oc=AdnLdW5roJRH_d-0gV2GgOLaFENbaf86qRWw1rnyridWXut0mCfj8xRuZrGHZm9sYPs&_nc_zt=23&_nc_ht=scontent.fuih1-1.fna&_nc_gid=ogxVcjqUIClQR5ytvXeB3g&oh=00_AfU4lqKaByf0wYQs5Dg9IY1TKEnCs63Zd4QD0We-Sez6pA&oe=68ADB85C\n'
+  },
+  image: null
+}
+A conversationUpdated: 68ed295b75f12daba25ba9ea
+A messagesRead: {
+  conversationId: '68ed295b75f12daba25ba9ea',
+  userId: '68b939235a3c926e1b29bb25'
+}
+A receiveMessage: {
+  senderId: '68a58f505da769247b3db6f7',
+  conversationId: '68ed295b75f12daba25ba9ea',
+  content: 'Hello from A',
+  messageType: 'text',
+  imageId: null,
+  mediaUrl: null,
+  timestamp: '2025-10-13T16:51:33.995Z',
+  messageId: '68ed2e156a7f81179e27a04a',
+  sender: {
+    _id: '68a58f505da769247b3db6f7',
+    username: 'testzalo111',
+    avatar: 'https://scontent.fuih1-1.fna.fbcdn.net/v/t39.30808-6/499499551_3981598038780723_982113078773541381_n.jpg?stp=cp6_dst-jpg_tt6&_nc_cat=109&ccb=1-7&_nc_sid=6ee11a&_nc_eui2=AeEHNKotuxnXr4_Lpzi-4iCf8GJXGMh30X_wYlcYyHfRf9sQys6-kH6YcjO9K1GILkHNBAReBORsuLrTDdizJRWt&_nc_ohc=yqvUoUDQB1wQ7kNvwF2IybI&_nc_oc=AdnLdW5roJRH_d-0gV2GgOLaFENbaf86qRWw1rnyridWXut0mCfj8xRuZrGHZm9sYPs&_nc_zt=23&_nc_ht=scontent.fuih1-1.fna&_nc_gid=ogxVcjqUIClQR5ytvXeB3g&oh=00_AfU4lqKaByf0wYQs5Dg9IY1TKEnCs63Zd4QD0We-Sez6pA&oe=68ADB85C\n'
+  },
+  image: null
+}
+A conversationUpdated: 68ed295b75f12daba25ba9ea
+A messagesRead: {
+  conversationId: '68ed295b75f12daba25ba9ea',
+  userId: '68b939235a3c926e1b29bb25'
+}
+A connected: ZYxmPEOkE8lHk24OAAAD
+A receiveMessage: {
+  senderId: '68a58f505da769247b3db6f7',
+  conversationId: '68ed295b75f12daba25ba9ea',
+  content: 'Hello from A',
+  messageType: 'text',
+  imageId: null,
+  mediaUrl: null,
+  timestamp: '2025-10-13T16:58:04.903Z',
+  messageId: '68ed2f9c8f3e1e7846313c26',
+  sender: {
+    _id: '68a58f505da769247b3db6f7',
+    username: 'testzalo111',
+    avatar: 'https://scontent.fuih1-1.fna.fbcdn.net/v/t39.30808-6/499499551_3981598038780723_982113078773541381_n.jpg?stp=cp6_dst-jpg_tt6&_nc_cat=109&ccb=1-7&_nc_sid=6ee11a&_nc_eui2=AeEHNKotuxnXr4_Lpzi-4iCf8GJXGMh30X_wYlcYyHfRf9sQys6-kH6YcjO9K1GILkHNBAReBORsuLrTDdizJRWt&_nc_ohc=yqvUoUDQB1wQ7kNvwF2IybI&_nc_oc=AdnLdW5roJRH_d-0gV2GgOLaFENbaf86qRWw1rnyridWXut0mCfj8xRuZrGHZm9sYPs&_nc_zt=23&_nc_ht=scontent.fuih1-1.fna&_nc_gid=ogxVcjqUIClQR5ytvXeB3g&oh=00_AfU4lqKaByf0wYQs5Dg9IY1TKEnCs63Zd4QD0We-Sez6pA&oe=68ADB85C\n'
+  },
+  image: null
+}
+A conversationUpdated: 68ed295b75f12daba25ba9ea
+A messagesRead: {
+  conversationId: '68ed295b75f12daba25ba9ea',
+  userId: '68b939235a3c926e1b29bb25'
+}
+A receiveMessage: {
+  senderId: '68a58f505da769247b3db6f7',
+  conversationId: '68ed295b75f12daba25ba9ea',
+  content: 'Hello from A',
+  messageType: 'text',
+  imageId: null,
+  mediaUrl: null,
+  timestamp: '2025-10-13T16:58:05.537Z',
+  messageId: '68ed2f9d8f3e1e7846313c2e',
+  sender: {
+    _id: '68a58f505da769247b3db6f7',
+    username: 'testzalo111',
+    avatar: 'https://scontent.fuih1-1.fna.fbcdn.net/v/t39.30808-6/499499551_3981598038780723_982113078773541381_n.jpg?stp=cp6_dst-jpg_tt6&_nc_cat=109&ccb=1-7&_nc_sid=6ee11a&_nc_eui2=AeEHNKotuxnXr4_Lpzi-4iCf8GJXGMh30X_wYlcYyHfRf9sQys6-kH6YcjO9K1GILkHNBAReBORsuLrTDdizJRWt&_nc_ohc=yqvUoUDQB1wQ7kNvwF2IybI&_nc_oc=AdnLdW5roJRH_d-0gV2GgOLaFENbaf86qRWw1rnyridWXut0mCfj8xRuZrGHZm9sYPs&_nc_zt=23&_nc_ht=scontent.fuih1-1.fna&_nc_gid=ogxVcjqUIClQR5ytvXeB3g&oh=00_AfU4lqKaByf0wYQs5Dg9IY1TKEnCs63Zd4QD0We-Sez6pA&oe=68ADB85C\n'
+  },
+  image: null
+}
+A conversationUpdated: 68ed295b75f12daba25ba9ea
+A messagesRead: {
+  conversationId: '68ed295b75f12daba25ba9ea',
+  userId: '68b939235a3c926e1b29bb25'
+}
+A connected: wrAu3lvWG82lxno-AAAB
+A connected: nypGOh7yTW7Kgg-lAAAH
