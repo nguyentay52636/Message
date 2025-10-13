@@ -19,6 +19,7 @@ interface IUser extends Document {
   resetPasswordExpires?: Date;
   devices?: Types.ObjectId[];
   friends: Types.ObjectId[];
+  
   blockedUsers: Types.ObjectId[];
   privacy: {
     showLastSeen: boolean;
