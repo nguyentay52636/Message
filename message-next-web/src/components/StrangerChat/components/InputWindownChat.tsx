@@ -1,11 +1,15 @@
 "use client"
 
 import type React from "react"
-
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Smile, ImageIcon, FileText, Sticker, Camera, Send } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { useSocket } from "@/context/SocketContext"
+import { useTypingIndicator } from "@/features/chat/hooks/useChatMessages"
+import { findOrCreateConversation } from "@/apis/conservationApi"
+import { useAppSelector } from "@/redux/hooks/hooks"
+import { selectAuth } from "@/redux/slices/authSlice"
 
 interface StrangerChatInputProps {
     message: string
@@ -13,6 +17,9 @@ interface StrangerChatInputProps {
     onSendMessage: () => void
     recipientName?: string
     disabled?: boolean
+    conversationId?: string | null
+    recipientId?: string
+    onConversationCreated?: (conversationId: string) => void
 }
 
 export default function InputWindownChat({
@@ -21,8 +28,42 @@ export default function InputWindownChat({
     onSendMessage,
     recipientName,
     disabled = false,
+    conversationId,
+    recipientId,
+    onConversationCreated
 }: StrangerChatInputProps) {
     const [showAttachments, setShowAttachments] = useState(false)
+    const [isCreatingConversation, setIsCreatingConversation] = useState(false)
+    const { sendTyping, stopTyping, sendMessage: sendSocketMessage } = useSocket()
+    const { startTyping, stopTyping: stopTypingIndicator } = useTypingIndicator(conversationId || null)
+    const { user } = useAppSelector(selectAuth)
+
+    // Typing indicator logic
+    useEffect(() => {
+        let typingTimeout: NodeJS.Timeout | undefined
+
+        if (message.trim() && conversationId) {
+            startTyping()
+
+            // Clear existing timeout
+            if (typingTimeout) {
+                clearTimeout(typingTimeout)
+            }
+
+            // Set new timeout to stop typing
+            typingTimeout = setTimeout(() => {
+                stopTypingIndicator()
+            }, 1000)
+        } else if (!message.trim() && conversationId) {
+            stopTypingIndicator()
+        }
+
+        return () => {
+            if (typingTimeout) {
+                clearTimeout(typingTimeout)
+            }
+        }
+    }, [message, conversationId, startTyping, stopTypingIndicator])
 
     const handleKeyPress = (e: React.KeyboardEvent) => {
         if (e.key === "Enter" && !e.shiftKey) {
@@ -33,10 +74,41 @@ export default function InputWindownChat({
         }
     }
 
-    const handleSendClick = () => {
-        if (message.trim() && !disabled) {
-            onSendMessage()
+    const handleSendClick = async () => {
+        if (message.trim() && !disabled && !isCreatingConversation) {
+            // Nếu chưa có conversationId và có recipientId, tạo conversation trước
+            if (!conversationId && recipientId && user) {
+                setIsCreatingConversation(true)
+                try {
+                    const conversation = await findOrCreateConversation(user._id || user.id || '', recipientId)
+                    if (onConversationCreated) {
+                        onConversationCreated(conversation._id)
+                    }
+
+                    // Gửi tin nhắn qua socket với conversationId mới
+                    sendSocketMessage({
+                        conversationId: conversation._id,
+                        content: message.trim(),
+                        messageType: 'text',
+                        senderId: user._id || user.id,
+                        receiverId: recipientId
+                    })
+
+                    setMessage("")
+                } catch (error) {
+                    console.error('Error creating conversation:', error)
+                } finally {
+                    setIsCreatingConversation(false)
+                }
+            } else {
+                // Nếu đã có conversationId, gửi tin nhắn bình thường
+                onSendMessage()
+            }
         }
+    }
+
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setMessage(e.target.value)
     }
 
     return (
@@ -168,7 +240,7 @@ export default function InputWindownChat({
                                     : "Nhập tin nhắn..."
                         }
                         value={message}
-                        onChange={(e) => setMessage(e.target.value)}
+                        onChange={handleInputChange}
                         onKeyPress={handleKeyPress}
                         disabled={disabled}
                         className="w-full h-10 rounded-full border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all pr-20 bg-white text-gray-900 placeholder:text-gray-500 disabled:opacity-50 disabled:cursor-not-allowed"
@@ -187,9 +259,13 @@ export default function InputWindownChat({
                                 onClick={handleSendClick}
                                 size="sm"
                                 className="p-1.5 rounded-full bg-blue-500 hover:bg-blue-600 text-white"
-                                disabled={disabled}
+                                disabled={disabled || isCreatingConversation}
                             >
-                                <Send className="w-4 h-4" />
+                                {isCreatingConversation ? (
+                                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                                ) : (
+                                    <Send className="w-4 h-4" />
+                                )}
                             </Button>
                         ) : (
                             <Button

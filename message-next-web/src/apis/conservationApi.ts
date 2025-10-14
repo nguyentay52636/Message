@@ -3,7 +3,8 @@ import {
   ConversationCreateRequest, 
   ConversationUpdateRequest, 
   AddMemberRequest,
-  ApiResponse 
+  ApiResponse,
+  IUser
 } from "@/types/types";
 import baseApi from "./baseApi";
 
@@ -16,6 +17,60 @@ export const addConversation = async (conversation: ConversationCreateRequest): 
     throw new Error(data.message || 'Failed to create conversation');
   } catch (error: any) {
     throw new Error(error.message || 'Failed to create conversation');
+  }
+};
+
+// Tìm user và tạo conversation khi gửi tin nhắn
+export const findOrCreateConversation = async (senderId: string, receiverId: string): Promise<IConversation> => {
+  try {
+    // Tìm conversation hiện có giữa 2 user
+    const existingConversations = await getConversationOfUser(senderId);
+    const existingConversation = existingConversations.find(conv => 
+      conv.members.some(member => 
+        typeof member === 'string' ? member === receiverId : member._id === receiverId
+      ) && 
+      conv.members.length === 2
+    );
+
+    if (existingConversation) {
+      return existingConversation;
+    }
+
+    // Nếu không có conversation, tạo mới
+    const newConversation: ConversationCreateRequest = {
+      members: [senderId, receiverId],
+      type: 'personal'
+    };
+
+    return await addConversation(newConversation);
+  } catch (error: any) {
+    throw new Error(error.message || 'Failed to find or create conversation');
+  }
+};
+
+// Tìm user theo username hoặc email
+export const searchUser = async (query: string): Promise<IUser[]> => {
+  try {
+    const { data } = await baseApi.get<ApiResponse<IUser[]>>(`/users/search?q=${encodeURIComponent(query)}`);
+    if (data.success && data.data) {
+      return data.data;
+    }
+    throw new Error(data.message || 'Failed to search users');
+  } catch (error: any) {
+    throw new Error(error.message || 'Failed to search users');
+  }
+};
+
+// Lấy thông tin user theo ID
+export const getUserById = async (userId: string): Promise<IUser> => {
+  try {
+    const { data } = await baseApi.get<ApiResponse<IUser>>(`/users/${userId}`);
+    if (data.success && data.data) {
+      return data.data;
+    }
+    throw new Error(data.message || 'Failed to get user');
+  } catch (error: any) {
+    throw new Error(error.message || 'Failed to get user');
   }
 };
 

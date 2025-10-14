@@ -2,6 +2,7 @@
 import "./globals.css";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { ReduxProvider } from "@/components/ReduxProvider";
+import { SocketContextProvider } from "@/context/SocketContext";
 import { Toaster } from "sonner";
 import { SiderBar } from "@/components/shared/SiderBar/SiderBar";
 import { usePathname } from "next/navigation";
@@ -26,21 +27,22 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-
           <ReduxProvider>
-            {!isAuthRoute ? (
-              <div className="h-screen w-full flex">
-                <div className="h-full">
-                  <SiderBar />
+            <SocketContextProvider>
+              {!isAuthRoute ? (
+                <div className="h-screen w-full flex">
+                  <div className="h-full">
+                    <SiderBar />
+                  </div>
+                  <main className="flex-1 h-full overflow-auto">
+                    {children}
+                  </main>
                 </div>
-                <main className="flex-1 h-full overflow-auto">
-                  {children}
-                </main>
-              </div>
-            ) : (
-              <>{children}</>
-            )}
-            <Toaster position="top-right" richColors />
+              ) : (
+                <>{children}</>
+              )}
+              <Toaster position="top-right" richColors />
+            </SocketContextProvider>
           </ReduxProvider>
         </ThemeProvider>
       </body>

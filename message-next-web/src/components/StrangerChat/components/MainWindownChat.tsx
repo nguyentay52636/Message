@@ -5,14 +5,13 @@ import MessageAreaWindownChat from "./MessageAreaWindownChat/MessageAreaWindownC
 import InputWindownChat from "./InputWindownChat"
 import InfoUserWindownChat from "./InfoUserWindownChat/InfoUserWindownChat"
 import HeaderWindownChat from "./HeaderWindownChat"
-import { IUser } from "@/types/types"
-import { Message } from "@/lib/Mock/dataMock"
+import { IUser, IMessage } from "@/types/types"
 import { Button } from "@/components/ui/button"
 import { Phone, Video, Search, MoreHorizontal, MessageCircle, Users, Settings } from "lucide-react"
 import BubbleStartChat from "./BubbleStartChat"
 
 interface MainWindownChatProps {
-    messages: Message[]
+    messages: IMessage[]
     setSelectedChat: (chatId: string) => void
     selectedChat: string | null
     message: string
@@ -22,22 +21,25 @@ interface MainWindownChatProps {
     user: IUser
     onToggleMobileSidebar?: () => void
     onBack?: () => void
+    onConversationCreated?: (conversationId: string) => void
 }
 
 export function MainWindownChat({
     messages,
+    setSelectedChat,
+    selectedChat,
     message,
     setMessage,
     onSendMessage,
     recipientName,
     user,
     onToggleMobileSidebar,
-    onBack
+    onBack,
+    onConversationCreated
 }: MainWindownChatProps) {
     const [showInfoPanel, setShowInfoPanel] = useState(true)
     const [showChatBubble, setShowChatBubble] = useState(false)
     const [friendRequestStatus, setFriendRequestStatus] = useState<"pending" | "waiting" | "accepted">("waiting")
-
 
     const userForComponents = {
         id: user._id || user.username,
@@ -46,13 +48,14 @@ export function MainWindownChat({
         isOnline: user.status === 'online'
     }
 
+    // Convert IMessage to the format expected by MessageAreaWindownChat
     const strangerMessages = messages.map(msg => ({
-        id: msg.id,
-        content: msg.content,
+        id: msg.id || '',
+        content: msg.content || '',
         sender: msg.sender as "user" | "other",
-        timestamp: msg.timestamp,
-        type: msg.type === "image" || msg.type === "file" || msg.type === "video" ? "text" : msg.type as "text" | "sticker",
-        isRead: msg.isRead
+        timestamp: msg.createdAt ? msg.createdAt.toISOString() : new Date().toISOString(),
+        type: msg.messageType === "image" || msg.messageType === "file" || msg.messageType === "video" ? "text" : msg.messageType as "text" | "sticker",
+        isRead: msg.isRead || false
     }))
 
     const handleSendMessage = () => {
@@ -113,6 +116,9 @@ export function MainWindownChat({
                             onSendMessage={handleSendMessage}
                             recipientName={recipientName}
                             disabled={false}
+                            conversationId={selectedChat}
+                            recipientId={user._id}
+                            onConversationCreated={onConversationCreated}
                         />
                     </div>
                 </div>

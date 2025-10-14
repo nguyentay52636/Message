@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { useSelector } from "react-redux";
 import { selectAuth } from "@/redux/slices/authSlice";
-import { addConversation } from "@/apis/conservationApi";
+import { useChatConnection } from "@/features/chat/hooks/useChatConnection";
 
 interface ResponeUserProps {
     users: IUser | null;
@@ -19,11 +19,11 @@ export default function ResponeUser(props: ResponeUserProps) {
     const { users, loading, searchQuery, onConversationCreated } = props;
     const selectHandler = props.onSelectUser ?? props.onSelect;
     const router = useRouter();
-    const [creating, setCreating] = useState(false);
     const { user } = useSelector(selectAuth);
-    const userId = user?._id;
+    const { openChatConnection, isConnecting, checkSocketConnection } = useChatConnection();
+
     console.log(users?._id)
-    console.log(userId)
+    console.log(user?._id)
 
     if (loading) {
         return <p className="text-sm text-gray-500 mt-4">Đang tìm kiếm...</p>;
@@ -41,27 +41,43 @@ export default function ResponeUser(props: ResponeUserProps) {
 
     const handleChat = async (e: React.MouseEvent) => {
         e.stopPropagation();
-        if (!userId || !users?._id) return;
+
+        if (!user?._id || !users?._id) {
+            console.error("❌ Missing user IDs:", { currentUser: user?._id, targetUser: users?._id });
+            return;
+        }
+
+        // Check socket connection status
+        const connectionStatus = checkSocketConnection();
+        console.log("🔍 Socket connection status:", connectionStatus);
+
+        if (!connectionStatus.isConnected) {
+            alert("Đang kết nối socket, vui lòng thử lại sau!");
+            return;
+        }
+
         try {
-            setCreating(true);
-            console.log("🚀 Creating conversation between:", userId, "and", users._id);
+            console.log("🚀 Starting chat connection process...");
 
-            const newConversation = await addConversation({
-                members: [userId, users._id],
-                type: "personal",
-            });
+            const result = await openChatConnection(users._id, users.username);
 
-            console.log("✅ Conversation created successfully:", newConversation);
+            if (result.success) {
+                console.log("✅ Chat connection established successfully!");
 
-            if (onConversationCreated) {
-                console.log("📞 Calling onConversationCreated with ID:", newConversation._id);
-                onConversationCreated(newConversation._id);
+                if (onConversationCreated) {
+                    console.log("📞 Calling onConversationCreated with ID:", result.conversationId);
+                    onConversationCreated(result.conversationId);
+                }
+
+                // Navigate to chat page (stable route)
+                router.push(`/strager-chat`);
+            } else {
+                console.error("❌ Failed to establish chat connection:", result.error);
+                alert(`Không thể tạo cuộc trò chuyện: ${result.error}`);
             }
-            router.push(`/strager-chat/${newConversation._id}`);
         } catch (error: any) {
-            alert("Không thể tạo cuộc trò chuyện!");
-        } finally {
-            setCreating(false);
+            console.error("❌ Unexpected error:", error);
+            alert("Có lỗi xảy ra khi tạo cuộc trò chuyện!");
         }
     };
 
@@ -103,7 +119,7 @@ export default function ResponeUser(props: ResponeUserProps) {
             <Button
                 variant="ghost"
                 onClick={handleChat}
-                disabled={creating}
+                disabled={isConnecting}
                 className="cursor-pointer
           px-3 py-1 text-[13px] font-medium text-[#007aff] 
           border border-[#007aff] rounded-lg 
@@ -111,7 +127,7 @@ export default function ResponeUser(props: ResponeUserProps) {
           transition-colors duration-200
         "
             >
-                {creating ? "Đang tạo..." : "Chat"}
+                {isConnecting ? "Đang kết nối..." : "Chat"}
             </Button>
         </div>
     );
